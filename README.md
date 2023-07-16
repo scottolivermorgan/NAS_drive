@@ -14,6 +14,15 @@ May need to update user/.shh if changes made easiest to just clear.
 
 git clone https://github.com/scottolivermorgan/NAS_drive.git
 
+sudo sh update.sh
+
+restablish ssh connection
+
+sudo sh nextcloud-dependancies.sh
+
+sudo sh nextcloud-setup.sh
+
+sudo sh nextcloud-installation.sh
 
 
 
