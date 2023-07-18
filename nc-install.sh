@@ -33,7 +33,7 @@ cd /var/www
 wget https://download.nextcloud.com/server/releases/latest.tar.bz2
 
 # Extract the archive
-tar -xvf latest.tar.bz2 -y
+tar -xvf latest.tar.bz2
 
 # Make directory for Nextcloud to operate in
 mkdir -p /var/www/nextcloud/data
@@ -47,5 +47,5 @@ mv /home/pi/NAS_drive/nextcloud.conf /etc/apache2/sites-available/
 # Point Apahe2 to config file for Nextcloud
 a2ensite nextcloud.conf
 
-# Restart Apache2 to load ne confi
+# Restart Apache2 to load nextcloud confi
 systemctl reload apache2
