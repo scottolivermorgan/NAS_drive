@@ -34,6 +34,3 @@ sudo sh nextcloud-dependancies.sh -y
 sudo sh nextcloud-setup.sh -y
 
 sudo sh nextcloud-installation.sh -y
-
-
-
