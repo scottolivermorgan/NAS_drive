@@ -23,14 +23,14 @@ git clone https://github.com/scottolivermorgan/NAS_drive.git
 
 cd NAS_drive
 
-sudo sh update.sh -y
+sudo sh update.sh
 
 restablish ssh connection
 
 cd NAS_drive
 
-sudo sh nextcloud-dependancies.sh -y
+sudo sh nextcloud-dependancies.sh
 
-sudo sh nextcloud-setup.sh -y
+sudo sh nextcloud-setup.sh
 
-sudo sh nextcloud-installation.sh -y
+sudo sh nextcloud-installation.sh
