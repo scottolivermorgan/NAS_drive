@@ -22,3 +22,5 @@ apt install php8.1 php8.1-gd php8.1-sqlite3 php8.1-curl php8.1-zip php8.1-xml ph
 # Install mariaDB
 echo "Installing MySQL"
 apt install mariadb-server
+
+echo "Nextcloud dependancies installed, please run nextcloud-setup"

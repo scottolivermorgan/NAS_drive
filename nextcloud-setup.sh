@@ -5,3 +5,5 @@ echo "CREATE DATABASE nextclouddb;
       GRANT ALL PRIVILEGES ON nextclouddb.* TO 'nextclouduser'@'localhost';
       FLUSH PRIVILEGES;
       Quit" | sudo mysql -u root -p
+
+echo "Nextcloud-setup complete, please run nextcloud-installation"
