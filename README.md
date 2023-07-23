@@ -36,3 +36,13 @@ sudo sh nextcloud-setup.sh
 sudo sh nextcloud-installation.sh
 
 sudo reboot
+
+# enable external storage via gui
+
+lsblk     - Check mount point is sda1
+
+sudo sh mount-drives.sh
+
+sudo reboot
+
+# add external storage via gui under /media/harddrive1
