@@ -1,3 +1,4 @@
+## Nextcloud 
 Format SD card
 https://www.sdcard.org/downloads/formatter/
 
@@ -46,3 +47,14 @@ sudo sh mount-drives.sh
 sudo reboot
 
 # add external storage via gui under /media/harddrive1
+
+## Plex
+
+sudo sh update.sh
+
+sudo sh plex-installation.sh
+
+access Plex at 192.168.1.100:32400/web
+
+sign in/create account and addexternal lib via GUI
+Add Libary > harddrive1
