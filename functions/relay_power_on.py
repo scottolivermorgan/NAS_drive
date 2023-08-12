@@ -4,7 +4,7 @@ def power_on():
     GPIO.output(RELAY_CHANNEL, GPIO.HIGH)
 
 if __name__ == "__main__":
-    RELAY_CHANNEL = 26
+    RELAY_CHANNEL = 14
     GPIO.setwarnings(False)
     GPIO.setmode(GPIO.BCM)
     GPIO.setup(RELAY_CHANNEL, GPIO.OUT)
