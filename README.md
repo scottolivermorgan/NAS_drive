@@ -91,3 +91,7 @@ __-__  =     __Ground__   (board no# 6)
 __s__  =    __GPIO 14__  (board no# 8)
 
 ![pinout](./assets/backup_setup/pi4_pinout.PNG)
+
+``cd NAS_drive/scripts/backup_drive``
+
+``sudo schedule-backup.sh``

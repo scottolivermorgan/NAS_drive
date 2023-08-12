@@ -1,5 +1,5 @@
 python relay_power_on.py
 
-sleep 1m
+sleep 20s
 
 python relay_power_off.py
