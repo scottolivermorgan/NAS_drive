@@ -1,4 +1,7 @@
 ## Initial Pi 4 Setup
+
+![formatSD](./assets/format_SD.PNG)
+
 Format SD card
 https://www.sdcard.org/downloads/formatter/
 
