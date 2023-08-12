@@ -15,7 +15,7 @@ Set username and password
 Insert and turn on pi, nav to 192.168.1.1 and login to router, connected devices find Pi address.
 
 Powershell
-ssh <username>@192.168.1.x -v
+`ssh <username>@192.168.1.x -v``
 - enter <password>
 
 May need to update user/.shh if changes made easiest to just clear.
