@@ -92,6 +92,8 @@ __s__  =    __GPIO 14__  (board no# 8)
 
 ![pinout](./assets/backup_setup/pi4_pinout.PNG)
 
+Switch to correct dir:
 ``cd NAS_drive/scripts/backup_drive``
 
-``sudo schedule-backup.sh``
+Schedule relay (_note_ runs in superuser cron jobs):
+``sudo sh schedule-backup.sh``
