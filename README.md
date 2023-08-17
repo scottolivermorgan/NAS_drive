@@ -86,8 +86,8 @@ Add Libary > harddrive1
 ## Backup drive
 Relay wiring:
 __Relay__  __Pin__
-__+__  =    __5v Power__ (board no# 4)
-__-__  =     __Ground__   (board no# 6)
+__+__  =    __5v Power__ (board no# 2)
+__-__  =     __Ground__   (board no# 14)
 __s__  =    __GPIO 14__  (board no# 8)
 
 ![pinout](./assets/backup_setup/pi4_pinout.PNG)
