@@ -4,6 +4,7 @@ eg: mv /home/pi/NAS_drive/scripts/nextcloud/nextcloud.conf /etc/apache2/sites-av
 - update scripts to read env vars
 - script to automate gui config on NC
 - script to automate gui config on Plex.
+- mount HD's via USID not path
 
 ## Initial Pi 4 Setup
 Download SD card formating software:
