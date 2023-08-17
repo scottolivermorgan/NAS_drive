@@ -1,3 +1,10 @@
+TODO:
+- script to prompt and set envvariables to set/keep consistant users, pw ect
+eg: mv /home/pi/NAS_drive/scripts/nextcloud/nextcloud.conf /etc/apache2/sites-available/ in nextcloud-installation.sh
+- update scripts to read env vars
+- script to automate gui config on NC
+- script to automate gui config on Plex.
+
 ## Initial Pi 4 Setup
 Download SD card formating software:
 https://www.sdcard.org/downloads/formatter/
@@ -42,13 +49,13 @@ Clone this repo:
 ``git clone https://github.com/scottolivermorgan/NAS_drive.git``
 
 Change into repo folder:
-``cd NAS_drive``
+``cd NAS_drive/scripts``
 
 Update packages and reboot Pi:
 ``sudo sh update.sh``
 
 Restablish SSH connection (as above) after Pi rebooted & change into repo folder:
-``cd NAS_drive``
+``cd NAS_drive/scripts/nextcloud``
 
 Install nexcloud dependancies and follw prompts:
 ``sudo sh nextcloud-dependancies.sh``
@@ -76,9 +83,11 @@ Reboot after completeion
 
 ``sudo sh update.sh``
 
+``cd NAS_drive/scripts/plex``
+
 ``sudo sh plex-installation.sh``
 
-Access Plex at 192.168.1.100:32400/web
+Access Plex at 192.168.1.9:32400/web
 
 Sign in/create account and addexternal lib via GUI
 Add Libary > harddrive1
