@@ -70,28 +70,42 @@ Install nextcloud:
 Reboot after completeion
 ``sudo reboot``
 
-# Enable external storage via gui
+# Enable External Storage via GUI
 
 ``lsblk``     - Check mount point is sda1
 
 ``sudo sh mount-drives.sh``
 
+Click top right userprofile icon and select Apps.
+![addExt1](./assets/nextcloud_add_external_drive/nc1.PNG)
+
+Scroll list and select Enable on External Storage support
+![addExt1](./assets/nextcloud_add_external_drive/nc2.PNG)
+
+Wait several seconds, again select user icon at top right and select Administrator settings.
+![addExt1](./assets/nextcloud_add_external_drive/nc3.PNG)
+
+Select External storage tab on left and add name, Local, and add mount point defined in mount-drives.sh - /media/harddrive1
+![addExt1](./assets/nextcloud_add_external_drive/nc4.PNG)
+
+Return to SSH shell and reboot Pi.
 ``sudo reboot``
 
-## Add external storage via gui under /media/harddrive1
-
 ## Plex
+From SSH shell update packages if havent recently
 
 ``sudo sh update.sh``
 
+Change directory to plex installation script
 ``cd NAS_drive/scripts/plex``
 
+install plex
 ``sudo sh plex-installation.sh``
 
-Access Plex at 192.168.1.9:32400/web
+Access Plex at 192.168.1.x:32400/web -x dependant on your local network.
 
 Sign in/create account and addexternal lib via GUI
-Add Libary > harddrive1
+Add Libary > harddrive1 (in this case as has been set in previouse steps)
 
 ## Backup drive
 Relay wiring:
@@ -107,3 +121,9 @@ Switch to correct dir:
 
 Schedule relay (_note_ runs in superuser cron jobs):
 ``sudo sh schedule-backup.sh``
+
+## Add Powerdown Button
+Pi dosen't ship with power off button, shutting down cleanly avoids SD card corruption so add a switch and python script to enable clean shutdowns before turing off at plug.
+
+Pinout as follows:
+![pinout](./assets/shutdown_switch/shutdown_switch_pinout.PNG)

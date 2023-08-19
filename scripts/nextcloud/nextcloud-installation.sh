@@ -14,10 +14,10 @@ mkdir -p /var/www/nextcloud/data
 chown -R www-data:www-data /var/www/nextcloud/
 
 #Move Nextcloud config file to correct location for Apache
-mv /home/pi/NAS_drive/nextcloud.conf /etc/apache2/sites-available/
+mv /home/pi/NAS_drive/scripts/nextcloud/nextcloud.conf /etc/apache2/sites-available/
 
 # Point Apahe2 to config file for Nextcloud
 a2ensite nextcloud.conf
 
-# Restart Apache2 to load ne confi
+# Restart Apache2 to load new configuration
 systemctl reload apache2
