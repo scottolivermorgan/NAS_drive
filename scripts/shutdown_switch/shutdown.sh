@@ -1,6 +1,5 @@
 #!/bin/bash
 
-match='fields'
 insert='/home/scott/NAS_drive/functions/shutdown.py'
 file='/etc/rc.local'
 
