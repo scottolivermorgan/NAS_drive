@@ -127,3 +127,12 @@ Pi dosen't ship with power off button, shutting down cleanly avoids SD card corr
 
 Use board pins __39__ (ground) and __40__ (GPIO21):
 ![pinout](./assets/shutdown_switch/shutdown_switch_pinout.PNG)
+
+Change working directory
+``cd /NAS_drive/scripts/shutdown_switch``
+
+Edit start up scripts to run shutdown.py to listen to button
+``sudo sh shutdown.sh``
+
+Reboot Pi
+``sudo reboot``
