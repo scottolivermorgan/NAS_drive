@@ -1,7 +1,4 @@
 TODO:
-- script to prompt and set envvariables to set/keep consistant users, pw ect
-eg: mv /home/pi/NAS_drive/scripts/nextcloud/nextcloud.conf /etc/apache2/sites-available/ in nextcloud-installation.sh
-- update scripts to read env vars
 - script to automate gui config on NC
 - script to automate gui config on Plex.
 - mount HD's via USID not path
