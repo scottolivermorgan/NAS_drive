@@ -125,5 +125,5 @@ Schedule relay (_note_ runs in superuser cron jobs):
 ## Add Powerdown Button
 Pi dosen't ship with power off button, shutting down cleanly avoids SD card corruption so add a switch and python script to enable clean shutdowns before turing off at plug.
 
-Pinout as follows:
+Use board pins __39__ (ground) and __40__ (GPIO21):
 ![pinout](./assets/shutdown_switch/shutdown_switch_pinout.PNG)
