@@ -21,7 +21,7 @@ Select settings (cog wheel - lower right)
 Select 'Enable shh'
 Select 'Use password authentication'
 'set authorised keys' auto fills to local user.
-enter username and password.
+enter username and password. __DO NOT USE DEFAULT USERNAME & PASSWORDS__.
 
 ![formatSD](./assets/pi_setup/imager_screen_2.PNG)
 
@@ -140,3 +140,12 @@ Change working dir
 
 Install packages
 ``sudo sh auto_patch.sh``
+
+Check for users with empty passwords
+``sudo awk -F: '($2 == "") {print}' /etc/shadow``
+
+Lock any applicable accounts
+``passwd -l <username>``
+
+Check expected logins
+``lslogins -u``
