@@ -138,8 +138,9 @@ Reboot Pi
 Change working dir
 `` cd NAS_drive/scripts/harden_security``
 
-Install packages
+Install packages to auto update security patchs
 ``sudo sh auto_patch.sh``
+_Note:_ SSH port changed from 22 to 1111
 
 Check for users with empty passwords
 ``sudo awk -F: '($2 == "") {print}' /etc/shadow``
@@ -149,3 +150,12 @@ Lock any applicable accounts
 
 Check expected logins
 ``lslogins -u``
+
+Check any unexpected services running
+``sudo service --status-all``
+
+Check SHH root login disabled
+``sudo nano /etc/ssh/sshd_config``
+
+Verify following exists
+``#PermitRootLogin prohibit-password``
