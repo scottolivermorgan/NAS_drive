@@ -17,6 +17,13 @@ ufw allow 443
 
 # Allow SSH
 ufw allow 1111
+
+# Allow Plex
+ufw allow 32400
+
+# Enable firewall
+sudo ufw enable
+
 # Set root user to recive email updates of upgrades.
 sed -i 's/^\/\/Unattended-Upgrade::Mail ""/Unattended-Upgrade::Mail "root";/' /etc/apt/apt.conf.d/50unattended-upgrades
 
