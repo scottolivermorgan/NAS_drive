@@ -133,3 +133,10 @@ Edit start up scripts to run shutdown.py to listen to button
 
 Reboot Pi
 ``sudo reboot``
+
+## Harden Security
+Change working dir
+`` cd NAS_drive/scripts/harden_security``
+
+Install packages
+``sudo sh auto_patch.sh``
