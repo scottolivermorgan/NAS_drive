@@ -166,3 +166,24 @@ https://help.nextcloud.com/t/how-to-access-from-outside-your-network/126311
 https://techmadeeasy.co.uk/2020/03/access-a-nextcloud-server-from-outside-your-home-network/
 Nextcloud desktop client:
 https://nextcloud.com/install/#install-clients
+
+Set up account and domain name with following DDNS service:
+https://www.noip.com/
+
+Open SSH to Pi andchange dir to
+``cd /var/www/html/nextcloud/config``
+
+Open config file
+``sudo nanoconfig.php``
+
+add domain name to
+``'trusted_domains' =>
+   array (
+     0 => '192.168.1.100',
+     1 => 'your.ddns.domain',
+   ), ``
+
+Set up port fowarding rules on router
+
+
+
