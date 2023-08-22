@@ -185,5 +185,6 @@ add domain name to
 
 Set up port fowarding rules on router
 
+# Resolve Nextcloud security prompts
 
 
