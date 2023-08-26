@@ -188,3 +188,13 @@ Set up port fowarding rules on router
 # Resolve Nextcloud security prompts
 
 
+# Use UUID for externl HD mounting
+- Use ``blkid`` command-line utility to locate/print block device attributes:
+
+open fstab to edit
+``sudo nano /etc/fstab``
+add line
+``UUID={YOUR-UID}    {/path/to/mount/point}               {file-system-type}    defaults,errors=remount-ro 0       1``
+
+
+
