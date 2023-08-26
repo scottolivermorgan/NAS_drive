@@ -106,6 +106,8 @@ Add Libary > harddrive1 (in this case as has been set in previouse steps)
 
 ## Backup drive
 Relay wiring:
+
+_note_ GPIOs 0-8, 14 & 15 appearhigh at boot, if connected to these pins relay will power up, connect 2nd HD then power down so don't use these pins.
 __Relay__  __Pin__
 __+__  =    __5v Power__ (board no# 2)
 __-__  =     __Ground__   (board no# 14)
@@ -190,6 +192,8 @@ Set up port fowarding rules on router
 
 # Use UUID for externl HD mounting
 source: https://www.cyberciti.biz/faq/linux-finding-using-uuids-to-update-fstab/
+
+- add primary HD (plugged in)
 - Use ``blkid`` command-line utility to locate/print block device attributes:
 
 open fstab to edit
@@ -197,5 +201,15 @@ open fstab to edit
 add line
 ``UUID={YOUR-UID}    {/path/to/mount/point}               {file-system-type}    defaults,errors=remount-ro 0       1``
 
-
+- add airgapped back up drive:
+    - plug in drive to correct port(hijacked circuit -should not power upas relay open)
+    - switch dir ``cd /NAS_drive/functions``
+    - shut relay to power up 2nd HD ``python relay_power_on.py``
+    - Use  ``lsblk`` - note device name (sdb1 in my case).
+    - get uuid of device name with ``sudo blkid /dev/sdb1``
+    -note uuid
+    open fstab to edit
+``sudo nano /etc/fstab``
+add line
+``UUID={YOUR-UID}    {/path/to/mount/point}               {file-system-type}    defaults,errors=remount-ro 0       1``
 
