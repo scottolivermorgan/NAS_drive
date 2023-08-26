@@ -193,6 +193,8 @@ Set up port fowarding rules on router
 # Use UUID for externl HD mounting
 source: https://www.cyberciti.biz/faq/linux-finding-using-uuids-to-update-fstab/
 
+__note__ UUID changes when drives formated.
+
 - add primary HD (plugged in)
 - Use ``blkid`` command-line utility to locate/print block device attributes:
 
