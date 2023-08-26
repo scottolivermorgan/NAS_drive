@@ -189,6 +189,7 @@ Set up port fowarding rules on router
 
 
 # Use UUID for externl HD mounting
+source: https://www.cyberciti.biz/faq/linux-finding-using-uuids-to-update-fstab/
 - Use ``blkid`` command-line utility to locate/print block device attributes:
 
 open fstab to edit
