@@ -162,7 +162,7 @@ Check SHH root login disabled
 Verify following exists
 ``#PermitRootLogin prohibit-password``
 
-## External Accsess
+## External Access
 Resources:
 https://help.nextcloud.com/t/how-to-access-from-outside-your-network/126311
 https://techmadeeasy.co.uk/2020/03/access-a-nextcloud-server-from-outside-your-home-network/
