@@ -37,7 +37,14 @@ Set hotsname as Pi , enable SSH and select use password authentication.
 Save and write SD, takes a few minutes.
 Insert SD and turn on pi, nav to router on local network (192.168.1.1 for me) and login to router,  navigate to connected devices and find Pi address.
 
-## Nextcloud ##
+# Enter Enviroment variables
+On network connected computer open Powershell:
+``ssh <username>@192.168.1.x -v``
+
+``sudo sh env_setup.sh``
+Follows prompts the set usernames and passwords.
+
+# Nextcloud 
 On network connected computer open Powershell:
 ``ssh <username>@192.168.1.x -v``
 
