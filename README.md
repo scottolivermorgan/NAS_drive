@@ -41,6 +41,20 @@ Insert SD and turn on pi, nav to router on local network (192.168.1.1 for me) an
 On network connected computer open Powershell:
 ``ssh <username>@192.168.1.x -v``
 
+Clone this repo:
+``git clone https://github.com/scottolivermorgan/NAS_drive.git``
+
+change dir
+``cd NAS_drive/scripts``
+
+run
+``sudo sh env_setup.sh``
+and enter prompts
+
+# Update Pi
+On network connected computer open Powershell:
+``ssh <username>@192.168.1.x -v``
+
 ``sudo sh env_setup.sh``
 Follows prompts the set usernames and passwords.
 
@@ -50,14 +64,13 @@ On network connected computer open Powershell:
 
 Enter password set when flashing OS in steps above.
 
-Clone this repo:
-``git clone https://github.com/scottolivermorgan/NAS_drive.git``
+
 
 Change into repo folder:
 ``cd NAS_drive/scripts``
 
 Update packages and reboot Pi:
-``sudo sh update.sh``
+``yes | sudo sh update.sh``
 
 Restablish SSH connection (as above) after Pi rebooted & change into repo folder:
 ``cd NAS_drive/scripts/nextcloud``

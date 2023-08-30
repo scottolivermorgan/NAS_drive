@@ -4,8 +4,8 @@
 export UN=$(whoami)
 
 # Prompt user for password
-read -s -p "Create nextcloud user: " nc_user
-echo
+echo "Create nextcloud user: "
+read nc_user
 
 # Set the password as an environment variable
 export NC_USER="$nc_user"
@@ -13,8 +13,8 @@ export NC_USER="$nc_user"
 echo "Password has been set as the environment variable NC_USER"
 
 # Prompt user for password
-read -s -p "Set nextcloud user passwor: " nc_password
-echo
+echo "Set nextcloud user password: "
+read nc_password
 
 # Set the password as an environment variable
 export NC_PASSWORD="$nc_password"
