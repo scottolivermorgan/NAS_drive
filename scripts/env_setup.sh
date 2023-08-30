@@ -10,7 +10,7 @@ read nc_user
 # Set the password as an environment variable
 export NC_USER="$nc_user"
 
-echo "Password has been set as the environment variable NC_USER"
+echo "Next cloud user name has been set as the environment variable NC_USER"
 
 # Prompt user for password
 echo "Set nextcloud user password: "
