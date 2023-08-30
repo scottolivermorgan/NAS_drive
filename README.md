@@ -51,6 +51,8 @@ run
 ``sudo sh env_setup.sh``
 and enter prompts
 
+TODO: retrive UUID of external HD and set here
+
 # Update Pi
 On network connected computer open Powershell:
 ``ssh <username>@192.168.1.x -v``
