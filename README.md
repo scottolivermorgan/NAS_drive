@@ -55,34 +55,24 @@ and enter prompts
 On network connected computer open Powershell:
 ``ssh <username>@192.168.1.x -v``
 
-``sudo sh env_setup.sh``
+``yes | sudo sh env_setup.sh``
 Follows prompts the set usernames and passwords.
 
 # Nextcloud 
 On network connected computer open Powershell:
 ``ssh <username>@192.168.1.x -v``
 
-Enter password set when flashing OS in steps above.
-
-
-
 Change into repo folder:
-``cd NAS_drive/scripts``
-
-Update packages and reboot Pi:
-``yes | sudo sh update.sh``
-
-Restablish SSH connection (as above) after Pi rebooted & change into repo folder:
 ``cd NAS_drive/scripts/nextcloud``
 
 Install nexcloud dependancies and follw prompts:
-``sudo sh nextcloud-dependancies.sh``
+``yes | sudo sh nextcloud-dependancies.sh``
 
 Setup initial databse and user for nextcloud, follow prompts:
 ``sudo sh nextcloud-setup.sh``
 
 Install nextcloud:
-``sudo sh nextcloud-installation.sh``
+``yes | sudo sh nextcloud-installation.sh``
 
 Reboot after completeion
 ``sudo reboot``
