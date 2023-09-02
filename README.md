@@ -38,6 +38,7 @@ Save and write SD, takes a few minutes.
 Insert SD and turn on pi, nav to router on local network (192.168.1.1 for me) and login to router,  navigate to connected devices and find Pi address.
 
 # Update Pi
+15:00
 On network connected computer open Powershell:
 ``ssh <username>@192.168.1.x -v``
 
@@ -52,6 +53,9 @@ and re- try the clone cmd
 ``yes | sudo sh NAS_drive/scripts/update.sh``
 
 The Pi reboots upon completion.
+
+#Test script
+``sudo sh NAS_drive/scripts/test.sh``
 
 # Enter Enviroment variables
 On network connected computer open Powershell:
