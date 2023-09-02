@@ -61,6 +61,25 @@ On network connected computer open Powershell:
 run the following cmd & enter prompts to set up Nextcloud credentials.
 ``sudo sh NAS_drive/scripts/env_setup.sh``
 
+
+
+
+
+blkid | grep -rn 'LABEL="cloudDrive"' | grep -o ' UUID="[^"]*'
+
+blkid | grep -rn 'LABEL="cloudDrive"' | grep -o ' UUID="[^"]*' | awk -F= '{print $2}' | tr -d '"'
+
+
+
+export DRIVE_1_UUID=$(blkid | grep -rn 'LABEL="cloudDrive"' | grep -o ' UUID="[^"]*')
+
+export DRIVE_1_UUID=$(blkid | grep -rn 'LABEL="cloudDrive"' | grep -o ' UUID="[^"]*' | awk -F= '{print $2}' | tr -d '"')
+
+
+
+
+
+
 # Nextcloud 
 On network connected computer open Powershell:
 ``ssh <username>@192.168.1.x -v``
