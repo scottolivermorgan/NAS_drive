@@ -37,28 +37,29 @@ Set hotsname as Pi , enable SSH and select use password authentication.
 Save and write SD, takes a few minutes.
 Insert SD and turn on pi, nav to router on local network (192.168.1.1 for me) and login to router,  navigate to connected devices and find Pi address.
 
-# Enter Enviroment variables
+# Update Pi
 On network connected computer open Powershell:
 ``ssh <username>@192.168.1.x -v``
 
 Clone this repo:
 ``git clone https://github.com/scottolivermorgan/NAS_drive.git``
+_note_ if the following error occurs:
+``j``
+Run
+``git config --global http.version HTTP/1.1``
+and re- try the clone cmd
 
-change dir
-``cd NAS_drive/scripts``
+``yes | sudo sh NAS_drive/scripts/update.sh``
 
-run
-``sudo sh env_setup.sh``
-and enter prompts
+The Pi reboots upon completion.
 
-TODO: retrive UUID of external HD and set here
-
-# Update Pi
+# Enter Enviroment variables
 On network connected computer open Powershell:
 ``ssh <username>@192.168.1.x -v``
 
-``yes | sudo sh env_setup.sh``
-Follows prompts the set usernames and passwords.
+
+run the following cmd & enter prompts to set up Nextcloud credentials.
+``sudo sh NAS_drive/scripts/env_setup.sh``
 
 # Nextcloud 
 On network connected computer open Powershell:
