@@ -24,4 +24,4 @@ echo "Password has been set as the environment variable NC_PASSWORD"
 echo "Enter name of external hard drive:"
 read external_hd
 
-export DRIVE_1_UUID=$(blkid | grep -rn 'LABEL="$external_hd"' | grep -o ' UUID="[^"]*' | awk -F= '{print $2}' | tr -d '"')
+export DRIVE_1_UUID=$(blkid | grep -rn 'LABEL="'$external_hd'"' | grep -o ' UUID="[^"]*' | awk -F= '{print $2}' | tr -d '"')
