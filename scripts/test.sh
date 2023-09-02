@@ -29,8 +29,8 @@ export DRIVE_1_UUID=$(blkid | grep -rn 'LABEL="'$external_hd'"' | grep -o ' UUID
 
 #remove unused packages and clean cache
 echo "remove unused packages and cleaning cache"
-sudo apt autoremove
-sudo apt clean
+yes | sudo apt autoremove
+yes | sudo apt clean
 
 # Install apache
 echo "Installing apahe2"
@@ -52,6 +52,7 @@ yes | apt install mariadb-server
 
 echo "Nextcloud dependancies installed, please run nextcloud-setup"
 
+# password prompt here!
 
 # Create & configure database for nextcloud
 
@@ -79,7 +80,7 @@ mkdir -p /var/www/nextcloud/data
 chown -R www-data:www-data /var/www/nextcloud/
 
 #Move Nextcloud config file to correct location for Apache
-#error here on UN
+#error here on UN - root?
 mv /home/$UN/NAS_drive/scripts/nextcloud/nextcloud.conf /etc/apache2/sites-available/
 
 # Point Apahe2 to config file for Nextcloud
@@ -95,3 +96,5 @@ mkdir /media/hardrive1
 #echo "/dev/sda2 /media/hardrive1    auto    uid=1000,gid=1000,noatime 0 0" >> /etc/fstab
 
 echo "UUID='$DRIVE_1_UUID'    /media/hardrive1               nfts    defaults,errors=remount-ro 0       1" >> /etc/fstab
+
+#echo "UUID=2C10102D100FFD10    /media/hardrive1               nfts    defaults,errors=remount-ro 0       1" >> /etc/fstab
