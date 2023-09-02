@@ -1,7 +1,11 @@
 #!/bin/bash
 
 # Retrive current user and set as environment variable
-export UN=$(whoami)
+echo "enter current user name (Pi): "
+read pi_user
+
+# Set the password as an environment variable
+export UN="$pi_user"
 
 # Prompt user for password
 echo "Create nextcloud user: "
@@ -95,6 +99,6 @@ mkdir /media/hardrive1
 # Mount harddrive on boot
 #echo "/dev/sda2 /media/hardrive1    auto    uid=1000,gid=1000,noatime 0 0" >> /etc/fstab
 
-echo "UUID='$DRIVE_1_UUID'    /media/hardrive1               nfts    defaults,errors=remount-ro 0       1" >> /etc/fstab
+echo "UUID='$DRIVE_1_UUID'    /media/hardrive1               ntfs    defaults,errors=remount-ro 0       1" >> /etc/fstab
 
-#echo "UUID=2C10102D100FFD10    /media/hardrive1               nfts    defaults,errors=remount-ro 0       1" >> /etc/fstab
+#echo "UUID=2C10102D100FFD10    /media/hardrive1               ntfs    defaults,errors=remount-ro 0       1" >> /etc/fstab
