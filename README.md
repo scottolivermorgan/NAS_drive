@@ -61,6 +61,8 @@ On network connected computer open Powershell:
 run the following cmd & enter prompts to set up Nextcloud credentials.
 ``sudo sh NAS_drive/scripts/env_setup.sh``
 
+``sudo sh source NAS_drive/scripts/env_setup.sh``
+
 
 
 
