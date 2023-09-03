@@ -253,3 +253,12 @@ add line
 add line
 ``UUID={YOUR-UID}    {/path/to/mount/point}               {file-system-type}    defaults,errors=remount-ro 0       1``
 
+#Sync external HD;s
+
+rsync syntax 
+``# rsync options source destination``
+
+``rsync -av /media/scott/cloudDrive/* /media/scott/cloudDriveBU``
+
+test
+``for i in {1..50}; do touch "testfile$i.txt"; done``
