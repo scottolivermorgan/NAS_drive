@@ -46,8 +46,8 @@ __note__ if this has been done before and is freash installation, navigate to C:
 Clone this repo:
 ``git clone https://github.com/scottolivermorgan/NAS_drive.git``
 _note_ if the following error occurs:
-``j``
-Run
+``error: RPC failed; curl 16 Error in the HTTP2 framing layer``
+retry cmd, else if error persits Run:
 ``git config --global http.version HTTP/1.1``
 and re- try the clone cmd
 
