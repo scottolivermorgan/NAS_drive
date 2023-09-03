@@ -1,7 +1,6 @@
 TODO:
 - script to automate gui config on NC
 - script to automate gui config on Plex.
-- mount HD's via USID not path
 
 ## Initial Pi 4 Setup
 Download SD card formating software:
@@ -38,7 +37,6 @@ Save and write SD, takes a few minutes.
 Insert SD and turn on pi, nav to router on local network (192.168.1.1 for me) and login to router,  navigate to connected devices and find Pi address.
 
 # Update Pi
-15:00
 On network connected computer open Powershell:
 ``ssh <username>@192.168.1.x -v``
 
@@ -54,62 +52,35 @@ and re- try the clone cmd
 
 The Pi reboots upon completion.
 
-#Test script
-``sudo sh NAS_drive/scripts/test.sh``
-
-# Enter Enviroment variables
-On network connected computer open Powershell:
+# New Version 03092023
+On network connected computer open Powershell & reconnect to Pi:
 ``ssh <username>@192.168.1.x -v``
 
+Run nextcloud script and follow prompts, pi user is your current user, then set nextcloud user name & passweord as prompted.
+``sudo sh NAS_drive/scripts/nc.sh``
 
-run the following cmd & enter prompts to set up Nextcloud credentials.
-``sudo sh NAS_drive/scripts/env_setup.sh``
+_bug note_
+fstab UUID incorrect, run following cmd and note UUID of relevent drive
+``blkid``
 
-``sudo sh source NAS_drive/scripts/env_setup.sh``
+then ``sudo nano /etc/fstab``
 
+append with  (replacing relevent UUID):
+``UUID=2C10102D100FFD10    /media/hardrive1               ntfs    defaults,errors=remount-ro 0       1``
+_end bug note_
 
+Schedule relay for back up every 24 hours (_note_ runs in superuser cron jobs):
+``sudo sh NAS_drive/scripts/backup_drive/schedule-backup.sh``
 
+Edit start up scripts to run shutdown.py to listen to button
+``sudo sh NAS_drive/scripts/shutdown_switch/shutdown.sh``
 
-
-blkid | grep -rn 'LABEL="cloudDrive"' | grep -o ' UUID="[^"]*'
-
-blkid | grep -rn 'LABEL="cloudDrive"' | grep -o ' UUID="[^"]*' | awk -F= '{print $2}' | tr -d '"'
-
-
-
-export DRIVE_1_UUID=$(blkid | grep -rn 'LABEL="cloudDrive"' | grep -o ' UUID="[^"]*')
-
-export DRIVE_1_UUID=$(blkid | grep -rn 'LABEL="cloudDrive"' | grep -o ' UUID="[^"]*' | awk -F= '{print $2}' | tr -d '"')
-
-
-
-
-
-
-# Nextcloud 
-On network connected computer open Powershell:
-``ssh <username>@192.168.1.x -v``
-
-Change into repo folder:
-``cd NAS_drive/scripts/nextcloud``
-
-Install nexcloud dependancies and follw prompts:
-``yes | sudo sh nextcloud-dependancies.sh``
-
-Setup initial databse and user for nextcloud, follow prompts:
-``sudo sh nextcloud-setup.sh``
-
-Install nextcloud:
-``yes | sudo sh nextcloud-installation.sh``
-
-Reboot after completeion
-``sudo reboot``
 
 # Enable External Storage via GUI
 
-``lsblk``     - Check mount point is sda1
+~~``lsblk``     - Check mount point is sda1~~
 
-``sudo sh mount-drives.sh``
+~~``sudo sh mount-drives.sh``~~
 
 Click top right userprofile icon and select Apps.
 ![addExt1](./assets/nextcloud_add_external_drive/nc1.PNG)
@@ -127,9 +98,9 @@ Return to SSH shell and reboot Pi.
 ``sudo reboot``
 
 ## Plex
-From SSH shell update packages if havent recently
+~~From SSH shell update packages if havent recently~~
 
-``sudo sh update.sh``
+~~``sudo sh update.sh``~~
 
 Change directory to plex installation script
 ``cd NAS_drive/scripts/plex``
@@ -142,6 +113,56 @@ Access Plex at 192.168.1.x:32400/web -x dependant on your local network.
 Sign in/create account and addexternal lib via GUI
 Add Libary > harddrive1 (in this case as has been set in previouse steps)
 
+~~# Enter Enviroment variables~~
+~~On network connected computer open Powershell:~~
+~~``ssh <username>@192.168.1.x -v``~~
+
+
+~~run the following cmd & enter prompts to set up Nextcloud credentials.~~
+~~``sudo sh NAS_drive/scripts/env_setup.sh``~~
+
+~~``sudo sh source NAS_drive/scripts/env_setup.sh``~~
+
+
+
+
+
+~~blkid | grep -rn 'LABEL="cloudDrive"' | grep -o ' UUID="[^"]~~*'
+
+~~blkid | grep -rn 'LABEL="cloudDrive"' | grep -o ' UUID="[^"]*' | awk -F= '{print $2}' | tr -d '"'~~
+
+
+
+~~export DRIVE_1_UUID=$(blkid | grep -rn 'LABEL="cloudDrive"' | grep -o ' UUID="[^"]*')~~
+
+~~export DRIVE_1_UUID=$(blkid | grep -rn 'LABEL="cloudDrive"' | grep -o ' UUID="[^"]*' | awk -F= '{print $2}' | tr -d '"')~~
+
+
+
+
+
+
+~~# Nextcloud ~~
+~~On network connected computer open Powershell:~~
+~~``ssh <username>@192.168.1.x -v``~~
+
+~~Change into repo folder:~~
+~~``cd NAS_drive/scripts/nextcloud``~~
+
+~~Install nexcloud dependancies and follw prompts:~~
+~~``yes | sudo sh nextcloud-dependancies.sh``~~
+
+~~Setup initial databse and user for nextcloud, follow prompts:~~
+~~``sudo sh nextcloud-setup.sh``~~
+
+~~Install nextcloud:~~
+~~``yes | sudo sh nextcloud-installation.sh``~~
+
+~~Reboot after completeion~~
+~~``sudo reboot``~~
+
+
+
 ## Backup drive
 Relay wiring:
 
@@ -153,11 +174,11 @@ __s__  =    __GPIO 14__  (board no# 8)
 
 ![pinout](./assets/backup_setup/pi4_pinout.PNG)
 
-Switch to correct dir:
-``cd NAS_drive/scripts/backup_drive``
+~~Switch to correct dir:~~
+~~``cd NAS_drive/scripts/backup_drive``~~
 
-Schedule relay (_note_ runs in superuser cron jobs):
-``sudo sh NAS_drive/scripts/backup_drive/schedule-backup.sh``
+~~Schedule relay (_note_ runs in superuser cron jobs):~~
+~~``sudo sh NAS_drive/scripts/backup_drive/schedule-backup.sh``~~
 
 ## Add Powerdown Button
 Pi dosen't ship with power off button, shutting down cleanly avoids SD card corruption so add a switch and python script to enable clean shutdowns before turing off at plug.
@@ -165,11 +186,11 @@ Pi dosen't ship with power off button, shutting down cleanly avoids SD card corr
 Use board pins __39__ (ground) and __40__ (GPIO21):
 ![pinout](./assets/shutdown_switch/shutdown_switch_pinout.PNG)
 
-Change working directory
-``cd /NAS_drive/scripts/shutdown_switch``
+~~Change working directory~~
+~~``cd /NAS_drive/scripts/shutdown_switch``~~
 
-Edit start up scripts to run shutdown.py to listen to button
-``sudo sh NAS_drive/scripts/shutdown_switch/shutdown.sh``
+~~Edit start up scripts to run shutdown.py to listen to button~~
+~~``sudo sh NAS_drive/scripts/shutdown_switch/shutdown.sh``~~
 
 Reboot Pi
 ``sudo reboot``
@@ -229,36 +250,36 @@ Set up port fowarding rules on router
 
 
 # Use UUID for externl HD mounting
-source: https://www.cyberciti.biz/faq/linux-finding-using-uuids-to-update-fstab/
+~~source: https://www.cyberciti.biz/faq/linux-finding-using-uuids-to-update-fstab/~~
 
-__note__ UUID changes when drives formated.
+~~__note__ UUID changes when drives formated.~~
 
-- add primary HD (plugged in)
-- Use ``blkid`` command-line utility to locate/print block device attributes:
+~~- add primary HD (plugged in)~~
+~~- Use ``blkid`` command-line utility to locate/print block device attributes:~~
 
-open fstab to edit
-``sudo nano /etc/fstab``
-add line
-``UUID={YOUR-UID}    {/path/to/mount/point}               {file-system-type}    defaults,errors=remount-ro 0       1``
+~~open fstab to edit~~
+~~``sudo nano /etc/fstab``~~
+~~add line~~
+~~``UUID={YOUR-UID}    {/path/to/mount/point}               {file-system-type}    defaults,errors=remount-ro 0       1``~~
 
-- add airgapped back up drive:
-    - plug in drive to correct port(hijacked circuit -should not power upas relay open)
-    - switch dir ``cd /NAS_drive/functions``
-    - shut relay to power up 2nd HD ``python relay_power_on.py``
-    - Use  ``lsblk`` - note device name (sdb1 in my case).
-    - get uuid of device name with ``sudo blkid /dev/sdb1``
-    -note uuid
-    open fstab to edit
-``sudo nano /etc/fstab``
-add line
-``UUID={YOUR-UID}    {/path/to/mount/point}               {file-system-type}    defaults,errors=remount-ro 0       1``
+~~- add airgapped back up drive:~~
+    ~~- plug in drive to correct port(hijacked circuit -should not power upas relay open)~~
+    ~~- switch dir ``cd /NAS_drive/functions``~~
+    ~~- shut relay to power up 2nd HD ``python relay_power_on.py``~~
+    ~~- Use  ``lsblk`` - note device name (sdb1 in my case).~~
+    ~~- get uuid of device name with ``sudo blkid /dev/sdb1``~~
+    ~~-note uuid~~
+    ~~open fstab to edit~~
+~~``sudo nano /etc/fstab``~~
+~~add line~~
+~~``UUID={YOUR-UID}    {/path/to/mount/point}               {file-system-type}    defaults,errors=remount-ro 0       1``~~
 
-#Sync external HD;s
+~~#Sync external HD;s~~
 
-rsync syntax 
-``# rsync options source destination``
+~~rsync syntax ~~
+~~``# rsync options source destination``~~
 
-``rsync -av /media/scott/cloudDrive/* /media/scott/cloudDriveBU``
+~~``rsync -av /media/scott/cloudDrive/* /media/scott/cloudDriveBU``~~
 
-test
-``for i in {1..50}; do touch "testfile$i.txt"; done``
+~~test~~
+~~``for i in {1..50}; do touch "testfile$i.txt"; done``~~
