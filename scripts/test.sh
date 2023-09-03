@@ -101,4 +101,4 @@ mkdir /media/hardrive1
 
 echo "UUID='$DRIVE_1_UUID'    /media/hardrive1               ntfs    defaults,errors=remount-ro 0       1" >> /etc/fstab
 
-#echo "UUID=2C10102D100FFD10    /media/hardrive1               ntfs    defaults,errors=remount-ro 0       1" >> /etc/fstab
+#UUID=2C10102D100FFD10    /media/hardrive1               ntfs    defaults,errors=remount-ro 0       1

@@ -157,7 +157,7 @@ Switch to correct dir:
 ``cd NAS_drive/scripts/backup_drive``
 
 Schedule relay (_note_ runs in superuser cron jobs):
-``sudo sh schedule-backup.sh``
+``sudo sh NAS_drive/scripts/backup_drive/schedule-backup.sh``
 
 ## Add Powerdown Button
 Pi dosen't ship with power off button, shutting down cleanly avoids SD card corruption so add a switch and python script to enable clean shutdowns before turing off at plug.
@@ -169,7 +169,7 @@ Change working directory
 ``cd /NAS_drive/scripts/shutdown_switch``
 
 Edit start up scripts to run shutdown.py to listen to button
-``sudo sh shutdown.sh``
+``sudo sh NAS_drive/scripts/shutdown_switch/shutdown.sh``
 
 Reboot Pi
 ``sudo reboot``
