@@ -5,6 +5,8 @@ TODO:
 - Rename main external hard drive to cloudDrive and back up to cloudDriveBU.
 - _note_ Synch drives before setting up as MUCH quciker if large and popultated (use Free file sync).
 
+-Ensure Hd cloudDrive is attatched to permenant usb and cloudDriveBU attatched to realy controled USB.
+
 ## Initial Pi 4 Setup
 Download SD card formating software:
 https://www.sdcard.org/downloads/formatter/
