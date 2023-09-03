@@ -40,6 +40,9 @@ Insert SD and turn on pi, nav to router on local network (192.168.1.1 for me) an
 On network connected computer open Powershell:
 ``ssh <username>@192.168.1.x -v``
 
+if first time connecting will be prompted for ssh fingerprint, type yes
+__note__ if this has been done before and is freash installation, navigate to C://users/user/.ssh/known_hosts and delete privious fingerprint.
+
 Clone this repo:
 ``git clone https://github.com/scottolivermorgan/NAS_drive.git``
 _note_ if the following error occurs:
