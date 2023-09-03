@@ -1,6 +1,9 @@
 TODO:
 - script to automate gui config on NC
 - script to automate gui config on Plex.
+# Pre steps
+- Rename main external hard drive to cloudDrive and back up to cloudDriveBU.
+- _note_ Synch drives before setting up as MUCH quciker if large and popultated (use Free file sync).
 
 ## Initial Pi 4 Setup
 Download SD card formating software:
@@ -69,7 +72,7 @@ fstab UUID incorrect, run following cmd and note UUID of relevent drive
 then ``sudo nano /etc/fstab``
 
 append with  (replacing relevent UUID):
-``UUID=2C10102D100FFD10    /media/hardrive1               ntfs    defaults,errors=remount-ro 0       1``
+``UUID=C41E05971E0583A0    /media/hardrive1               ntfs    defaults,errors=remount-ro 0       1``
 _end bug note_
 
 Schedule relay for back up every 24 hours (_note_ runs in superuser cron jobs):
