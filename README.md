@@ -99,7 +99,7 @@ Scroll list and select Enable on External Storage support
 Wait several seconds, again select user icon at top right and select Administrator settings.
 ![addExt1](./assets/nextcloud_add_external_drive/nc3.PNG)
 
-Select External storage tab on left and add name, Local, and add mount point defined in mount-drives.sh - /media/harddrive1
+Select External storage tab on left and add name, Local, and add mount point defined in mount-drives.sh - /media/hardrive1
 ![addExt1](./assets/nextcloud_add_external_drive/nc4.PNG)
 
 Return to SSH shell and reboot Pi.
@@ -110,11 +110,11 @@ Return to SSH shell and reboot Pi.
 
 ~~``sudo sh update.sh``~~
 
-Change directory to plex installation script
-``cd NAS_drive/scripts/plex``
+~~Change directory to plex installation script~~
+~~``cd NAS_drive/scripts/plex``~~
 
 install plex
-``sudo sh plex-installation.sh``
+``sudo sh NAS_drive/scripts/plex/plex-installation.sh``
 
 Access Plex at 192.168.1.x:32400/web -x dependant on your local network.
 
@@ -185,8 +185,8 @@ __s__  =    __GPIO 14__  (board no# 8)
 ~~Switch to correct dir:~~
 ~~``cd NAS_drive/scripts/backup_drive``~~
 
-~~Schedule relay (_note_ runs in superuser cron jobs):~~
-~~``sudo sh NAS_drive/scripts/backup_drive/schedule-backup.sh``~~
+Schedule relay (_note_ runs in superuser cron jobs):~~
+``sudo sh NAS_drive/scripts/backup_drive/schedule-backup.sh``
 
 ## Add Powerdown Button
 Pi dosen't ship with power off button, shutting down cleanly avoids SD card corruption so add a switch and python script to enable clean shutdowns before turing off at plug.
@@ -197,37 +197,37 @@ Use board pins __39__ (ground) and __40__ (GPIO21):
 ~~Change working directory~~
 ~~``cd /NAS_drive/scripts/shutdown_switch``~~
 
-~~Edit start up scripts to run shutdown.py to listen to button~~
-~~``sudo sh NAS_drive/scripts/shutdown_switch/shutdown.sh``~~
+Edit start up scripts to run shutdown.py to listen to button
+``sudo sh NAS_drive/scripts/shutdown_switch/shutdown.sh``
 
 Reboot Pi
 ``sudo reboot``
 
 ## Harden Security
-Change working dir
-`` cd NAS_drive/scripts/harden_security``
+~~Change working dir~~
+~~`` cd NAS_drive/scripts/harden_security``~~
 
 Install packages to auto update security patchs
-``sudo sh auto_patch.sh``
+``yes | sudo sh NAS_drive/scripts/harden_security/auto_patch.sh``
 _Note:_ SSH port changed from 22 to 1111
 
-Check for users with empty passwords
-``sudo awk -F: '($2 == "") {print}' /etc/shadow``
+~~Check for users with empty passwords~~
+~~``sudo awk -F: '($2 == "") {print}' /etc/shadow``~~
 
-Lock any applicable accounts
-``passwd -l <username>``
+~~Lock any applicable accounts~~
+~~``passwd -l <username>``~~
 
-Check expected logins
-``lslogins -u``
+~~Check expected logins~~
+~~``lslogins -u``~~
 
-Check any unexpected services running
-``sudo service --status-all``
+~~Check any unexpected services running~~
+~~``sudo service --status-all``~~
 
-Check SHH root login disabled
-``sudo nano /etc/ssh/sshd_config``
+~~Check SHH root login disabled~~
+~~``sudo nano /etc/ssh/sshd_config``~~
 
-Verify following exists
-``#PermitRootLogin prohibit-password``
+~~Verify following exists~~
+~~``#PermitRootLogin prohibit-password``~~
 
 ## External Access
 Resources:
