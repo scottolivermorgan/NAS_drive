@@ -309,5 +309,15 @@ to
 ~~``for i in {1..50}; do touch "testfile$i.txt"; done``~~
 
 # Create Backup Image of Pi SD
-Download:
+Download & install imaging software:
 https://sourceforge.net/projects/win32diskimager/
+
+- Open Win32 Disk Imager
+
+![WI1](./assets/SD_backup/wI_1.PNG)
+
+![WI2](./assets/SD_backup/wI_2.PNG)
+
+![WI3](./assets/SD_backup/wI_3.PNG)
+
+![WI4](./assets/SD_backup/wI_4.PNG)
