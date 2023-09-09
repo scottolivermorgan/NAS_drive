@@ -8,7 +8,7 @@ sleep 20s
 
 echo "Syncing drives"
 
-rsync -av /media/scott/cloudDrive/* /media/scott/cloudDriveBU
+rsync -av /media/hardrive1/* /media/scott/cloudDriveBU
 
 sleep 20s
 
