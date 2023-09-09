@@ -5,7 +5,7 @@ TODO:
 - Rename main external hard drive to cloudDrive and back up to cloudDriveBU.
 - _note_ Synch drives before setting up as MUCH quciker if large and popultated (use Free file sync).
 
--Ensure Hd cloudDrive is attatched to permenant usb and cloudDriveBU attatched to realy controled USB.
+- Ensure Hd cloudDrive is attatched to permenant usb and cloudDriveBU attatched to realy controled USB.
 
 ## Initial Pi 4 Setup
 Download SD card formating software:
@@ -39,35 +39,41 @@ Set hotsname as Pi , enable SSH and select use password authentication.
 ![formatSD](./assets/pi_setup/pialt.PNG)
 
 Save and write SD, takes a few minutes.
-Insert SD and turn on pi, nav to router on local network (192.168.1.1 for me) and login to router,  navigate to connected devices and find Pi address.
+Insert SD and turn on Pi, navigate to router on local network (192.168.1.1 for me) and login to router, navigate to connected devices and find Pi address.
 
 # Update Pi
-On network connected computer open Powershell:
-``ssh <username>@192.168.1.x -v``
+- On network connected computer open Powershell and run the following command, if this is the first time connecting you will be prompted for ssh fingerprint, type yes.
 
-if first time connecting will be prompted for ssh fingerprint, type yes
-__note__ if this has been done before and is freash installation, navigate to C://users/user/.ssh/known_hosts and delete privious fingerprint.
+    ``ssh <username>@192.168.1.x -v``
 
-Clone this repo:
+
+
+__Note:__ if this has been done before and is fresh installation, navigate to C://users/user/.ssh/known_hosts and delete previous fingerprint.
+
+ - Clone this repo:
 ``git clone https://github.com/scottolivermorgan/NAS_drive.git``
-_note_ if the following error occurs:
-``error: RPC failed; curl 16 Error in the HTTP2 framing layer``
-retry cmd, else if error persits Run:
-``git config --global http.version HTTP/1.1``
-and re- try the clone cmd
 
+__Note:__ if the following error occurs:
+``error: RPC failed; curl 16 Error in the HTTP2 framing layer``
+
+retry cmd, else if error persits Run:
+    ``git config --global http.version HTTP/1.1``
+    and re- try the clone cmd
+
+
+- Update packages and reboot Pi:
 ``yes | sudo sh NAS_drive/scripts/update.sh``
 
 The Pi reboots upon completion.
 
 # New Version 03092023
-On network connected computer open Powershell & reconnect to Pi:
+- On network connected computer open Powershell & reconnect to Pi:
 ``ssh <username>@192.168.1.x -v``
 
-Run nextcloud script and follow prompts, pi user is your current user, then set nextcloud user name & passweord as prompted.
+- Run nextcloud script and follow prompts, pi user is your current user, then set nextcloud user name & passweord as prompted.
 ``sudo sh NAS_drive/scripts/nc.sh``
 
-_bug note_
+__bug note__
 fstab UUID incorrect, run following cmd and note UUID of relevent drive
 ``blkid``
 
@@ -75,15 +81,15 @@ then ``sudo nano /etc/fstab``
 
 append with  (replacing relevent UUID):
 ``UUID=C41E05971E0583A0    /media/hardrive1               ntfs    defaults,errors=remount-ro 0       1``
-_end bug note_
 
-Schedule relay for back up every 24 hours (_note_ runs in superuser cron jobs):
+
+- Schedule relay for back up every 24 hours (_note_ runs in superuser cron jobs):
 ``sudo sh NAS_drive/scripts/backup_drive/schedule-backup.sh``
 
-_note_ Can check cron logs with
+__note__ Can check cron logs with
 ``grep CRON /var/log/syslog``
 
-Edit start up scripts to run shutdown.py to listen to button
+- Edit start up scripts to run shutdown.py to listen to button
 ``sudo sh NAS_drive/scripts/shutdown_switch/shutdown.sh``
 
 
@@ -188,7 +194,7 @@ __s__  =    __GPIO 14__  (board no# 8)
 ~~Switch to correct dir:~~
 ~~``cd NAS_drive/scripts/backup_drive``~~
 
-Schedule relay (_note_ runs in superuser cron jobs):~~
+- Schedule relay (_note_ runs in superuser cron jobs):
 ``sudo sh NAS_drive/scripts/backup_drive/schedule-backup.sh``
 
 ## Add Powerdown Button
@@ -200,19 +206,20 @@ Use board pins __39__ (ground) and __40__ (GPIO21):
 ~~Change working directory~~
 ~~``cd /NAS_drive/scripts/shutdown_switch``~~
 
-Edit start up scripts to run shutdown.py to listen to button
+ - Edit start up scripts to run shutdown.py to listen to button
 ``sudo sh NAS_drive/scripts/shutdown_switch/shutdown.sh``
 
-Reboot Pi
+- Reboot Pi
 ``sudo reboot``
 
 ## Harden Security
 ~~Change working dir~~
 ~~`` cd NAS_drive/scripts/harden_security``~~
 
-Install packages to auto update security patchs
+- Install packages to auto update security patchs
 ``yes | sudo sh NAS_drive/scripts/harden_security/auto_patch.sh``
-_Note:_ SSH port changed from 22 to 1111
+
+__Note:__ SSH port changed from 22 to 1111
 
 ~~Check for users with empty passwords~~
 ~~``sudo awk -F: '($2 == "") {print}' /etc/shadow``~~
