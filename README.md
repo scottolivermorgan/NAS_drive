@@ -265,7 +265,13 @@ add domain name to
 Set up port fowarding rules on router
 
 # Resolve Nextcloud security prompts
+- The PHP memory limit is below the recommended value of 512MB
+``sudo nano /etc/php/8.1/apach2/php.ini``
+change line:
 
+``memory_limit = 128M``
+to
+``memory_limit = 1G``
 
 # Use UUID for externl HD mounting
 ~~source: https://www.cyberciti.biz/faq/linux-finding-using-uuids-to-update-fstab/~~
@@ -301,3 +307,5 @@ Set up port fowarding rules on router
 
 ~~test~~
 ~~``for i in {1..50}; do touch "testfile$i.txt"; done``~~
+
+# Creae Backup Image
