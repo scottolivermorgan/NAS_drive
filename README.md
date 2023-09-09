@@ -312,12 +312,14 @@ to
 Download & install imaging software:
 https://sourceforge.net/projects/win32diskimager/
 
-- Open Win32 Disk Imager
-
+- Insert SD card from Pi & Open Win32 Disk Imager, check drive letter and select under device dropdown:
 ![WI1](./assets/SD_backup/wI_1.PNG)
 
+- Select folder icon to select save location for image:
 ![WI2](./assets/SD_backup/wI_2.PNG)
 
+- In pop up navigate to desired save location and enter  desired image name, ensure file extenino is .img
 ![WI3](./assets/SD_backup/wI_3.PNG)
 
+Select read option to save, operation can take 10 -20 mins.
 ![WI4](./assets/SD_backup/wI_4.PNG)
