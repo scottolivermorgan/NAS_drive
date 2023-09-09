@@ -12,8 +12,7 @@ Download SD card formating software:
 https://www.sdcard.org/downloads/formatter/
 
 Format card on local machine:
-![formatSD](./assets/pi_setup/format_SD.PNG)
-<img src="./assets/pi_setup/format_SD.PNG"/>
+![formatSD](./assets/pi_setup/format_SD.png)
 
 Download Raspberry Pi Imager:
 https://www.raspberrypi.com/software/
