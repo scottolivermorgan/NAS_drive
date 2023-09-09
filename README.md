@@ -12,6 +12,7 @@ Download SD card formating software:
 https://www.sdcard.org/downloads/formatter/
 
 Format card on local machine:
+
 ![formatSD](./assets/pi_setup/format_SD.png)
 
 Download Raspberry Pi Imager:
@@ -20,23 +21,23 @@ https://www.raspberrypi.com/software/
 Run Raspberry Pi Imager and flash OS,
 Select settings (cog wheel - lower right)
 
-![formatSD](./assets/pi_setup/imager_screen_1.PNG)
+![formatSD](./assets/pi_setup/imager_screen_1.png)
 
 Select 'Enable shh'
 Select 'Use password authentication'
 'set authorised keys' auto fills to local user.
 enter username and password. __DO NOT USE DEFAULT USERNAME & PASSWORDS__.
 
-![formatSD](./assets/pi_setup/imager_screen_2.PNG)
+![formatSD](./assets/pi_setup/imager_screen_2.png)
 
 Select 'Configure wireless LAN option and enter network details.
-![formatSD](./assets/pi_setup/imager_screen_3.PNG)
+![formatSD](./assets/pi_setup/imager_screen_3.png)
 
 Local settings auto filled, if not complete.
-![formatSD](./assets/pi_setup/imager_screen_4.PNG)
+![formatSD](./assets/pi_setup/imager_screen_4.png)
 
 Set hotsname as Pi , enable SSH and select use password authentication.
-![formatSD](./assets/pi_setup/pialt.PNG)
+![formatSD](./assets/pi_setup/pialt.png)
 
 Save and write SD, takes a few minutes.
 Insert SD and turn on Pi, navigate to router on local network (192.168.1.1 for me) and login to router, navigate to connected devices and find Pi address.
@@ -100,16 +101,16 @@ __note__ Can check cron logs with
 ~~``sudo sh mount-drives.sh``~~
 
 Click top right userprofile icon and select Apps.
-![addExt1](./assets/nextcloud_add_external_drive/nc1.PNG)
+![addExt1](./assets/nextcloud_add_external_drive/nc1.png)
 
 Scroll list and select Enable on External Storage support
-![addExt1](./assets/nextcloud_add_external_drive/nc2.PNG)
+![addExt1](./assets/nextcloud_add_external_drive/nc2.png)
 
 Wait several seconds, again select user icon at top right and select Administrator settings.
-![addExt1](./assets/nextcloud_add_external_drive/nc3.PNG)
+![addExt1](./assets/nextcloud_add_external_drive/nc3.png)
 
 Select External storage tab on left and add name, Local, and add mount point defined in mount-drives.sh - /media/hardrive1
-![addExt1](./assets/nextcloud_add_external_drive/nc4.PNG)
+![addExt1](./assets/nextcloud_add_external_drive/nc4.png)
 
 Return to SSH shell and reboot Pi.
 ``sudo reboot``
@@ -189,7 +190,7 @@ __+__  =    __5v Power__ (board no# 2)
 __-__  =     __Ground__   (board no# 14)
 __s__  =    __GPIO 14__  (board no# 8)
 
-![pinout](./assets/backup_setup/pi4_pinout.PNG)
+![pinout](./assets/backup_setup/pi4_pinout.png)
 
 ~~Switch to correct dir:~~
 ~~``cd NAS_drive/scripts/backup_drive``~~
@@ -201,7 +202,7 @@ __s__  =    __GPIO 14__  (board no# 8)
 Pi dosen't ship with power off button, shutting down cleanly avoids SD card corruption so add a switch and python script to enable clean shutdowns before turing off at plug.
 
 Use board pins __39__ (ground) and __40__ (GPIO21):
-![pinout](./assets/shutdown_switch/shutdown_switch_pinout.PNG)
+![pinout](./assets/shutdown_switch/shutdown_switch_pinout.png)
 
 ~~Change working directory~~
 ~~``cd /NAS_drive/scripts/shutdown_switch``~~
@@ -313,13 +314,13 @@ Download & install imaging software:
 https://sourceforge.net/projects/win32diskimager/
 
 - Insert SD card from Pi & Open Win32 Disk Imager, check drive letter and select under device dropdown:
-![WI1](./assets/SD_backup/wI_1.PNG)
+![WI1](./assets/SD_backup/wI_1.png)
 
 - Select folder icon to select save location for image:
-![WI2](./assets/SD_backup/wI_2.PNG)
+![WI2](./assets/SD_backup/wI_2.png)
 
 - In pop up navigate to desired save location and enter  desired image name, ensure file extenino is .img
-![WI3](./assets/SD_backup/wI_3.PNG)
+![WI3](./assets/SD_backup/wI_3.png)
 
 Select read option to save, operation can take 10 -20 mins.
-![WI4](./assets/SD_backup/wI_4.PNG)
+![WI4](./assets/SD_backup/wI_4.png)
