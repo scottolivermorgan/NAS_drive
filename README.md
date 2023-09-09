@@ -80,6 +80,9 @@ _end bug note_
 Schedule relay for back up every 24 hours (_note_ runs in superuser cron jobs):
 ``sudo sh NAS_drive/scripts/backup_drive/schedule-backup.sh``
 
+_note_ Can check cron logs with
+``grep CRON /var/log/syslog``
+
 Edit start up scripts to run shutdown.py to listen to button
 ``sudo sh NAS_drive/scripts/shutdown_switch/shutdown.sh``
 
