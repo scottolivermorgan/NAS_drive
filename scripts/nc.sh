@@ -28,7 +28,11 @@ echo "Password has been set as the environment variable NC_PASSWORD"
 echo "Enter name of external hard drive:"
 read external_hd
 
-export DRIVE_1_UUID=$(blkid | grep -rn 'LABEL="'$external_hd'"' | grep -o ' UUID="[^"]*' | awk -F= '{print $2}' | tr -d '"')
+# Set the external hd name as an environment variable
+export EXTERNAL_HD="$external_hd"
+
+# Look up UUID of eternal hd and set as an environment variable
+export DRIVE_1_UUID=$(blkid | grep -rn 'LABEL="'$EXTERNAL_HD'"' | grep -o ' UUID="[^"]*' | awk -F= '{print $2}' | tr -d '"')
 
 
 #remove unused packages and clean cache
