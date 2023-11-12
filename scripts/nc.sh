@@ -32,8 +32,9 @@ read external_hd
 export EXTERNAL_HD="$external_hd"
 
 # Look up UUID of eternal hd and set as an environment variable
-export DRIVE_1_UUID=$(blkid | grep -rn 'LABEL="'$EXTERNAL_HD'"' | grep -o ' UUID="[^"]*' | awk -F= '{print $2}' | tr -d '"')
-
+# Note: Commands extract full details of drive from blkid,
+# parse for uuid, strip 'uuid=', strip leading whitespace.
+export DRIVE_1_UUID=$(blkid --match-token LABEL="$EXTERNAL_HD" | grep -o ' UUID="[^"]*' | sed 's/UUID="//' | sed 's/^ *//')
 
 #remove unused packages and clean cache
 echo "remove unused packages and cleaning cache"
@@ -104,6 +105,6 @@ mkdir /media/hardrive1
 # Mount harddrive on boot
 #echo "/dev/sda2 /media/hardrive1    auto    uid=1000,gid=1000,noatime 0 0" >> /etc/fstab
 
-echo "UUID='$DRIVE_1_UUID'    /media/hardrive1               ntfs    defaults,errors=remount-ro 0       1" >> /etc/fstab
+echo "UUID=$DRIVE_1_UUID    /media/hardrive1               ntfs    defaults,errors=remount-ro 0       1" >> /etc/fstab
 
 #UUID=2C10102D100FFD10    /media/hardrive1               ntfs    defaults,errors=remount-ro 0       1
