@@ -74,17 +74,17 @@ The Pi reboots upon completion.
 - Run nextcloud script and follow prompts, pi user is your current user, then set nextcloud user name & passweord as prompted.
 ``sudo sh NAS_drive/scripts/nc.sh``
 
-__bug note__
-fstab UUID incorrect, run following cmd and note UUID of relevent drive
-``blkid``
+~~__bug note__~~
+~~fstab UUID incorrect, run following cmd and note UUID of relevent drive~~
+~~``blkid``~~
 
-then ``sudo nano /etc/fstab``
+~~then ``sudo nano /etc/fstab``~~
 
-append with  (replacing relevent UUID):
-``UUID=C41E05971E0583A0    /media/hardrive1               ntfs    defaults,errors=remount-ro 0       1``
+~~append with  (replacing relevent UUID):~~
+~~``UUID=C41E05971E0583A0    /media/hardrive1               ntfs    defaults,errors=remount-ro 0       1``~~
 
 
-- Schedule relay for back up every 24 hours (_note_ runs in superuser cron jobs):
+- Schedule relay for back up every 24 hours (_note_ runs in superuser cron jobs -no crontab for root-ignore):
 ``sudo sh NAS_drive/scripts/backup_drive/schedule-backup.sh``
 
 __note__ Can check cron logs with

@@ -58,13 +58,13 @@ yes | apt install php8.1 php8.1-gd php8.1-sqlite3 php8.1-curl php8.1-zip php8.1-
 echo "Installing MySQL"
 yes | apt install mariadb-server
 
-echo "Nextcloud dependancies installed, please run nextcloud-setup"
+#echo "Nextcloud dependancies installed, please run nextcloud-setup"
 
 # password prompt here!
 
 # Create & configure database for nextcloud
 
-echo "CREATE DATABASE nextclouddb;
+ $nc_password | echo "CREATE DATABASE nextclouddb;
       CREATE USER '$NC_USER'@'localhost' IDENTIFIED BY '$NC_PASSWORD';
       GRANT ALL PRIVILEGES ON nextclouddb.* TO '$NC_USER'@'localhost';
       FLUSH PRIVILEGES;
@@ -76,7 +76,8 @@ echo "Nextcloud-setup complete, please run nextcloud-installation"
 cd /var/www
 
 # Download Nextcloud
-wget https://download.nextcloud.com/server/releases/latest.tar.bz2
+#wget https://download.nextcloud.com/server/releases/latest.tar.bz2
+wget https://download.nextcloud.com/server/releases/nextcloud-27.0.1.tar.bz2
 
 # Extract the archive
 tar -xvf latest.tar.bz2
