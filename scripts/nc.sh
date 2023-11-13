@@ -53,7 +53,10 @@ apt update
 
 # Install relevent PHP packages
 echo "Installing required PHP packages"
-yes | apt install php8.1 php8.1-gd php8.1-sqlite3 php8.1-curl php8.1-zip php8.1-xml php8.1-mbstring php8.1-mysql php8.1-bz2 php8.1-intl php8.1-smbclient php8.1-imap php8.1-gmp php8.1-bcmath libapache2-mod-php8.1
+yes | sudo apt-get install libapache2-mod-php8.2 php8.2-zip php8.2-mysql php8.2-curl php8.2-xml php8.2-mbstring php8.2-gd php8.2-smbclient
+#yes | apt install libapache2-mod-php8.1 php8.1-zip php8.1-mysql php8.1-curl php8.1-xml php8.1-mbstring php8.1-gd 
+
+#yes | apt install php8.1 php8.1-gd php8.1-sqlite3 php8.1-curl php8.1-zip php8.1-xml php8.1-mbstring php8.1-mysql php8.1-bz2 php8.1-intl php8.1-smbclient php8.1-imap php8.1-gmp php8.1-bcmath libapache2-mod-php8.1
 
 # Install mariaDB
 echo "Installing MySQL"
@@ -65,7 +68,7 @@ yes | apt install mariadb-server
 
 # Create & configure database for nextcloud
 
- $nc_password | echo "CREATE DATABASE nextclouddb;
+ echo "CREATE DATABASE nextclouddb;
       CREATE USER '$NC_USER'@'localhost' IDENTIFIED BY '$NC_PASSWORD';
       GRANT ALL PRIVILEGES ON nextclouddb.* TO '$NC_USER'@'localhost';
       FLUSH PRIVILEGES;
@@ -81,7 +84,8 @@ cd /var/www
 wget https://download.nextcloud.com/server/releases/nextcloud-27.0.1.tar.bz2
 
 # Extract the archive
-tar -xvf latest.tar.bz2
+#tar -xvf latest.tar.bz2
+tar -xvf nextcloud-27.0.1.tar.bz2
 
 # Make directory for Nextcloud to operate in
 mkdir -p /var/www/nextcloud/data
