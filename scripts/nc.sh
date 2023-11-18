@@ -42,6 +42,8 @@ yes | sudo apt autoremove
 yes | sudo apt clean
 
 # Install apache
+# Server version: Apache/2.4.57 (Debian)
+# Server built:   2023-04-13T03:26:51
 echo "Installing apahe2"
 yes | apt install apache2
 
@@ -54,11 +56,14 @@ apt update
 # Install relevent PHP packages
 echo "Installing required PHP packages"
 yes | sudo apt-get install libapache2-mod-php8.2 php8.2-zip php8.2-mysql php8.2-curl php8.2-xml php8.2-mbstring php8.2-gd php8.2-smbclient
-#yes | apt install libapache2-mod-php8.1 php8.1-zip php8.1-mysql php8.1-curl php8.1-xml php8.1-mbstring php8.1-gd 
 
+
+#yes | apt install libapache2-mod-php8.1 php8.1-zip php8.1-mysql php8.1-curl php8.1-xml php8.1-mbstring php8.1-gd 
 #yes | apt install php8.1 php8.1-gd php8.1-sqlite3 php8.1-curl php8.1-zip php8.1-xml php8.1-mbstring php8.1-mysql php8.1-bz2 php8.1-intl php8.1-smbclient php8.1-imap php8.1-gmp php8.1-bcmath libapache2-mod-php8.1
 
+
 # Install mariaDB
+# mariadb  Ver 15.1 Distrib 10.11.4-MariaDB, for debian-linux-gnu (aarch64) using  EditLine wrapper
 echo "Installing MySQL"
 yes | apt install mariadb-server
 
@@ -112,3 +117,6 @@ mkdir /media/hardrive1
 echo "UUID=$DRIVE_1_UUID    /media/hardrive1               ntfs    defaults,errors=remount-ro 0       1" >> /etc/fstab
 
 #UUID=2C10102D100FFD10    /media/hardrive1               ntfs    defaults,errors=remount-ro 0       1
+
+# Index user files on external HD.
+-u www-data php /var/www/nextcloud/occ files:scan --all --verbose 
