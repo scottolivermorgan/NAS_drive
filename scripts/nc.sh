@@ -79,7 +79,7 @@ yes | apt install mariadb-server
       FLUSH PRIVILEGES;
       Quit" | sudo mysql -u root -p
 
-echo "Nextcloud-setup complete, please run nextcloud-installation"
+#echo "Nextcloud-setup complete, please run nextcloud-installation"
 
 # Change to default Apache2 directory
 cd /var/www
