@@ -3,8 +3,6 @@
 # https://forums.plex.tv/t/customizing-your-plex-configuration/205443
 # intended for those systems where cat /proc/1/comm returns systemd
 
-sudo su
-
 systemctl stop plexmediaserver
 
 mkdir /etc/systemd/system/plexmediaserver.service.d
