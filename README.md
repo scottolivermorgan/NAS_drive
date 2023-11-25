@@ -114,7 +114,7 @@ Install plex
 Move metadata locatoin to external HD - requires super user perms
 ``sudo su``
 
-``sh NAS_drive/scripts/plex/mv_meta_loc``
+``sh NAS_drive/scripts/plex/mv_meta_loc.sh``
 
 Access Plex at 192.168.1.x:32400/web -x dependant on your local network.
 
