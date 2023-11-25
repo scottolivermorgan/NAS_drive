@@ -20,16 +20,15 @@ https://www.raspberrypi.com/software/
 
 Run Raspberry Pi Imager and flash OS,
 version:
-
-``PRETTY_NAME="Debian GNU/Linux 12 (bookworm)"``
-``NAME="Debian GNU/Linux"``
-``VERSION_ID="12"``
-``VERSION="12 (bookworm)"``
-``VERSION_CODENAME=bookworm``
-``ID=debian``
-``HOME_URL="https://www.debian.org/"``
-``SUPPORT_URL="https://www.debian.org/support"``
-``BUG_REPORT_URL="https://bugs.debian.org/"``
+PRETTY_NAME="Debian GNU/Linux 12 (bookworm)"
+NAME="Debian GNU/Linux"
+VERSION_ID="12"
+VERSION="12 (bookworm)"
+VERSION_CODENAME=bookworm
+ID=debian
+HOME_URL="https://www.debian.org/"
+SUPPORT_URL="https://www.debian.org/support"
+BUG_REPORT_URL="https://bugs.debian.org/"
 
 Select settings (cog wheel - lower right)
 
@@ -59,6 +58,8 @@ Insert SD and turn on Pi, navigate to router on local network (192.168.1.1 for m
 
     ``ssh <username>@192.168.1.x -v``
 
+
+
 __Note:__ if this has been done before and is fresh installation, navigate to C://users/user/.ssh/known_hosts and delete previous fingerprint.
 
  - Clone this repo:
@@ -70,6 +71,7 @@ __Note:__ if the following error occurs:
 retry cmd, else if error persits Run:
     ``git config --global http.version HTTP/1.1``
     and re- try the clone cmd
+
 
 - Update packages and reboot Pi:
 ``yes | sudo sh NAS_drive/scripts/update.sh``
@@ -83,14 +85,31 @@ The Pi reboots upon completion.
 - Run nextcloud script and follow prompts, pi user is your current user, then set nextcloud user name & passweord as prompted.
 ``sudo sh NAS_drive/scripts/nc.sh``
 
+~~__bug note__~~
+~~fstab UUID incorrect, run following cmd and note UUID of relevent drive~~
+~~``blkid``~~
+
+~~then ``sudo nano /etc/fstab``~~
+
+~~append with  (replacing relevent UUID):~~
+~~``UUID=C41E05971E0583A0    /media/hardrive1               ntfs    defaults,errors=remount-ro 0       1``~~
+
+
 - Schedule relay for back up every 24 hours (_note_ runs in superuser cron jobs -no crontab for root-ignore):
 ``sudo sh NAS_drive/scripts/backup_drive/schedule-backup.sh``
+
+__note__ Can check cron logs with
+``grep CRON /var/log/syslog``
 
 - Edit start up scripts to run shutdown.py to listen to button
 ``sudo sh NAS_drive/scripts/shutdown_switch/shutdown.sh``
 
 
 # Enable External Storage via GUI
+
+~~``lsblk``     - Check mount point is sda1~~
+
+~~``sudo sh mount-drives.sh``~~
 
 Click top right userprofile icon and select Apps.
 ![addExt1](./assets/nextcloud_add_external_drive/nc1.png)
@@ -108,10 +127,17 @@ Return to SSH shell and reboot Pi.
 ``sudo reboot``
 
 ## Plex
-Install plex
+~~From SSH shell update packages if havent recently~~
+
+~~``sudo sh update.sh``~~
+
+~~Change directory to plex installation script~~
+~~``cd NAS_drive/scripts/plex``~~
+
+install plex
 ``sudo sh NAS_drive/scripts/plex/plex-installation.sh``
 
-Move metadata locatoin to external HD
+move metadata locatoin to external HD
 ``sudo sh NAS_drive/scripts/plex/mv_meta_loc``
 
 Access Plex at 192.168.1.x:32400/web -x dependant on your local network.
@@ -119,11 +145,57 @@ Access Plex at 192.168.1.x:32400/web -x dependant on your local network.
 Sign in/create account and addexternal lib via GUI
 Add Libary > harddrive1 (in this case as has been set in previouse steps)
 
+~~# Enter Enviroment variables~~
+~~On network connected computer open Powershell:~~
+~~``ssh <username>@192.168.1.x -v``~~
+
+
+~~run the following cmd & enter prompts to set up Nextcloud credentials.~~
+~~``sudo sh NAS_drive/scripts/env_setup.sh``~~
+
+~~``sudo sh source NAS_drive/scripts/env_setup.sh``~~
+
+
+
+
+
+~~blkid | grep -rn 'LABEL="cloudDrive"' | grep -o ' UUID="[^"]~~*'
+
+~~blkid | grep -rn 'LABEL="cloudDrive"' | grep -o ' UUID="[^"]*' | awk -F= '{print $2}' | tr -d '"'~~
+
+
+
+~~export DRIVE_1_UUID=$(blkid | grep -rn 'LABEL="cloudDrive"' | grep -o ' UUID="[^"]*')~~
+
+~~export DRIVE_1_UUID=$(blkid | grep -rn 'LABEL="cloudDrive"' | grep -o ' UUID="[^"]*' | awk -F= '{print $2}' | tr -d '"')~~
+
+
+
+
+
+
+~~# Nextcloud ~~
+~~On network connected computer open Powershell:~~
+~~``ssh <username>@192.168.1.x -v``~~
+
+~~Change into repo folder:~~
+~~``cd NAS_drive/scripts/nextcloud``~~
+
+~~Install nexcloud dependancies and follw prompts:~~
+~~``yes | sudo sh nextcloud-dependancies.sh``~~
+
+~~Setup initial databse and user for nextcloud, follow prompts:~~
+~~``sudo sh nextcloud-setup.sh``~~
+
+~~Install nextcloud:~~
+~~``yes | sudo sh nextcloud-installation.sh``~~
+
+~~Reboot after completeion~~
+~~``sudo reboot``~~
+
+
 
 ## Backup drive
-- Schedule relay (_note_ runs in superuser cron jobs):
-``sudo sh NAS_drive/scripts/backup_drive/schedule-backup.sh``
-
 Relay wiring:
 
 _note_ GPIOs 0-8, 14 & 15 appearhigh at boot, if connected to these pins relay will power up, connect 2nd HD then power down so don't use these pins.
@@ -134,9 +206,20 @@ __s__  =    __GPIO 14__  (board no# 8)
 
 ![pinout](./assets/backup_setup/pi4_pinout.png)
 
+~~Switch to correct dir:~~
+~~``cd NAS_drive/scripts/backup_drive``~~
+
+- Schedule relay (_note_ runs in superuser cron jobs):
+``sudo sh NAS_drive/scripts/backup_drive/schedule-backup.sh``
 
 ## Add Powerdown Button
 Pi dosen't ship with power off button, shutting down cleanly avoids SD card corruption so add a switch and python script to enable clean shutdowns before turing off at plug.
+
+Use board pins __39__ (ground) and __40__ (GPIO21):
+![pinout](./assets/shutdown_switch/shutdown_switch_pinout.png)
+
+~~Change working directory~~
+~~``cd /NAS_drive/scripts/shutdown_switch``~~
 
  - Edit start up scripts to run shutdown.py to listen to button
 ``sudo sh NAS_drive/scripts/shutdown_switch/shutdown.sh``
@@ -144,16 +227,32 @@ Pi dosen't ship with power off button, shutting down cleanly avoids SD card corr
 - Reboot Pi
 ``sudo reboot``
 
-Use board pins __39__ (ground) and __40__ (GPIO21):
-![pinout](./assets/shutdown_switch/shutdown_switch_pinout.png)
-
-
 ## Harden Security
+~~Change working dir~~
+~~`` cd NAS_drive/scripts/harden_security``~~
+
 - Install packages to auto update security patchs
 ``yes | sudo sh NAS_drive/scripts/harden_security/auto_patch.sh``
 
 __Note:__ SSH port changed from 22 to 1111
 
+~~Check for users with empty passwords~~
+~~``sudo awk -F: '($2 == "") {print}' /etc/shadow``~~
+
+~~Lock any applicable accounts~~
+~~``passwd -l <username>``~~
+
+~~Check expected logins~~
+~~``lslogins -u``~~
+
+~~Check any unexpected services running~~
+~~``sudo service --status-all``~~
+
+~~Check SHH root login disabled~~
+~~``sudo nano /etc/ssh/sshd_config``~~
+
+~~Verify following exists~~
+~~``#PermitRootLogin prohibit-password``~~
 
 ## External Access
 Resources:
@@ -188,6 +287,41 @@ change line:
 ``memory_limit = 128M``
 to
 ``memory_limit = 1G``
+
+# Use UUID for externl HD mounting
+~~source: https://www.cyberciti.biz/faq/linux-finding-using-uuids-to-update-fstab/~~
+
+~~__note__ UUID changes when drives formated.~~
+
+~~- add primary HD (plugged in)~~
+~~- Use ``blkid`` command-line utility to locate/print block device attributes:~~
+
+~~open fstab to edit~~
+~~``sudo nano /etc/fstab``~~
+~~add line~~
+~~``UUID={YOUR-UID}    {/path/to/mount/point}               {file-system-type}    defaults,errors=remount-ro 0       1``~~
+
+~~- add airgapped back up drive:~~
+    ~~- plug in drive to correct port(hijacked circuit -should not power upas relay open)~~
+    ~~- switch dir ``cd /NAS_drive/functions``~~
+    ~~- shut relay to power up 2nd HD ``python relay_power_on.py``~~
+    ~~- Use  ``lsblk`` - note device name (sdb1 in my case).~~
+    ~~- get uuid of device name with ``sudo blkid /dev/sdb1``~~
+    ~~-note uuid~~
+    ~~open fstab to edit~~
+~~``sudo nano /etc/fstab``~~
+~~add line~~
+~~``UUID={YOUR-UID}    {/path/to/mount/point}               {file-system-type}    defaults,errors=remount-ro 0       1``~~
+
+~~#Sync external HD;s~~
+
+~~rsync syntax ~~
+~~``# rsync options source destination``~~
+
+~~``rsync -av /media/scott/cloudDrive/* /media/scott/cloudDriveBU``~~
+
+~~test~~
+~~``for i in {1..50}; do touch "testfile$i.txt"; done``~~
 
 # Create Backup Image of Pi SD
 Download & install imaging software:
