@@ -111,8 +111,10 @@ Return to SSH shell and reboot Pi.
 Install plex
 ``sudo sh NAS_drive/scripts/plex/plex-installation.sh``
 
-Move metadata locatoin to external HD
-``sudo sh NAS_drive/scripts/plex/mv_meta_loc``
+Move metadata locatoin to external HD - requires super user perms
+``sudo su``
+
+``sh NAS_drive/scripts/plex/mv_meta_loc``
 
 Access Plex at 192.168.1.x:32400/web -x dependant on your local network.
 
