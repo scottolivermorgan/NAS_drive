@@ -119,4 +119,4 @@ echo "UUID=$DRIVE_1_UUID    /media/hardrive1               ntfs    defaults,erro
 #UUID=2C10102D100FFD10    /media/hardrive1               ntfs    defaults,errors=remount-ro 0       1
 
 # Index user files on external HD.
--u www-data php /var/www/nextcloud/occ files:scan --all --verbose 
+sudo -u www-data php /var/www/nextcloud/occ files:scan --all --verbose

@@ -124,7 +124,7 @@ Add Libary > harddrive1 (in this case as has been set in previouse steps)
 
 ## Backup drive
 - Schedule relay (_note_ runs in superuser cron jobs):
-``sudo sh NAS_drive/scripts/backup_drive/schedule-backup.sh``
+~~``sudo sh NAS_drive/scripts/backup_drive/schedule-backup.sh``~~
 
 Relay wiring:
 
@@ -141,7 +141,7 @@ __s__  =    __GPIO 14__  (board no# 8)
 Pi dosen't ship with power off button, shutting down cleanly avoids SD card corruption so add a switch and python script to enable clean shutdowns before turing off at plug.
 
  - Edit start up scripts to run shutdown.py to listen to button
-``sudo sh NAS_drive/scripts/shutdown_switch/shutdown.sh``
+~~``sudo sh NAS_drive/scripts/shutdown_switch/shutdown.sh``~~
 
 - Reboot Pi
 ``sudo reboot``
