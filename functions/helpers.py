@@ -1,7 +1,9 @@
 import hashlib
 from datetime import datetime
+import random
+import os
 
-def create_hash_file():
+def create_hash_file(path):
     # Get the current datetime
     current_datetime = datetime.now()
 
@@ -13,7 +15,7 @@ def create_hash_file():
     hash_hex = hash_object.hexdigest()
 
     # Create a text file and write the hash to it
-    file_name = f"hash_{current_datetime.strftime('%Y-%m-%d_%H-%M-%S')}.txt"
+    file_name = f"{path}\\hash_{current_datetime.strftime('%Y-%m-%d_%H-%M-%S')}.txt"
     with open(file_name, 'w') as file:
         file.write(hash_hex)
 

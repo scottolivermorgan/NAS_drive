@@ -1,6 +1,10 @@
-#!/bin/bash
+from helpers import select_random_location, create_hash_file
 
-# Build dir tree of src
+fp_1 = "test"
+loc_1 = select_random_location(fp_1)
+print(loc_1)
+
+create_hash_file(p)
 
 # Select random location and write hash check
 
