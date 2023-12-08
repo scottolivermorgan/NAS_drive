@@ -21,7 +21,11 @@ def create_hash_file(paths):
         file_name = f"{path}/hash_{current_datetime.strftime('%Y-%m-%d_%H-%M-%S')}.txt"
         fn.append(file_name)
         with open(file_name, 'w') as file:
-            file.write(hash_hex)
+            if path == paths[-1]:
+                offset_hash = hash_offset(hash_hex, reset=False)
+                file.write(offset_hash)
+            else:
+                file.write(hash_hex)
 
     print(f"Hash saved to {file_name}")
 
@@ -35,16 +39,10 @@ def select_random_location(folder_path):
     # Only logs last dir if a file present in dir
     for root, dirs, files in os.walk(folder_path):
         for file in files:
-            file_path = os.path.join(root)#, file)
+            file_path = os.path.join(root)
             all_files.append(file_path)
-    """
-    # Check if any files were found
-    if not all_files:
-        print("No files found in the specified folder and its subfolders.")
-        return None
-    """
+
     # Select a random file path
-    #print(all_files)
     random_location = random.choice(all_files)
     return random_location
 
@@ -59,8 +57,19 @@ def pre_sync_hash_verification():
     
     with open(dst, 'r') as f:
         dst_hash = f.readlines()
+        dst_hash = hash_offset(dst_hash[0], reset=True)
     
-    if src_hash == dst_hash:
+    if src_hash[0] == dst_hash:
         return True
     else:
         return False
+    
+def hash_offset(hash, reset):
+    offset = ''
+    for i in hash:
+        if reset:
+            offset += (chr(ord(i)-1))
+        else:
+            offset += (chr(ord(i)+1))
+
+    return offset

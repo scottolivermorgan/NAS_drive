@@ -2,12 +2,14 @@
 
 #remove unused packages and clean cache
 echo "remove unused packages and cleaning cache"
-sudo apt autoremove
-sudo apt clean
+yes | sudo apt autoremove
+yes | sudo apt clean
 
 # Install apache
+# Server version: Apache/2.4.57 (Debian)
+# Server built:   2023-04-13T03:26:51
 echo "Installing apahe2"
-apt install apache2
+yes | apt install apache2
 
 # Add third party PHP repo
 echo " Adding third party PHP repos"
@@ -17,10 +19,9 @@ apt update
 
 # Install relevent PHP packages
 echo "Installing required PHP packages"
-apt install php8.1 php8.1-gd php8.1-sqlite3 php8.1-curl php8.1-zip php8.1-xml php8.1-mbstring php8.1-mysql php8.1-bz2 php8.1-intl php8.1-smbclient php8.1-imap php8.1-gmp php8.1-bcmath libapache2-mod-php8.1
+yes | sudo apt-get install libapache2-mod-php8.2 php8.2-zip php8.2-mysql php8.2-curl php8.2-xml php8.2-mbstring php8.2-gd php8.2-smbclient php8.2-gmp php8.2-bcmath php8.2-intl php8.2-imagick
 
 # Install mariaDB
+# mariadb  Ver 15.1 Distrib 10.11.4-MariaDB, for debian-linux-gnu (aarch64) using  EditLine wrapper
 echo "Installing MySQL"
-apt install mariadb-server
-
-echo "Nextcloud dependancies installed, please run nextcloud-setup"
+yes | apt install mariadb-server

@@ -6,6 +6,7 @@ def power_on():
 
 if __name__ == "__main__":
     if pre_sync_hash_verification():
+        print('Verification sucsessfull')
         RELAY_CHANNEL = 18
         GPIO.setwarnings(False)
         GPIO.setmode(GPIO.BCM)
