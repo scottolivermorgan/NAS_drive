@@ -1,8 +1,8 @@
-from dotenv import load_dotenv
 import hashlib
 from datetime import datetime
 import random
 import os
+from dotenv import load_dotenv
 
 def create_hash_file(paths: List[str]) -> List[str]:
     """
@@ -20,10 +20,11 @@ def create_hash_file(paths: List[str]) -> List[str]:
     filenames = create_hash_file(paths)
     ```
 
-    The function creates a hash file for the current datetime using SHA-256. The hash is written to a text file,
-    and the file is saved in the specified directories. The file name format is 'hash_YYYY-MM-DD_HH-MM-SS.txt'.
-    If multiple paths are provided, the hash is written with an offset using the `hash_offset` function to ensure
-    uniqueness across files.
+    The function creates a hash file for the current datetime using SHA-256.
+    The hash is written to a text file, and the file is saved in the specified
+    directories. The file name format is 'hash_YYYY-MM-DD_HH-MM-SS.txt'.
+    If multiple paths are provided, the hash is written with an offset using 
+    the `hash_offset` function to ensure uniqueness across files.
     """
     # Get the current datetime
     current_datetime = datetime.now()
@@ -58,7 +59,8 @@ def select_random_location(folder_path):
         folder_path (str): The path to the folder for which a random file path will be selected.
 
     Returns:
-        str or None: A randomly selected file path if files are found, or None if the folder is empty.
+        str or None: A randomly selected file path if files are found, or None if
+        the folder is empty.
 
     Raises:
         ValueError: If the provided folder_path is not a valid directory.
@@ -100,19 +102,18 @@ def pre_sync_hash_verification() -> bool:
     src = os.getenv("SRC_VALIDATION_HASH_LOC")
     dst = os.getenv("DST_VALIDATION_HASH_LOC")
 
-    with open(src, 'r') as f:
+    with open(src, 'r', encoding="utf8") as f:
         src_hash = f.readlines()
-    
-    with open(dst, 'r') as f:
+
+    with open(dst, 'r', encoding="utf8") as f:
         dst_hash = f.readlines()
         dst_hash = hash_offset(dst_hash[0], reset=True)
-    
+
     if src_hash[0] == dst_hash:
         return True
-    else:
-        return False
-    
-def hash_offset(hash: str, reset: bool) -> str:
+    return False
+
+def hash_offset(hash_key: str, reset: bool) -> str:
     """
     Computes an offset for each character in the input hash string based on the 'reset' flag.
 
@@ -121,7 +122,8 @@ def hash_offset(hash: str, reset: bool) -> str:
         reset (bool): A flag indicating whether to reset the offset (True) or increment it (False).
 
     Returns:
-        str: The resulting offset string, where each character is adjusted based on the 'reset' flag.
+        str: The resulting offset string, where each character is adjusted based
+        on the 'reset' flag.
         
     Example:
         >>> hash_offset("abc123", True)
@@ -131,7 +133,7 @@ def hash_offset(hash: str, reset: bool) -> str:
         'yz{890'
     """
     offset = ''
-    for i in hash:
+    for i in hash_key:
         if reset:
             offset += (chr(ord(i) - 1))
         else:
