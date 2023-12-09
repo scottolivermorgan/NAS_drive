@@ -1,5 +1,7 @@
 #!/bin/bash
 
+# Run script as superuser
+
 echo "Install Next Cloud y/n?"
 read nc_option
 
@@ -47,3 +49,22 @@ if [ "$nc_option" = "y" ]; then
     sh NAS_drive/scripts/nextcloud/nextcloud-installation.sh
     sh NAS_drive/scripts/nextcloud/nextcloud-setup.sh
 fi
+
+if [ "$ext_hd" = "y" ]; then
+    sh NAS_drive/scripts/nextcloud/mount-drives.sh
+fi
+
+if [ "$ag_bu" = "y" ]; then
+    sh NAS_drive/scripts/backup_drive/schedule-backup.sh
+fi
+
+if [ "$ag_bu" = "y" ]; then
+    sh NAS_drive/scripts/shutdown_switch/shutdown.sh
+fi
+
+if [ "$plex" = "y" ]; then
+    sh NAS_drive/scripts/plex/plex-installation.sh
+    sh NAS_drive/scripts/plex/mv_meta_loc.sh
+fi
+
+yes | sudo sh NAS_drive/scripts/harden_security/auto_patch.sh
