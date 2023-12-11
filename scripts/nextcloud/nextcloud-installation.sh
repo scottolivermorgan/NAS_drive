@@ -16,7 +16,7 @@ mkdir -p /var/www/nextcloud/data
 chown -R www-data:www-data /var/www/nextcloud/
 
 #Move Nextcloud config file to correct location for Apache
-mv /home/$User_name/NAS_drive/scripts/nextcloud/nextcloud.conf /etc/apache2/sites-available/
+mv /home/$UN/NAS_drive/scripts/nextcloud/nextcloud.conf /etc/apache2/sites-available/
 
 # Point Apahe2 to config file for Nextcloud
 a2ensite nextcloud.conf
