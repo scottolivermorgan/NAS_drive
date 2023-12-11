@@ -2,6 +2,10 @@
 
 # Run script as superuser
 
+echo "Enter current user name?"
+read User_name
+export UN="$User_name"
+
 echo "Install Next Cloud y/n?"
 read nc_option
 
