@@ -11,4 +11,4 @@ mkdir /media/hardrive1
 # Mount harddrive on boot
 echo "UUID=$DRIVE_1_UUID    /media/hardrive1               ntfs    defaults,errors=remount-ro 0       1" >> /etc/fstab
 
-#sudo -u www-data php /var/www/nextcloud/occ files:scan --all --verbose
+sudo -u www-data php /var/www/nextcloud/occ files:scan --all --verbose
