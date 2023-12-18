@@ -57,6 +57,7 @@ fi
 if [ "$ext_hd" = "y" ]; then
     sh NAS_drive/scripts/nextcloud/mount-drives.sh
     echo "enable external storage via nextcloud GUI, type y when enabled."
+    read dummy
     sudo -u www-data php /var/www/nextcloud/occ files:scan --all --verbose
 fi
 
