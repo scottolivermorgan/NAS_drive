@@ -4,7 +4,7 @@ import random
 import os
 from dotenv import load_dotenv
 
-def create_hash_file(paths: List[str]) -> List[str]:
+def create_hash_file(paths: list[str]) -> list[str]:
     """
     Create a hash file for the current datetime and save it in the specified paths.
 
