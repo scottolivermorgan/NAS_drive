@@ -71,7 +71,7 @@ fi
 
 if [ "$plex" = "y" ]; then
     sh NAS_drive/scripts/plex/plex-installation.sh
-    sh NAS_drive/scripts/plex/mv_meta_loc.sh
+    #sh NAS_drive/scripts/plex/mv_meta_loc.sh
 fi
 
 yes | sudo sh NAS_drive/scripts/harden_security/auto_patch.sh
