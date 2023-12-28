@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# Run script as superuser
+# Run script as superuser (NO)
 
 echo "Enter current user name?"
 read User_name
@@ -58,7 +58,7 @@ if [ "$ext_hd" = "y" ]; then
     sh NAS_drive/scripts/nextcloud/mount-drives.sh
     echo "enable external storage via nextcloud GUI, type y when enabled."
     read dummy
-    sudo -u www-data php /var/www/nextcloud/occ files:scan --all --verbose
+    #sudo -u www-data php /var/www/nextcloud/occ files:scan --all --verbose
 fi
 
 if [ "$ag_bu" = "y" ]; then
@@ -71,7 +71,7 @@ fi
 
 if [ "$plex" = "y" ]; then
     sh NAS_drive/scripts/plex/plex-installation.sh
-    #sh NAS_drive/scripts/plex/mv_meta_loc.sh
+    sh NAS_drive/scripts/plex/mv_meta_loc.sh
 fi
 
 yes | sudo sh NAS_drive/scripts/harden_security/auto_patch.sh
