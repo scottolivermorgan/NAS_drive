@@ -74,20 +74,27 @@ retry cmd, else if error persits Run:
 - Update packages and reboot Pi:
 ``yes | sudo sh NAS_drive/scripts/update.sh``
 
-The Pi reboots upon completion.
+- On reboot run
+``sudo sh NAS_drive/main.sh``
+follow prompts, reboots on completion
 
-# New Version 03092023
-- On network connected computer open Powershell & reconnect to Pi:
-``ssh <username>@192.168.1.x -v``
+- finaly run 
+``sudo -u www-data php /var/www/nextcloud/occ files:scan --all --verbose``
 
-- Run nextcloud script and follow prompts, pi user is your current user, then set nextcloud user name & passweord as prompted.
-``sudo sh NAS_drive/scripts/nc.sh``
+~~The Pi reboots upon completion.~~
 
-- Schedule relay for back up every 24 hours (_note_ runs in superuser cron jobs -no crontab for root-ignore):
-``sudo sh NAS_drive/scripts/backup_drive/schedule-backup.sh``
+~~# New Version 03092023~~
+~~- On network connected computer open Powershell & reconnect to Pi:~~
+~~``ssh <username>@192.168.1.x -v``~~
 
-- Edit start up scripts to run shutdown.py to listen to button
-``sudo sh NAS_drive/scripts/shutdown_switch/shutdown.sh``
+~~- Run nextcloud script and follow prompts, pi user is your current user, then set nextcloud user name & passweord as prompted.~~
+~~``sudo sh NAS_drive/scripts/nc.sh``~~
+
+~~- Schedule relay for back up every 24 hours (_note_ runs in superuser cron jobs -no crontab for root-ignore):~~
+~~``sudo sh NAS_drive/scripts/backup_drive/schedule-backup.sh``~~
+
+~~- Edit start up scripts to run shutdown.py to listen to button~~
+~~``sudo sh NAS_drive/scripts/shutdown_switch/shutdown.sh``~~
 
 
 # Enable External Storage via GUI
@@ -108,13 +115,13 @@ Return to SSH shell and reboot Pi.
 ``sudo reboot``
 
 ## Plex
-Install plex
-``sudo sh NAS_drive/scripts/plex/plex-installation.sh``
+~~Install plex~~
+~~``sudo sh NAS_drive/scripts/plex/plex-installation.sh``~~
 
-Move metadata locatoin to external HD - requires super user perms
-``sudo su``
+~~Move metadata locatoin to external HD - requires super user perms~~
+~~``sudo su``~~
 
-``sh NAS_drive/scripts/plex/mv_meta_loc.sh``
+~~``sh NAS_drive/scripts/plex/mv_meta_loc.sh``~~
 
 Access Plex at 192.168.1.x:32400/web -x dependant on your local network.
 
@@ -122,8 +129,8 @@ Sign in/create account and addexternal lib via GUI
 Add Libary > harddrive1 (in this case as has been set in previouse steps)
 
 
-## Backup drive
-- Schedule relay (_note_ runs in superuser cron jobs):
+~~## Backup drive~~
+~~- Schedule relay (_note_ runs in superuser cron jobs):~~
 ~~``sudo sh NAS_drive/scripts/backup_drive/schedule-backup.sh``~~
 
 Relay wiring:
@@ -140,19 +147,19 @@ __s__  =    __GPIO 14__  (board no# 8)
 ## Add Powerdown Button
 Pi dosen't ship with power off button, shutting down cleanly avoids SD card corruption so add a switch and python script to enable clean shutdowns before turing off at plug.
 
- - Edit start up scripts to run shutdown.py to listen to button
+ ~~- Edit start up scripts to run shutdown.py to listen to button~~
 ~~``sudo sh NAS_drive/scripts/shutdown_switch/shutdown.sh``~~
 
-- Reboot Pi
-``sudo reboot``
+~~- Reboot Pi~~
+~~``sudo reboot``~~
 
 Use board pins __39__ (ground) and __40__ (GPIO21):
 ![pinout](./assets/shutdown_switch/shutdown_switch_pinout.png)
 
 
 ## Harden Security
-- Install packages to auto update security patchs
-``yes | sudo sh NAS_drive/scripts/harden_security/auto_patch.sh``
+~~- Install packages to auto update security patchs~~
+~~``yes | sudo sh NAS_drive/scripts/harden_security/auto_patch.sh``~~
 
 __Note:__ SSH port changed from 22 to 1111
 

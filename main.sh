@@ -75,3 +75,5 @@ if [ "$plex" = "y" ]; then
 fi
 
 yes | sudo sh NAS_drive/scripts/harden_security/auto_patch.sh
+
+sudo reboot
