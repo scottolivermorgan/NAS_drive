@@ -4,6 +4,9 @@ from helpers import select_random_location, create_hash_file
 SOURCE_DIR = os.getcwd()
 DESTINATION_DIR = "/media/hardrive1"
 
+print("src = ",SOURCE_DIR)
+print("dst = ",DESTINATION_DIR)
+
 """
 locs = [select_random_location(SOURCE_DIR),
          select_random_location(DESTINATION_DIR)]
