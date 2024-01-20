@@ -1,8 +1,40 @@
 import hashlib
+import RPi.GPIO as GPIO
 from datetime import datetime
 import random
 import os
 from dotenv import load_dotenv
+
+def power_on(RELAY_CHANNEL) -> None:
+    """
+    Turns on the power by setting the GPIO output to high for the specified relay channel.
+
+    This function uses the GPIO library to control a relay channel, turning it on by setting the
+    corresponding GPIO output to high.
+
+    Note:
+    Make sure to initialize the GPIO setup before calling this function.
+
+    Example:
+    ```python
+    # Set up GPIO (assumed to be done before calling power_on)
+    GPIO.setup(RELAY_CHANNEL, GPIO.OUT)
+
+    # Turn on the power
+    power_on()
+    ```
+
+    Raises:
+        Any exceptions raised by the GPIO library during the output setting.
+
+    Global Constants:
+        - RELAY_CHANNEL: The GPIO channel connected to the relay.
+
+    """
+    GPIO.setwarnings(False)
+    GPIO.setmode(GPIO.BCM)
+    GPIO.setup(RELAY_CHANNEL, GPIO.OUT)
+    GPIO.output(RELAY_CHANNEL, GPIO.HIGH)
 
 def create_hash_file(paths: list[str]) -> list[str]:
     """

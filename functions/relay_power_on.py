@@ -1,37 +1,40 @@
 import RPi.GPIO as GPIO
 import time
-from helpers import pre_sync_hash_verification
+from helpers import pre_sync_hash_verification, power_on
+import json
 
-def power_on(RELAY_CHANNEL) -> None:
-    """
-    Turns on the power by setting the GPIO output to high for the specified relay channel.
+fp = "C:\\Users\\Scott\\projects\\NAS_drive\\config.json"
 
-    This function uses the GPIO library to control a relay channel, turning it on by setting the
-    corresponding GPIO output to high.
+# Open and read the config.json file
+with open(fp, 'r') as config_file:
+    config_data = json.load(config_file)
 
-    Note:
-    Make sure to initialize the GPIO setup before calling this function.
 
-    Example:
-    ```python
-    # Set up GPIO (assumed to be done before calling power_on)
-    GPIO.setup(RELAY_CHANNEL, GPIO.OUT)
+# Iterate over external hard drive mappings
+for index, hd_obj in enumerate(config_data['HD_map']):
 
-    # Turn on the power
-    power_on()
-    ```
+    if pre_sync_hash_verification():
+        print('Verification sucsessfull')
 
-    Raises:
-        Any exceptions raised by the GPIO library during the output setting.
+        # Extract the "GPIO_pin" parameter from the configuration
+        RELAY_CHANNEL = config_data['HD_map'][hd_obj]['GPIO_pin']
 
-    Global Constants:
-        - RELAY_CHANNEL: The GPIO channel connected to the relay.
+        # Confi pin
+        GPIO.setwarnings(False)
+        GPIO.setmode(GPIO.BCM)
+        GPIO.setup(RELAY_CHANNEL, GPIO.OUT)
 
-    """
-    GPIO.setwarnings(False)
-    GPIO.setmode(GPIO.BCM)
-    GPIO.setup(RELAY_CHANNEL, GPIO.OUT)
-    GPIO.output(RELAY_CHANNEL, GPIO.HIGH)
+        # power up relay
+        power_on(RELAY_CHANNEL)
+    else:
+        print('Verification failed')
+
+
+
+
+
+
+"""
 
 if __name__ == "__main__":
     GPIO.setwarnings(False)
@@ -50,14 +53,6 @@ if __name__ == "__main__":
     GPIO.output(17, GPIO.LOW)
 
 
-"""
-    if pre_sync_hash_verification():
-        print('Verification sucsessfull')
-        RELAY_CHANNEL = 18
-        GPIO.setwarnings(False)
-        GPIO.setmode(GPIO.BCM)
-        GPIO.setup(RELAY_CHANNEL, GPIO.OUT)
-        power_on()
-    else:
-        print('Verification failed')
+
+ 
 """
