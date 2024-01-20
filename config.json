@@ -1,8 +1,8 @@
 {
     "HD_map": {
       "HD_1": {
-        "name": "cloudDrive",
-        "back_up_name": "CloudDriveBU",
+        "name": "HD_1",
+        "back_up_name": "BU_2",
         "GPIO_pin" : 17
       },
       "HD_2": {
