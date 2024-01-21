@@ -9,16 +9,23 @@ if [ ! -f "$config_file" ]; then
     exit 1
 fi
 
+# Use jq to loop over the items in HD_map and print the "name" value
+echo "$json" | jq '.HD_map | to_entries[] | .value.name'
+
 # Parse the JSON and count the objects within "HD_map"
-available_drives=$(jq '.HD_map | length' "$config_file")
-
-# Set the environment variable
-export AVALIBLE_DRIVES="$available_drives"
-
-# Print the result
-echo "AVALIBLE_DRIVES is set to: $AVALIBLE_DRIVES"
-
-
+#available_drives=$(jq '.HD_map | length' "$config_file")
+#
+## Set the environment variable
+#export AVALIBLE_DRIVES="$available_drives"
+#
+## Print the result
+#echo "AVALIBLE_DRIVES is set to: $AVALIBLE_DRIVES"
+#
+## Loop over the drives
+#for i in "$AVALIBLE_DRIVES"; do
+#  echo "Processing drive: $$AVALIBLE_DRIVES"
+#  # Add your logic here for each drive
+#done
 #echo "Enter current user name?"
 #read User_name
 #export UN="$User_name"
