@@ -9,8 +9,14 @@ if [ ! -f "$config_file" ]; then
     exit 1
 fi
 
+
+
+jq -c '.[]' config.json | while read i; do
+    echo "$i"
+done
+
 # Use jq to loop over the items in HD_map and print the "name" value
-echo "$json" | jq '.HD_map | to_entries[] | .value.name'
+#echo "$json" | jq '.HD_map | to_entries[] | .value.name'
 
 # Parse the JSON and count the objects within "HD_map"
 #available_drives=$(jq '.HD_map | length' "$config_file")
