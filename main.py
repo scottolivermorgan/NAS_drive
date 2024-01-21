@@ -7,7 +7,6 @@ fp = "config.json"
 with open(fp, 'r') as config_file:
     config_data = json.load(config_file)
 
-
 for object in config_data['HD_map']:
 
     # get drive mapping details:
