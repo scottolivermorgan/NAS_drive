@@ -1,11 +1,13 @@
 import hashlib
-import RPi.GPIO as GPIO
+import json
+import subprocess
+#import RPi.GPIO as GPIO
 from datetime import datetime
 import random
 import os
 from dotenv import load_dotenv
 
-def power_on(RELAY_CHANNEL) -> None:
+def power_on(RELAY_CHANNEL, ON) -> None:
     """
     Turns on the power by setting the GPIO output to high for the specified relay channel.
 
@@ -35,6 +37,13 @@ def power_on(RELAY_CHANNEL) -> None:
     GPIO.setmode(GPIO.BCM)
     GPIO.setup(RELAY_CHANNEL, GPIO.OUT)
     GPIO.output(RELAY_CHANNEL, GPIO.HIGH)
+    if ON is True:
+        GPIO.output(RELAY_CHANNEL, GPIO.HIGH)
+        return 1
+    else:
+        GPIO.output(RELAY_CHANNEL, GPIO.LOW)
+        return 0
+
 
 def create_hash_file(paths: list[str]) -> list[str]:
     """
@@ -172,3 +181,52 @@ def hash_offset(hash_key: str, reset: bool) -> str:
             offset += (chr(ord(i) + 1))
 
     return offset
+
+def mount_HD_from_config(config_data):
+    for object in config_data['HD_map']:
+        # get drive mapping details:
+        EXTERNAL_HD = config_data["HD_map"][object]["name"]
+        back_up_drive_name = hd_name = config_data["HD_map"][object]["back_up_name"]
+        signal_pin= hd_name = config_data["HD_map"][object]["GPIO_pin"]
+
+        # Build shell cmd's to pass to subprocesses:
+
+        # Look up UUID of eternal hd and set as an environment variable
+        # Note: Commands extract full details of drive from blkid,
+        # parse for uuid, strip 'uuid=', strip leading whitespace.
+        UUID_cmd = f"blkid --match-token LABEL=\"${EXTERNAL_HD}\" | grep -o ' UUID=\"[^\"]*' | sed 's/UUID=\"//' | sed 's/^ *//');"
+        UUID = subprocess.run(UUID_cmd)
+
+        # Build mount point & mount:
+        mount_location_str = f"/media/{EXTERNAL_HD};"
+        MOUNT_DIR = subprocess.run(["mkdir", mount_location_str])
+
+        # Add mount on boot:
+        fstab_cmd = f"echo \"UUID=${UUID}    {mount_location_str}               ntfs    defaults,errors=remount-ro 0       1\" >> /etc/fstab;"
+
+        # Execute command to mount drive in fstab:
+        subprocess.run(fstab_cmd)
+
+        return EXTERNAL_HD, back_up_drive_name, signal_pin
+    
+
+
+def hash_init(SOURCE_DIR, DESTINATION_DIR):
+    #SOURCE_DIR = os.getcwd()
+    #DESTINATION_DIR = "/media/hardrive1"
+
+    print("src = ",SOURCE_DIR)
+    print("dst = ",DESTINATION_DIR)
+
+    """
+    locs = [select_random_location(SOURCE_DIR),
+             select_random_location(DESTINATION_DIR)]
+    """
+    locs = [select_random_location(SOURCE_DIR),
+             DESTINATION_DIR]
+
+    hash_locations = create_hash_file(locs)
+
+    with open(".env", "w", encoding="utf8") as f:
+        f.write(f"SRC_VALIDATION_HASH_LOC = '{hash_locations[0]}'\n")
+        f.write(f"DST_VALIDATION_HASH_LOC = '{hash_locations[1]}'")

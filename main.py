@@ -1,32 +1,37 @@
 import json
 import subprocess
 
+from functions.helpers import mount_HD_from_config
+
 fp = "config.json"
 
 # Open and read the config.json file:
 with open(fp, 'r') as config_file:
     config_data = json.load(config_file)
 
-for object in config_data['HD_map']:
+# Prompt and read user options:
+UN = input("Enter current user name? ")
+nc_option = input("Install Next Cloud y/n? ")
+ext_hd = input("Attach external Hard drive? y/n? ")
+ag_bu = input("Configure air gapped backup y/n? ")
+shutdown_switch = input("Configure shutdown switch y/n? ")
+plex = input("Install Plex server y/n? ")
 
-    # get drive mapping details:
-    EXTERNAL_HD = config_data["HD_map"][object]["name"]
-    back_up_drive_name = hd_name = config_data["HD_map"][object]["back_up_name"]
-    signal_pin= hd_name = config_data["HD_map"][object]["GPIO_pin"]
+env = {"UN": UN}
 
-    # Build shell cmd's to pass to subprocesses:
+if nc_option == 'y':
+    env["NC_USER"] = input("Create nextcloud user: ")
+    env["NC_PASSWORD"] = input("Set nextcloud user password: ")
 
-    # Look up UUID of eternal hd and set as an environment variable
-    # Note: Commands extract full details of drive from blkid,
-    # parse for uuid, strip 'uuid=', strip leading whitespace.
-    shell_UUID_str = f"export DRIVE_UUID=$(blkid --match-token LABEL=\"${EXTERNAL_HD}\" | grep -o ' UUID=\"[^\"]*' | sed 's/UUID=\"//' | sed 's/^ *//');"
+    print("Installing nextcloud dependancies.")
+    subprocess.run("sudo sh NAS_drive/scripts/nextcloud/nextcloud-dependancies.sh")
+    subprocess.run("sudo sh NAS_drive/scripts/nextcloud/nextcloud-installation.sh", env=env)
+    subprocess.run("sudo sh NAS_drive/scripts/nextcloud/nextcloud-setup.sh", env=env)
 
-    # Build mount point:
-    mount_location_str = f"mkdir /media/{EXTERNAL_HD};"
+if ext_hd == 'y':
+    EXTERNAL_HD, back_up_drive_name, signal_pin = mount_HD_from_config(config_data)
+    dummy = input("enable external storage via nextcloud GUI, type y when enabled.")
 
-    # Mount:
-    fstab_entry = f"echo \"UUID=${shell_UUID_str}    /media/hardrive1               ntfs    defaults,errors=remount-ro 0       1\" >> /etc/fstab;"
-    cmd = shell_UUID_str + mount_location_str + fstab_entry
+if ag_bu == 'y':
+    subprocess.run("sudo sh NAS_drive/scripts/backup_drive/schedule-backup.sh", env=env)
 
-    # Execute command to mount drive in fstab:
-    subprocess.run(cmd)
