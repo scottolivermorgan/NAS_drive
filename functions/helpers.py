@@ -211,22 +211,29 @@ def mount_HD_from_config(config_data):
     
 
 
-def hash_init(SOURCE_DIR, DESTINATION_DIR):
-    #SOURCE_DIR = os.getcwd()
-    #DESTINATION_DIR = "/media/hardrive1"
+def hash_init(config_data):
+    for index, object in enumerate(config_data['HD_map']):
+        # get drive mapping details:
+        EXTERNAL_HD = config_data["HD_map"][object]["name"]
+        back_up_drive_name = hd_name = config_data["HD_map"][object]["back_up_name"]
+        signal_pin= hd_name = config_data["HD_map"][object]["GPIO_pin"]
 
-    print("src = ",SOURCE_DIR)
-    print("dst = ",DESTINATION_DIR)
+        SOURCE_DIR = os.curdir()
+        DESTINATION_DIR = "/media/{EXTERNAL_HD}"
 
-    """
-    locs = [select_random_location(SOURCE_DIR),
-             select_random_location(DESTINATION_DIR)]
-    """
-    locs = [select_random_location(SOURCE_DIR),
-             DESTINATION_DIR]
 
-    hash_locations = create_hash_file(locs)
+        #print("dst = ",DESTINATION_DIR)
 
-    with open(".env", "w", encoding="utf8") as f:
-        f.write(f"SRC_VALIDATION_HASH_LOC = '{hash_locations[0]}'\n")
-        f.write(f"DST_VALIDATION_HASH_LOC = '{hash_locations[1]}'")
+        """
+        locs = [select_random_location(SOURCE_DIR),
+                 select_random_location(DESTINATION_DIR)]
+        """
+        locs = [select_random_location(SOURCE_DIR),
+                 DESTINATION_DIR]
+
+        hash_locations = create_hash_file(locs)
+
+        with open(".env", "a", encoding="utf8") as f:
+            f.write(f"{EXTERNAL_HD}_SRC_VALIDATION_HASH_LOC = '{hash_locations[0]}'\n")
+            f.write(f"{EXTERNAL_HD}_DST_VALIDATION_HASH_LOC = '{hash_locations[1]}'")
+        print("hash checks written")
