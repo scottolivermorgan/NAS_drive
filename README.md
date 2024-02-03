@@ -213,3 +213,7 @@ https://sourceforge.net/projects/win32diskimager/
 
 Select read option to save, operation can take 10 -20 mins.
 ![WI4](./assets/SD_backup/wI_4.png)
+
+# Development tools
+``sudo docker build -t ubuntu-bookworm-git-python .`` # Sbuild image
+``sudo docker run -it --rm ubuntu-bookworm-git-python`` # Connect to the running container
