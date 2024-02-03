@@ -24,7 +24,7 @@ if nc_option == 'y':
     env["NC_PASSWORD"] = input("Set nextcloud user password: ")
 
     print("Installing nextcloud dependancies.")
-    subprocess.run(["sudo", "sh", "NAS_drive/scripts/nextcloud/nextcloud-dependancies.sh"])
+    subprocess.run(["sudo", "sh", "scripts/nextcloud/nextcloud-dependancies.sh"])
     #subprocess.run(["sudo", "sh", "NAS_drive/scripts/nextcloud/nextcloud-installation.sh"], env=env)
     #subprocess.run(["sudo", "sh", "NAS_drive/scripts/nextcloud/nextcloud-setup.sh"], env=env)
 """
