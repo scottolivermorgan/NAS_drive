@@ -6,7 +6,7 @@ ENV DEBIAN_FRONTEND=noninteractive
 
 # Update the package list and install Git, Python, sudo, and pip
 RUN apt-get update && \
-    apt-get install -y git sudo && \
+    apt-get install -y git sudo nano && \
     apt install -y software-properties-common && \
     add-apt-repository ppa:deadsnakes/ppa && \
     apt update && \

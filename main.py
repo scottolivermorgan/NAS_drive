@@ -25,9 +25,9 @@ if nc_option == 'y':
 
     print("Installing nextcloud dependancies.")
     subprocess.run(["sudo", "sh", "NAS_drive/scripts/nextcloud/nextcloud-dependancies.sh"])
-    subprocess.run(["sudo", "sh", "NAS_drive/scripts/nextcloud/nextcloud-installation.sh"], env=env)
-    subprocess.run(["sudo", "sh", "NAS_drive/scripts/nextcloud/nextcloud-setup.sh"], env=env)
-
+    #subprocess.run(["sudo", "sh", "NAS_drive/scripts/nextcloud/nextcloud-installation.sh"], env=env)
+    #subprocess.run(["sudo", "sh", "NAS_drive/scripts/nextcloud/nextcloud-setup.sh"], env=env)
+"""
 if ext_hd == 'y':
     EXTERNAL_HD, back_up_drive_name, signal_pin = mount_HD_from_config(config_data)
     dummy = input("enable external storage via nextcloud GUI, type y when enabled.")
@@ -45,3 +45,4 @@ if plex == 'y':
 
 subprocess.run(["yes", "|", "sudo", "sh", "NAS_drive/scripts/harden_security/auto_patch.sh"])
 subprocess.run(["sudo", "reboot"])
+"""
