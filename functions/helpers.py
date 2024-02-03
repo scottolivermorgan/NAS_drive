@@ -45,7 +45,7 @@ def power_on(RELAY_CHANNEL, ON) -> None:
         return 0
 
 
-def create_hash_file(paths: list(str)) -> list(str):
+def create_hash_file(paths):
     """
     Create a hash file for the current datetime and save it in the specified paths.
 
