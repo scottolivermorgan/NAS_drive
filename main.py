@@ -26,8 +26,11 @@ if nc_option == 'y':
     print("Installing nextcloud dependancies.")
     #subprocess.run(["sudo", "sh", "scripts/nextcloud/nextcloud-dependancies.sh"])
     #subprocess.run(["sudo", "sh", "scripts/nextcloud/nextcloud-installation.sh"], env=env)
-    subprocess.run([ f"{env['NC_PASSWORD']}","|","sudo", "sh", "scripts/nextcloud/nextcloud-setup.sh"], env=env)
-"""
+    command = f"echo {env['NC_PASSWORD']} | sudo -S sh scripts/nextcloud/nextcloud-setup.sh"
+    result = subprocess.run(command, shell=True, env=env, text=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+
+    #subprocess.run([ f"echo \"{env['NC_PASSWORD']}\"",password"|","sudo", "S-", "sh", "scripts/nextcloud/nextcloud-setup.sh"], env=env)
+"""password
 if ext_hd == 'y':
     EXTERNAL_HD, back_up_drive_name, signal_pin = mount_HD_from_config(config_data)
     dummy = input("enable external storage via nextcloud GUI, type y when enabled.")
