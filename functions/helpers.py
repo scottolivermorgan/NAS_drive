@@ -219,7 +219,7 @@ def hash_init(config_data):
         signal_pin= hd_name = config_data["HD_map"][object]["GPIO_pin"]
 
         SOURCE_DIR = os.getcwd()
-        DESTINATION_DIR = "/media/{EXTERNAL_HD}"
+        DESTINATION_DIR = f"/media/{EXTERNAL_HD}"
 
 
         #print("dst = ",DESTINATION_DIR)
