@@ -25,8 +25,8 @@ if nc_option == 'y':
 
     print("Installing nextcloud dependancies.")
     subprocess.run(["sudo", "sh", "scripts/nextcloud/nextcloud-dependancies.sh"])
-    #subprocess.run(["sudo", "sh", "NAS_drive/scripts/nextcloud/nextcloud-installation.sh"], env=env)
-    #subprocess.run(["sudo", "sh", "NAS_drive/scripts/nextcloud/nextcloud-setup.sh"], env=env)
+    subprocess.run(["sudo", "sh", "scripts/nextcloud/nextcloud-installation.sh"], env=env)
+    subprocess.run(["sudo", "sh", "scripts/nextcloud/nextcloud-setup.sh"], env=env)
 """
 if ext_hd == 'y':
     EXTERNAL_HD, back_up_drive_name, signal_pin = mount_HD_from_config(config_data)
@@ -34,15 +34,15 @@ if ext_hd == 'y':
 
 if ag_bu == 'y':
     hash_init(config_data)
-    subprocess.run(["sudo", "sh", "NAS_drive/scripts/backup_drive/schedule-backup.sh"], env=env)
-
+    subprocess.run(["sudo", "sh", "scripts/backup_drive/schedule-backup.sh"], env=env)
+"""
 if shutdown_switch == 'y':
-    subprocess.run(["sudo", "sh", "NAS_drive/scripts/shutdown_switch/shutdown.sh"])
-
+    subprocess.run(["sudo", "sh", "scripts/shutdown_switch/shutdown.sh"])
+"""
 if plex == 'y':
-    subprocess.run(["sudo", "sh", "NAS_drive/scripts/plex/plex-installation.sh"])
-    subprocess.run(["sudo", "sh", "NAS_drive/scripts/plex/mv_meta_loc.sh"])
+    subprocess.run(["sudo", "sh", "scripts/plex/plex-installation.sh"])
+    subprocess.run(["sudo", "sh", "scripts/plex/mv_meta_loc.sh"])
 
-subprocess.run(["yes", "|", "sudo", "sh", "NAS_drive/scripts/harden_security/auto_patch.sh"])
+subprocess.run(["yes", "|", "sudo", "sh", "scripts/harden_security/auto_patch.sh"])
 subprocess.run(["sudo", "reboot"])
 """
