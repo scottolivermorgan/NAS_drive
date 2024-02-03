@@ -218,7 +218,7 @@ def hash_init(config_data):
         back_up_drive_name = hd_name = config_data["HD_map"][object]["back_up_name"]
         signal_pin= hd_name = config_data["HD_map"][object]["GPIO_pin"]
 
-        SOURCE_DIR = os.curdir()
+        SOURCE_DIR = os.getcwd()
         DESTINATION_DIR = "/media/{EXTERNAL_HD}"
 
 

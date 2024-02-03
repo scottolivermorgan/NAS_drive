@@ -29,19 +29,23 @@ if nc_option == 'y':
     subprocess.run(["sudo", "sh", "scripts/nextcloud/nextcloud-setup.sh"], env=env)
 
 if ext_hd == 'y':
+    print("initialising hard drives")
     EXTERNAL_HD, back_up_drive_name, signal_pin = mount_HD_from_config(config_data)
     dummy = input("enable external storage via nextcloud GUI, type y when enabled.")
 
 if ag_bu == 'y':
+    print("Initialising backup routine")
     hash_init(config_data)
     subprocess.run(["sudo", "sh", "scripts/backup_drive/schedule-backup.sh"], env=env)
 
 if shutdown_switch == 'y':
+    print("Configuring shutdown switch")
     subprocess.run(["sudo", "sh", "scripts/shutdown_switch/shutdown.sh"], env=env)
 
 if plex == 'y':
     subprocess.run(["sudo", "sh", "scripts/plex/plex-installation.sh"])
     subprocess.run(["sudo", "sh", "scripts/plex/mv_meta_loc.sh"])
 
+#print(" Hardening security")
 #subprocess.run(["yes", "|", "sudo", "sh", "scripts/harden_security/auto_patch.sh"])
 #subprocess.run(["sudo", "reboot"])
