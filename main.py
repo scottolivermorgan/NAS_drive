@@ -24,13 +24,10 @@ if nc_option == 'y':
     env["NC_PASSWORD"] = input("Set nextcloud user password: ")
 
     print("Installing nextcloud dependancies.")
-    #subprocess.run(["sudo", "sh", "scripts/nextcloud/nextcloud-dependancies.sh"])
-    #subprocess.run(["sudo", "sh", "scripts/nextcloud/nextcloud-installation.sh"], env=env)
-    command = f"echo {env['NC_PASSWORD']} | sudo -S sh scripts/nextcloud/nextcloud-setup.sh"
-    result = subprocess.run(command, shell=True, env=env, text=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+    subprocess.run(["sudo", "sh", "scripts/nextcloud/nextcloud-dependancies.sh"])
+    subprocess.run(["sudo", "sh", "scripts/nextcloud/nextcloud-installation.sh"], env=env)
+    subprocess.run([ f"echo \"{env['NC_PASSWORD']}\"",password"|","sudo", "S-", "sh", "scripts/nextcloud/nextcloud-setup.sh"], env=env)
 
-    #subprocess.run([ f"echo \"{env['NC_PASSWORD']}\"",password"|","sudo", "S-", "sh", "scripts/nextcloud/nextcloud-setup.sh"], env=env)
-"""password
 if ext_hd == 'y':
     EXTERNAL_HD, back_up_drive_name, signal_pin = mount_HD_from_config(config_data)
     dummy = input("enable external storage via nextcloud GUI, type y when enabled.")
@@ -38,14 +35,13 @@ if ext_hd == 'y':
 if ag_bu == 'y':
     hash_init(config_data)
     subprocess.run(["sudo", "sh", "scripts/backup_drive/schedule-backup.sh"], env=env)
-"""
+
 if shutdown_switch == 'y':
-    subprocess.run(["sudo", "sh", "scripts/shutdown_switch/shutdown.sh"])
-"""
+    subprocess.run(["sudo", "sh", "scripts/shutdown_switch/shutdown.sh"], env=env)
+
 if plex == 'y':
     subprocess.run(["sudo", "sh", "scripts/plex/plex-installation.sh"])
     subprocess.run(["sudo", "sh", "scripts/plex/mv_meta_loc.sh"])
 
-subprocess.run(["yes", "|", "sudo", "sh", "scripts/harden_security/auto_patch.sh"])
-subprocess.run(["sudo", "reboot"])
-"""
+#subprocess.run(["yes", "|", "sudo", "sh", "scripts/harden_security/auto_patch.sh"])
+#subprocess.run(["sudo", "reboot"])
