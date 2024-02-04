@@ -228,10 +228,16 @@ def mount_HD_from_config(config_data):
 
         # Add mount on boot:
         #fstab_cmd = f"echo \"UUID=${UUID}    {mount_location_str}               ntfs    defaults,errors=remount-ro 0       1\" >> /etc/fstab;"
-        fstab_cmd = ["echo", f"UUID=${UUID}    {mount_location_str}               ntfs    defaults,errors=remount-ro 0       1", ">>", "/etc/fstab;"]
+        #fstab_cmd = ["echo", f"UUID=${UUID}    {mount_location_str}               ntfs    defaults,errors=remount-ro 0       1", ">>", "/etc/fstab;"]
 
         # Execute command to mount drive in fstab:
-        subprocess.run(fstab_cmd)
+        #subprocess.run(fstab_cmd)
+        # Create the entry to be added to /etc/fstab
+        fstab_entry = f"UUID={UUID}    {mount_location_str}    ntfs    defaults,errors=remount-ro 0    1\n"
+
+        # Open /etc/fstab in append mode and write the entry
+        with open('/etc/fstab', 'a') as fstab_file:
+            fstab_file.write(fstab_entry)
 
         print(f"{EXTERNAL_HD} mounted to boot succsessfully")
         drive_mapping[EXTERNAL_HD] = {"UUID": UUID,
