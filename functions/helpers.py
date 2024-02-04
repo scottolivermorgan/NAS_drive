@@ -254,19 +254,25 @@ def mount_HD_from_config(config_data):
         UUID = output.decode('utf-8').strip()
         """
             # Define a regular expression pattern to match UUID="..."
-        pattern = r'UUID=([a-f0-9-]+)'
+        label_pattern = r'LABEL=([a-f0-9-]+)'
+        uuid_pattern = r'UUID=([a-f0-9-]+)'
         with open('/etc/fstab','r') as f:
             data = f.readlines()
+
         for line in data:
-            match = re.search(pattern, line)
+            label_filter = re.search(label_pattern, line)
+            print('filter', label_filter)
+            print('name', EXTERNAL_HD)
+            """
+            match = re.search(uuid_pattern, line)
             if match:
                 # Extract the UUID from the matched group
                 UUID = match.group(1)
                 print("UUID:", UUID)
             else:
                 print("UUID not found in the input string.")
-        
-        #print("uuid =", UUID)
+        """
+        #print("uui =", UUID)
         # Build mount point & mount:
         mount_location_str = f"/media/{EXTERNAL_HD}"
         MOUNT_DIR = subprocess.run(["sudo", "mkdir", mount_location_str])
