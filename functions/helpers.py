@@ -218,11 +218,11 @@ def mount_HD_from_config(config_data):
                     's/^ *//'
                 ]
 
-        UUID_process = subprocess.Popen(UUID_cmd, stdout=subprocess.PIPE, shell=True)
-        UUID_output = UUID_process.communicate()[0].decode("utf-8").strip()
+        UUID = subprocess.Popen(UUID_cmd, stdout=subprocess.PIPE, shell=True)
+        UUID_output = UUID.communicate()[0].decode("utf-8").strip()
 
         # Build mount point & mount:
-        mount_location_str = f"/media/{EXTERNAL_HD};"
+        mount_location_str = f"/media/{EXTERNAL_HD}"
         MOUNT_DIR = subprocess.run(["sudo", "mkdir", mount_location_str])
 
         # Add mount on boot:
