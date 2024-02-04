@@ -186,6 +186,7 @@ def mount_HD_from_config(config_data):
     for object in config_data['HD_map']:
         # get drive mapping details:
         EXTERNAL_HD = config_data["HD_map"][object]["name"]
+        print(f"Found {EXTERNAL_HD}")
         back_up_drive_name = hd_name = config_data["HD_map"][object]["back_up_name"]
         signal_pin= hd_name = config_data["HD_map"][object]["GPIO_pin"]
 
@@ -195,11 +196,30 @@ def mount_HD_from_config(config_data):
         # Note: Commands extract full details of drive from blkid,
         # parse for uuid, strip 'uuid=', strip leading whitespace.
         #UUID_cmd = f"blkid --match-token LABEL=\"${EXTERNAL_HD}\" | grep -o ' UUID=\"[^\"]*' | sed 's/UUID=\"//' | sed 's/^ *//');"
-        UUID_cmd = ["blkid", "--match-token", f"\"LABEL=\"${EXTERNAL_HD}\"",
-                     "|", "grep", "-o", "\' UUID=\"[^\"]*\'",
-                       "|", "sed", "\'s/UUID=\"//'", "|", "sed",
-                         "\'s/^ *//');\""]
-        UUID = subprocess.run(UUID_cmd)
+        #UUID_cmd = ["blkid", "--match-token", f"\"LABEL=\"${EXTERNAL_HD}\"",
+        #             "|", "grep", "-o", "\' UUID=\"[^\"]*\'",
+        #               "|", "sed", "\'s/UUID=\"//'", "|", "sed",
+        #                 "\'s/^ *//');\""]
+        #UUID = subprocess.run(UUID_cmd)
+
+        UUID_cmd = [
+                    "blkid",
+                    "--match-token",
+                    f"LABEL={EXTERNAL_HD}",
+                    "|",
+                    "grep",
+                    "-o",
+                    ' UUID="[^\"]*"',
+                    "|",
+                    "sed",
+                    's/UUID=//',
+                    "|",
+                    "sed",
+                    's/^ *//'
+                ]
+
+        UUID_process = subprocess.Popen(UUID_cmd, stdout=subprocess.PIPE, shell=True)
+        UUID_output = UUID_process.communicate()[0].decode("utf-8").strip()
 
         # Build mount point & mount:
         mount_location_str = f"/media/{EXTERNAL_HD};"
