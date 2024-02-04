@@ -203,7 +203,7 @@ def mount_HD_from_config(config_data):
 
         # Build mount point & mount:
         mount_location_str = f"/media/{EXTERNAL_HD};"
-        MOUNT_DIR = subprocess.run(["mkdir", mount_location_str])
+        MOUNT_DIR = subprocess.run(["sudo", "mkdir", mount_location_str])
 
         # Add mount on boot:
         #fstab_cmd = f"echo \"UUID=${UUID}    {mount_location_str}               ntfs    defaults,errors=remount-ro 0       1\" >> /etc/fstab;"
