@@ -6,7 +6,7 @@ from datetime import datetime
 import random
 import os
 from dotenv import load_dotenv
-from subprocess import check_output
+import re
 
 def power_on(RELAY_CHANNEL, ON) -> None:
     """
