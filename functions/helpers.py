@@ -6,6 +6,7 @@ from datetime import datetime
 import random
 import os
 from dotenv import load_dotenv
+from subprocess import check_output
 
 def power_on(RELAY_CHANNEL, ON) -> None:
     """
@@ -220,7 +221,8 @@ def mount_HD_from_config(config_data):
                 ]
 
         #UUID = subprocess.Popen(UUID_cmd, stdout=subprocess.PIPE, shell=True)
-        UUID = subprocess.run(UUID_cmd, shell=True)
+        #UUID = subprocess.run(UUID_cmd, shell=True)
+        UUID = check_output(UUID_cmd)
         print("uuid = ", UUID)
         print("type", type(UUID))
         #print(UUID[])
