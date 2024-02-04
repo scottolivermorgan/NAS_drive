@@ -196,7 +196,7 @@ def mount_HD_from_config(config_data):
         # parse for uuid, strip 'uuid=', strip leading whitespace.
         #UUID_cmd = f"blkid --match-token LABEL=\"${EXTERNAL_HD}\" | grep -o ' UUID=\"[^\"]*' | sed 's/UUID=\"//' | sed 's/^ *//');"
         UUID_cmd = ["blkid", "--match-token", f"\"LABEL=\"${EXTERNAL_HD}\"",
-                     "|", "grep", "-o", "\' UUID=\"[^\"]*'",
+                     "|", "grep", "-o", "\' UUID=\"[^\"]*\'",
                        "|", "sed", "\'s/UUID=\"//'", "|", "sed",
                          "\'s/^ *//');\""]
         UUID = subprocess.run(UUID_cmd)
