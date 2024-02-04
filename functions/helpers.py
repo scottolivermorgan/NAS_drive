@@ -194,7 +194,11 @@ def mount_HD_from_config(config_data):
         # Look up UUID of eternal hd and set as an environment variable
         # Note: Commands extract full details of drive from blkid,
         # parse for uuid, strip 'uuid=', strip leading whitespace.
-        UUID_cmd = f"blkid --match-token LABEL=\"${EXTERNAL_HD}\" | grep -o ' UUID=\"[^\"]*' | sed 's/UUID=\"//' | sed 's/^ *//');"
+        #UUID_cmd = f"blkid --match-token LABEL=\"${EXTERNAL_HD}\" | grep -o ' UUID=\"[^\"]*' | sed 's/UUID=\"//' | sed 's/^ *//');"
+        UUID_cmd = ["blkid", "--match-token", f"\"LABEL=\"${EXTERNAL_HD}\"",
+                     "|", "grep", "-o", "\' UUID=\"[^\"]*'",
+                       "|", "sed", "\'s/UUID=\"//'", "|", "sed",
+                         "\'s/^ *//');\""]
         UUID = subprocess.run(UUID_cmd)
 
         # Build mount point & mount:
@@ -202,7 +206,8 @@ def mount_HD_from_config(config_data):
         MOUNT_DIR = subprocess.run(["mkdir", mount_location_str])
 
         # Add mount on boot:
-        fstab_cmd = f"echo \"UUID=${UUID}    {mount_location_str}               ntfs    defaults,errors=remount-ro 0       1\" >> /etc/fstab;"
+        #fstab_cmd = f"echo \"UUID=${UUID}    {mount_location_str}               ntfs    defaults,errors=remount-ro 0       1\" >> /etc/fstab;"
+        fstab_cmd = ["echo", f"UUID=${UUID}    {mount_location_str}               ntfs    defaults,errors=remount-ro 0       1", ">>", "/etc/fstab;"]
 
         # Execute command to mount drive in fstab:
         subprocess.run(fstab_cmd)
