@@ -219,7 +219,8 @@ def mount_HD_from_config(config_data):
                     's/^ *//'
                 ]
 
-        UUID = subprocess.Popen(UUID_cmd, stdout=subprocess.PIPE, shell=True)
+        #UUID = subprocess.Popen(UUID_cmd, stdout=subprocess.PIPE, shell=True)
+        UUID = subprocess.run(UUID_cmd, shell=True)
         print("uuid = ", UUID)
         print("type", type(UUID))
         #print(UUID[])
