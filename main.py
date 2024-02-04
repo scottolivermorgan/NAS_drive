@@ -30,7 +30,7 @@ if nc_option == 'y':
 
 if ext_hd == 'y':
     print("initialising hard drives")
-    EXTERNAL_HD, back_up_drive_name, signal_pin = mount_HD_from_config(config_data)
+    drive_mapping = mount_HD_from_config(config_data)
     dummy = input("enable external storage via nextcloud GUI, type y when enabled.")
 
 if ag_bu == 'y':

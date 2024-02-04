@@ -183,6 +183,7 @@ def hash_offset(hash_key: str, reset: bool) -> str:
     return offset
 
 def mount_HD_from_config(config_data):
+    drive_mapping = {}
     for object in config_data['HD_map']:
         # get drive mapping details:
         EXTERNAL_HD = config_data["HD_map"][object]["name"]
@@ -232,7 +233,13 @@ def mount_HD_from_config(config_data):
         # Execute command to mount drive in fstab:
         subprocess.run(fstab_cmd)
 
-        return EXTERNAL_HD, back_up_drive_name, signal_pin
+        print(f"{EXTERNAL_HD} mounted to boot succsessfully")
+        drive_mapping[EXTERNAL_HD] = {"UUID": UUID,
+                                      "back_up_name": back_up_drive_name,
+                                      "signal_pin" : signal_pin,
+                                      "mount_location": mount_location_str}
+
+    return drive_mapping
     
 
 
