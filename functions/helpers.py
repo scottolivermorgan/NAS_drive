@@ -224,7 +224,7 @@ def mount_HD_from_config(config_data):
         print("uuid = ", UUID)
         print("type", type(UUID))
         #print(UUID[])
-        UUID_output = UUID.communicate()[0].decode("utf-8").strip()
+        #UUID_output = UUID.communicate()[0].decode("utf-8").strip()
 
         # Build mount point & mount:
         mount_location_str = f"/media/{EXTERNAL_HD}"
@@ -244,6 +244,7 @@ def mount_HD_from_config(config_data):
             fstab_file.write(fstab_entry)
 
         print(f"{EXTERNAL_HD} mounted to boot succsessfully")
+        print('/n')
         drive_mapping[EXTERNAL_HD] = {"UUID": UUID,
                                       "back_up_name": back_up_drive_name,
                                       "signal_pin" : signal_pin,
