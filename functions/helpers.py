@@ -220,6 +220,9 @@ def mount_HD_from_config(config_data):
                 ]
 
         UUID = subprocess.Popen(UUID_cmd, stdout=subprocess.PIPE, shell=True)
+        print("uuid = ", UUID)
+        print("type", type(UUID))
+        #print(UUID[])
         UUID_output = UUID.communicate()[0].decode("utf-8").strip()
 
         # Build mount point & mount:
