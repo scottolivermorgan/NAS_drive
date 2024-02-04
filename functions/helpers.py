@@ -203,7 +203,7 @@ def mount_HD_from_config(config_data):
         #               "|", "sed", "\'s/UUID=\"//'", "|", "sed",
         #                 "\'s/^ *//');\""]
         #UUID = subprocess.run(UUID_cmd)
-
+        """
         UUID_cmd = [
                     "blkid",
                     "--match-token",
@@ -220,14 +220,40 @@ def mount_HD_from_config(config_data):
                     's/^ *//'
                 ]
 
-        #UUID = subprocess.Popen(UUID_cmd, stdout=subprocess.PIPE, shell=True)
-        #UUID = subprocess.run(UUID_cmd, shell=True)
         UUID = check_output(UUID_cmd)
         print("uuid = ", UUID)
         print("type", type(UUID))
         #print(UUID[])
         #UUID_output = UUID.communicate()[0].decode("utf-8").strip()
+        """
+        UUID_cmd = [
+                    "blkid",
+                    "--match-token",
+                    f"LABEL={EXTERNAL_HD}",
+                    "|",
+                    "grep",
+                    "-o",
+                    ' UUID="[^\"]*"',
+                    "|",
+                    "sed",
+                    's/UUID=//',
+                    "|",
+                    "sed",
+                    's/^ *//'
+                ]
 
+        # Use subprocess.Popen to execute the commands and pipe their output
+        process1 = subprocess.Popen(UUID_cmd[0:4], stdout=subprocess.PIPE)
+        process2 = subprocess.Popen(UUID_cmd[4:8], stdin=process1.stdout, stdout=subprocess.PIPE)
+        process3 = subprocess.Popen(UUID_cmd[8:12], stdin=process2.stdout, stdout=subprocess.PIPE)
+
+        # Get the output of the last command in the pipeline
+        output, _ = process3.communicate()
+        
+        # Decode the output to a string
+        UUID = output.decode('utf-8').strip()
+        
+        print("uuid =", UUID)
         # Build mount point & mount:
         mount_location_str = f"/media/{EXTERNAL_HD}"
         MOUNT_DIR = subprocess.run(["sudo", "mkdir", mount_location_str])
