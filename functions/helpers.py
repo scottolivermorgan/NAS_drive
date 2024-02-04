@@ -254,7 +254,7 @@ def mount_HD_from_config(config_data):
         UUID = output.decode('utf-8').strip()
         """
             # Define a regular expression pattern to match UUID="..."
-        label_pattern = r'LABEL=([a-f0-9-]+)'
+        label_pattern = r'LABEL="(.*?)"'
         uuid_pattern = r'UUID=([a-f0-9-]+)'
         with open('/etc/fstab','r') as f:
             data = f.readlines()
