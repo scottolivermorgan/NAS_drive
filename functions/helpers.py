@@ -262,7 +262,7 @@ def mount_HD_from_config(config_data):
         for line in data:
             label_filter = re.search(label_pattern, line)
 
-            if label_pattern.group(1) == EXTERNAL_HD:
+            if label_filter.group(1) == EXTERNAL_HD:
                 match = re.search(uuid_pattern, line)
                 UUID = match.group(1)
                 print("UUID:", UUID)
