@@ -198,11 +198,19 @@ def mount_HD_from_config(config_data):
         # Note: Commands extract full details of drive from blkid,
         # parse for uuid, strip 'uuid=', strip leading whitespace.
         #UUID_cmd = f"blkid --match-token LABEL=\"${EXTERNAL_HD}\" | grep -o ' UUID=\"[^\"]*' | sed 's/UUID=\"//' | sed 's/^ *//');"
-        #UUID_cmd = ["blkid", "--match-token", f"\"LABEL=\"${EXTERNAL_HD}\"",
+        
+        #UUID_cmd = ["export", f"UUID_{EXTERNAL_HD}_UUID","blkid", "--match-token", f"\"LABEL=\"${EXTERNAL_HD}\"",
         #             "|", "grep", "-o", "\' UUID=\"[^\"]*\'",
         #               "|", "sed", "\'s/UUID=\"//'", "|", "sed",
         #                 "\'s/^ *//');\""]
         #UUID = subprocess.run(UUID_cmd)
+        UUID_cmd = f"blkid --match-token \"LABEL={EXTERNAL_HD}\" | grep -o ' UUID=\"[^\"]*\"' | sed 's/UUID=\"//' | sed 's/^ *//'"
+        UUID = subprocess.run(UUID_cmd, shell=True, capture_output=True, text=True)
+
+        if UUID.returncode == 0:
+            print("UUID found:", UUID.stdout.strip())
+        else:
+            print("Failed to retrieve UUID.")
         """
         UUID_cmd = [
                     "blkid",
