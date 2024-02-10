@@ -6,7 +6,7 @@ cd /var/www
 
 # Download Nextcloud
 echo "Downloading Nextcloud"
-wget https://download.nextcloud.com/server/releases/nextcloud-27.0.1.tar.bz2
+sudo wget https://download.nextcloud.com/server/releases/nextcloud-27.0.1.tar.bz2
 
 # Extract the archive
 echo "Extracting Nextcloud"
