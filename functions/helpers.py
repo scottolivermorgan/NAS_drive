@@ -184,7 +184,52 @@ def hash_offset(hash_key: str, reset: bool) -> str:
     return offset
 
 def mount_HD_from_config(config_data):
+    """
+    Mounts external hard drives (HD) based on the configuration data provided.
+
+    Args:
+        config_data (dict): A dictionary containing configuration data, including HD mapping details.
+
+    Returns:
+        dict: A dictionary mapping external HD names to their details, including backup name,
+            signal pin, UUID, and mount location.
+
+    Raises:
+        OSError: If there are issues with subprocess calls or file operations.
+
+    Note:
+        This function assumes the availability of the 'blkid' command and relies on subprocess
+        calls to interact with system utilities. It also requires sudo privileges for creating
+        directories and modifying the fstab file.
+
+    Example:
+        Sample config_data:
+        {
+            'HD_map': {
+                'hd1': {
+                    'name': 'ExternalHD1',
+                    'back_up_name': 'BackupHD1',
+                    'GPIO_pin': 17
+                },
+                'hd2': {
+                    'name': 'ExternalHD2',
+                    'back_up_name': 'BackupHD2',
+                    'GPIO_pin': 18
+                }
+            }
+        }
+
+        Example usage:
+        >>> config_data = {...}  # Provide appropriate configuration data
+        >>> mappings = mount_HD_from_config(config_data)
+        >>> print(mappings)
+        {'ExternalHD1': {'back_up_name': 'BackupHD1', 'signal_pin': 17, 'UUID': '...', 'mount_loc': '...'},
+         'ExternalHD2': {'back_up_name': 'BackupHD2', 'signal_pin': 18, 'UUID': '...', 'mount_loc': '...'}}
+
+    """
+
     drive_mapping = {}
+
     for object in config_data['HD_map']:
         # get drive mapping details:
         EXTERNAL_HD = config_data["HD_map"][object]["name"]
@@ -193,104 +238,42 @@ def mount_HD_from_config(config_data):
         signal_pin= hd_name = config_data["HD_map"][object]["GPIO_pin"]
 
         # Build shell cmd's to pass to subprocesses:
-
         # Look up UUID of eternal hd and set as an environment variable
         # Note: Commands extract full details of drive from blkid,
         # parse for uuid, strip 'uuid=', strip leading whitespace.
-        #UUID_cmd = f"blkid --match-token LABEL=\"${EXTERNAL_HD}\" | grep -o ' UUID=\"[^\"]*' | sed 's/UUID=\"//' | sed 's/^ *//');"
-        
-        #UUID_cmd = ["export", f"UUID_{EXTERNAL_HD}_UUID","blkid", "--match-token", f"\"LABEL=\"${EXTERNAL_HD}\"",
-        #             "|", "grep", "-o", "\' UUID=\"[^\"]*\'",
-        #               "|", "sed", "\'s/UUID=\"//'", "|", "sed",
-        #                 "\'s/^ *//');\""]
-        #UUID = subprocess.run(UUID_cmd)
         UUID_cmd = f"blkid --match-token \"LABEL={EXTERNAL_HD}\" | grep -o ' UUID=\"[^\"]*\"' | sed 's/UUID=\"//' | sed 's/^ *//'"
         UUID = subprocess.run(UUID_cmd, shell=True, capture_output=True, text=True)
 
+        # If UUID found, format and add to fstab file to boot
         if UUID.returncode == 0:
+            # Format str:
             output_string = UUID.stdout.strip().replace('"', '')
+
+            # User feed back:
             print("UUID found:", output_string)
             print("Making file mount")
+
+            # Make dir to mount drive:
             mount_location_str = f"/media/{EXTERNAL_HD}"
             MOUNT_DIR = subprocess.run(["sudo", "mkdir", mount_location_str])
             print("Mount succsessfull, editing fstab")
+
+            # Edit fstab to mount drive on boot:
             fstab_entry = f"UUID={output_string}    {mount_location_str}    ntfs    defaults,errors=remount-ro 0    1\n"
             with open('/etc/fstab','a') as f:
                 f.write(fstab_entry)
             
-                #data = f.readlines()
+            # Update dict with HD details:
+            drive_mapping[EXTERNAL_HD] = {'back_up_name': back_up_drive_name,
+                                          'signal_pin': signal_pin,
+                                          'UUID': UUID,
+                                          'mount_loc': MOUNT_DIR}
 
         else:
             print("Failed to retrieve UUID.")
         
-
-        #with open('/etc/fstab','r') as f:
-        #    data = f.readlines()
-        """
-        for line in data:
-            label_filter = re.search(label_pattern, line)
-            print(label_filter)
-            if label_filter is not None:
-                        
-
-                if label_filter.group(1) == EXTERNAL_HD:
-                    match = re.search(uuid_pattern, line)
-                    UUID = match.group(1)
-                    print("UUID:", UUID)
-                    mount_location_str = f"/media/{EXTERNAL_HD}"
-                    MOUNT_DIR = subprocess.run(["sudo", "mkdir", mount_location_str])
-                    fstab_entry = f"UUID={UUID}    {mount_location_str}    ntfs    defaults,errors=remount-ro 0    1\n"
-                    with open('/etc/fstab', 'a') as fstab_file:
-                        fstab_file.write(fstab_entry)
-                    print(f"{EXTERNAL_HD} mounted to boot succsessfully")
-                    print('/n')
-                    drive_mapping[EXTERNAL_HD] = {"UUID": UUID,
-                                                  "back_up_name": back_up_drive_name,
-                                                  "signal_pin" : signal_pin,
-                                                  "mount_location": mount_location_str}
-
-            #print('filter', label_filter)
-            #print('name', EXTERNAL_HD)
-            
-            match = re.search(uuid_pattern, line)
-            if match:
-                # Extract the UUID from the matched group
-                UUID = match.group(1)
-                print("UUID:", UUID)
-            else:
-                print("UUID not found in the input string.")
-        """
-        """
-        #print("uui =", UUID)
-        # Build mount point & mount:
-        #mount_location_str = f"/media/{EXTERNAL_HD}"
-        #MOUNT_DIR = subprocess.run(["sudo", "mkdir", mount_location_str])
-
-        # Add mount on boot:
-        #fstab_cmd = f"echo \"UUID=${UUID}    {mount_location_str}               ntfs    defaults,errors=remount-ro 0       1\" >> /etc/fstab;"
-        #fstab_cmd = ["echo", f"UUID=${UUID}    {mount_location_str}               ntfs    defaults,errors=remount-ro 0       1", ">>", "/etc/fstab;"]
-
-        # Execute command to mount drive in fstab:
-        #subprocess.run(fstab_cmd)
-        # Create the entry to be added to /etc/fstab
-            
-        #fstab_entry = f"UUID={UUID}    {mount_location_str}    ntfs    defaults,errors=remount-ro 0    1\n"
-
-        # Open /etc/fstab in append mode and write the entry
-        #with open('/etc/fstab', 'a') as fstab_file:
-        #    fstab_file.write(fstab_entry)
-
-        #print(f"{EXTERNAL_HD} mounted to boot succsessfully")
-        #print('/n')
-        #drive_mapping[EXTERNAL_HD] = {"UUID": UUID,
-        #                              "back_up_name": back_up_drive_name,
-        #                              "signal_pin" : signal_pin,
-        #                              "mount_location": mount_location_str}
-    """
     return drive_mapping
     
-
-
 def hash_init(config_data):
     for index, object in enumerate(config_data['HD_map']):
         # get drive mapping details:
