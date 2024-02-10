@@ -210,64 +210,23 @@ def mount_HD_from_config(config_data):
         if UUID.returncode == 0:
             output_string = UUID.stdout.strip().replace('"', '')
             print("UUID found:", output_string)
+            print("Making file mount")
+            mount_location_str = f"/media/{EXTERNAL_HD}"
+            MOUNT_DIR = subprocess.run(["sudo", "mkdir", mount_location_str])
+            print("Mount succsessfull, editing fstab")
+            fstab_entry = f"UUID={output_string}    {mount_location_str}    ntfs    defaults,errors=remount-ro 0    1\n"
+            with open('/etc/fstab','a') as f:
+                f.write(fstab_entry)
+            
+                #data = f.readlines()
+
         else:
             print("Failed to retrieve UUID.")
-        """
-        UUID_cmd = [
-                    "blkid",
-                    "--match-token",
-                    f"LABEL={EXTERNAL_HD}",
-                    "|",
-                    "grep",
-                    "-o",
-                    ' UUID="[^\"]*"',
-                    "|",
-                    "sed",
-                    's/UUID=//',
-                    "|",
-                    "sed",
-                    's/^ *//'
-                ]
-
-        UUID = check_output(UUID_cmd)
-        print("uuid = ", UUID)
-        print("type", type(UUID))
-        #print(UUID[])
-        #UUID_output = UUID.communicate()[0].decode("utf-8").strip()
         
-        UUID_cmd = [
-                    "blkid",
-                    "--match-token",
-                    f"LABEL={EXTERNAL_HD}",
-                    "|",
-                    "grep",
-                    "-o",
-                    ' UUID="[^\"]*"',
-                    "|",
-                    "sed",
-                    's/UUID=//',
-                    "|",
-                    "sed",
-                    's/^ *//'
-                ]
 
-        # Use subprocess.Popen to execute the commands and pipe their output
-        process1 = subprocess.Popen(UUID_cmd[0:4], stdout=subprocess.PIPE)
-        process2 = subprocess.Popen(UUID_cmd[4:8], stdin=process1.stdout, stdout=subprocess.PIPE)
-        process3 = subprocess.Popen(UUID_cmd[8:12], stdin=process2.stdout, stdout=subprocess.PIPE)
-
-        # Get the output of the last command in the pipeline
-        output, _ = process3.communicate()
-        
-        # Decode the output to a string
-        UUID = output.decode('utf-8').strip()
+        #with open('/etc/fstab','r') as f:
+        #    data = f.readlines()
         """
-        # Define a regular expression pattern to match UUID="..."
-        label_pattern = r'LABEL="(.*?)"'
-        uuid_pattern = r'UUID=([a-f0-9-]+)'
-        with open('/etc/fstab','r') as f:
-            data = f.readlines()
-
         for line in data:
             label_filter = re.search(label_pattern, line)
             print(label_filter)
@@ -292,7 +251,7 @@ def mount_HD_from_config(config_data):
 
             #print('filter', label_filter)
             #print('name', EXTERNAL_HD)
-            """
+            
             match = re.search(uuid_pattern, line)
             if match:
                 # Extract the UUID from the matched group
@@ -300,6 +259,7 @@ def mount_HD_from_config(config_data):
                 print("UUID:", UUID)
             else:
                 print("UUID not found in the input string.")
+        """
         """
         #print("uui =", UUID)
         # Build mount point & mount:
@@ -326,7 +286,7 @@ def mount_HD_from_config(config_data):
         #                              "back_up_name": back_up_drive_name,
         #                              "signal_pin" : signal_pin,
         #                              "mount_location": mount_location_str}
-
+    """
     return drive_mapping
     
 
