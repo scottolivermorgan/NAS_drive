@@ -1,0 +1,3 @@
+
+printenv
+#echo "$UN"

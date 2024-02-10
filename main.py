@@ -1,6 +1,6 @@
 import json
 import subprocess
-
+import os
 from functions.helpers import mount_HD_from_config, hash_init
 
 fp = "config.json"
@@ -16,17 +16,19 @@ ext_hd = input("Attach external Hard drive? y/n? ")
 ag_bu = input("Configure air gapped backup y/n? ")
 shutdown_switch = input("Configure shutdown switch y/n? ")
 plex = input("Install Plex server y/n? ")
+security = input("Harden security settings?")
 
-env = {"UN": UN}
+#env = {"UN": UN}
+os.environ["UN"] = UN
 
 if nc_option == 'y':
-    env["NC_USER"] = input("Create nextcloud user: ")
-    env["NC_PASSWORD"] = input("Set nextcloud user password: ")
+    os.environ["NC_USER"] = input("Create nextcloud user: ")
+    os.environ["NC_PASSWORD"] = input("Set nextcloud user password: ")
 
     print("Installing nextcloud dependancies.")
-    subprocess.run(["sudo", "sh", "scripts/nextcloud/nextcloud-dependancies.sh"])
-    subprocess.run(["sudo", "sh", "scripts/nextcloud/nextcloud-installation.sh"], env=env)
-    subprocess.run(["sudo", "sh", "scripts/nextcloud/nextcloud-setup.sh"], env=env)
+    subprocess.run(["sh", "scripts/nextcloud/nextcloud-dependancies.sh"])
+    subprocess.run(["sh", "scripts/nextcloud/nextcloud-installation.sh"])
+    subprocess.run(["sh", "scripts/nextcloud/nextcloud-setup.sh"])
 
 if ext_hd == 'y':
     print("initialising hard drives")
@@ -36,16 +38,17 @@ if ext_hd == 'y':
 if ag_bu == 'y':
     print("Initialising backup routine")
     hash_init(config_data)
-    subprocess.run(["sudo", "sh", "scripts/backup_drive/schedule-backup.sh"], env=env)
+    subprocess.run(["sh", "scripts/backup_drive/schedule-backup.sh"])
 
 if shutdown_switch == 'y':
     print("Configuring shutdown switch")
-    subprocess.run(["sudo", "sh", "scripts/shutdown_switch/shutdown.sh"], env=env)
+    subprocess.run(["sh", "scripts/shutdown_switch/shutdown.sh"])
 
 if plex == 'y':
     subprocess.run(["sudo", "sh", "scripts/plex/plex-installation.sh"])
     subprocess.run(["sudo", "sh", "scripts/plex/mv_meta_loc.sh"])
 
-#print(" Hardening security")
-#subprocess.run(["yes", "|", "sudo", "sh", "scripts/harden_security/auto_patch.sh"])
-#subprocess.run(["sudo", "reboot"])
+if security == 'y':
+    print(" Hardening security")
+    subprocess.run(["yes", "|", "sudo", "sh", "scripts/harden_security/auto_patch.sh"])
+    subprocess.run(["sudo", "reboot"])
