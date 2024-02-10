@@ -253,7 +253,7 @@ def mount_HD_from_config(config_data):
         # Decode the output to a string
         UUID = output.decode('utf-8').strip()
         """
-            # Define a regular expression pattern to match UUID="..."
+        # Define a regular expression pattern to match UUID="..."
         label_pattern = r'LABEL="(.*?)"'
         uuid_pattern = r'UUID=([a-f0-9-]+)'
         with open('/etc/fstab','r') as f:
@@ -261,11 +261,26 @@ def mount_HD_from_config(config_data):
 
         for line in data:
             label_filter = re.search(label_pattern, line)
+            print(label_filter)
+            if label_filter is not None:
+                        
 
-            if label_filter.group(1) == EXTERNAL_HD:
-                match = re.search(uuid_pattern, line)
-                UUID = match.group(1)
-                print("UUID:", UUID)
+                if label_filter.group(1) == EXTERNAL_HD:
+                    match = re.search(uuid_pattern, line)
+                    UUID = match.group(1)
+                    print("UUID:", UUID)
+                    mount_location_str = f"/media/{EXTERNAL_HD}"
+                    MOUNT_DIR = subprocess.run(["sudo", "mkdir", mount_location_str])
+                    fstab_entry = f"UUID={UUID}    {mount_location_str}    ntfs    defaults,errors=remount-ro 0    1\n"
+                    with open('/etc/fstab', 'a') as fstab_file:
+                        fstab_file.write(fstab_entry)
+                    print(f"{EXTERNAL_HD} mounted to boot succsessfully")
+                    print('/n')
+                    drive_mapping[EXTERNAL_HD] = {"UUID": UUID,
+                                                  "back_up_name": back_up_drive_name,
+                                                  "signal_pin" : signal_pin,
+                                                  "mount_location": mount_location_str}
+
             #print('filter', label_filter)
             #print('name', EXTERNAL_HD)
             """
@@ -279,8 +294,8 @@ def mount_HD_from_config(config_data):
         """
         #print("uui =", UUID)
         # Build mount point & mount:
-        mount_location_str = f"/media/{EXTERNAL_HD}"
-        MOUNT_DIR = subprocess.run(["sudo", "mkdir", mount_location_str])
+        #mount_location_str = f"/media/{EXTERNAL_HD}"
+        #MOUNT_DIR = subprocess.run(["sudo", "mkdir", mount_location_str])
 
         # Add mount on boot:
         #fstab_cmd = f"echo \"UUID=${UUID}    {mount_location_str}               ntfs    defaults,errors=remount-ro 0       1\" >> /etc/fstab;"
@@ -289,18 +304,19 @@ def mount_HD_from_config(config_data):
         # Execute command to mount drive in fstab:
         #subprocess.run(fstab_cmd)
         # Create the entry to be added to /etc/fstab
-        fstab_entry = f"UUID={UUID}    {mount_location_str}    ntfs    defaults,errors=remount-ro 0    1\n"
+            
+        #fstab_entry = f"UUID={UUID}    {mount_location_str}    ntfs    defaults,errors=remount-ro 0    1\n"
 
         # Open /etc/fstab in append mode and write the entry
-        with open('/etc/fstab', 'a') as fstab_file:
-            fstab_file.write(fstab_entry)
+        #with open('/etc/fstab', 'a') as fstab_file:
+        #    fstab_file.write(fstab_entry)
 
-        print(f"{EXTERNAL_HD} mounted to boot succsessfully")
-        print('/n')
-        drive_mapping[EXTERNAL_HD] = {"UUID": UUID,
-                                      "back_up_name": back_up_drive_name,
-                                      "signal_pin" : signal_pin,
-                                      "mount_location": mount_location_str}
+        #print(f"{EXTERNAL_HD} mounted to boot succsessfully")
+        #print('/n')
+        #drive_mapping[EXTERNAL_HD] = {"UUID": UUID,
+        #                              "back_up_name": back_up_drive_name,
+        #                              "signal_pin" : signal_pin,
+        #                              "mount_location": mount_location_str}
 
     return drive_mapping
     
