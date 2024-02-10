@@ -7,7 +7,7 @@ cd /var/www
 wget https://download.nextcloud.com/server/releases/nextcloud-27.0.1.tar.bz2
 
 # Extract the archive
-tar -xvf nextcloud-27.0.1.tar.bz2
+sudo tar -xvf nextcloud-27.0.1.tar.bz2
 
 # Make directory for Nextcloud to operate in
 sudo mkdir -p /var/www/nextcloud/data
