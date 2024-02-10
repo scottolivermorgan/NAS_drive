@@ -208,7 +208,8 @@ def mount_HD_from_config(config_data):
         UUID = subprocess.run(UUID_cmd, shell=True, capture_output=True, text=True)
 
         if UUID.returncode == 0:
-            print("UUID found:", UUID.stdout.strip())
+            output_string = UUID.stdout.strip()('"', '')
+            print("UUID found:", output_string)
         else:
             print("Failed to retrieve UUID.")
         """
