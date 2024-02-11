@@ -243,7 +243,8 @@ def mount_HD_from_config(config_data):
         # parse for uuid, strip 'uuid=', strip leading whitespace.
         UUID_cmd = f"blkid --match-token \"LABEL={EXTERNAL_HD}\" | grep -o ' UUID=\"[^\"]*\"' | sed 's/UUID=\"//' | sed 's/^ *//'"
         UUID = subprocess.run(UUID_cmd, shell=True, capture_output=True, text=True)
-
+        type_cmd = f"blkid | grep \'LABEL=\"{EXTERNAL_HD}\"\' | grep -o \'TYPE=\"[^\"]*\"\' | sed \'s/.*TYPE=\"\([^\"]*\)\".*/\1/\'"
+        HD_type = subprocess.run(type_cmd, shell=True, capture_output=True, text=True)
         # If UUID found, format and add to fstab file to boot
         if UUID.returncode == 0:
             # Format str:
@@ -252,8 +253,8 @@ def mount_HD_from_config(config_data):
             # Get format type
             # blkid | grep 'LABEL="HD_1"' | grep 'TYPE=' 
             # blkid | grep 'LABEL="HD_1"' | grep -o 'TYPE="[^"]*"' | sed 's/.*TYPE="\([^"]*\)".*/\1/'
-            type_cmd = f"blkid | grep \'LABEL=\"{EXTERNAL_HD}\"\' | grep -o \'TYPE=\"[^\"]*\"\' | sed \'s/.*TYPE=\"\([^\"]*\)\".*/\1/\'"
-            HD_type = subprocess.run(type_cmd, shell=True, capture_output=True, text=True)
+            
+            
             type_output = HD_type.strip().replace('"', '')
             print(type_output)
 
