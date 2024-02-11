@@ -259,7 +259,7 @@ def mount_HD_from_config(config_data):
             print("Mount succsessfull, editing fstab")
 
             # Edit fstab to mount drive on boot:
-            fstab_entry = f"UUID={output_string}    {mount_location_str}    ntfs    defaults,errors=remount-ro 0    1\n"
+            fstab_entry = f"UUID={output_string}    {mount_location_str}    ntfs    defaults,errors=remount-ro 0    1"
             with open('/etc/fstab','a') as f:
                 f.write(fstab_entry)
             
