@@ -1,15 +1,15 @@
 # Add package to install security fixes every day.
 echo "Installing unattended-upgrades"
-apt install unattended-upgrades
+apt install unattended-upgrades -y
 
 # Add mail utils for update to root user.
-apt install mailutils
+apt install mailutils -y
 
 # Instsll fail2ban
-apt install fail2ban
+apt install fail2ban -y
 
 # Install firewall and allow required ports
-apt install ufw
+apt install ufw -y
 
 # Allow apache access for anyone
 ufw allow 80
