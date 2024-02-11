@@ -253,7 +253,7 @@ def mount_HD_from_config(config_data):
             # blkid | grep 'LABEL="HD_1"' | grep 'TYPE=' 
             # blkid | grep 'LABEL="HD_1"' | grep -o 'TYPE="[^"]*"' | sed 's/.*TYPE="\([^"]*\)".*/\1/'
             type_cmd = f"blkid | grep \'LABEL=\"{EXTERNAL_HD}\"\' | grep -o \'TYPE=\"[^\"]*\"\' | sed \'s/.*TYPE=\"\([^\"]*\)\".*/\1/\'"
-            HD_type = subprocess.run(type_cmd, shell=True, capture_output=True, text=True).stdout.srtip()
+            HD_type = subprocess.run(type_cmd, shell=True, capture_output=True, text=True).strip().replace('"', '')
             print(HD_type)
 
             # User feed back:
