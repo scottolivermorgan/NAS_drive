@@ -248,10 +248,12 @@ def mount_HD_from_config(config_data):
         if UUID.returncode == 0:
             # Format str:
             output_string = UUID.stdout.strip().replace('"', '')
-
+            
             # Get format type
+            var = subprocess.run(['blkid'], shell=True, capture_output=True, text=True)
             pattern = r'TYPE="([^"]+)"'
-            HD_type = re.search(pattern, input_string).group(1)
+            HD_type = re.search(pattern, var).group(1)
+            print(HD_type)
 
             # User feed back:
             print(f"UUID found: {output_string}, of type: {HD_type}")
