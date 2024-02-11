@@ -253,11 +253,12 @@ def mount_HD_from_config(config_data):
             # blkid | grep 'LABEL="HD_1"' | grep 'TYPE=' 
             # blkid | grep 'LABEL="HD_1"' | grep -o 'TYPE="[^"]*"' | sed 's/.*TYPE="\([^"]*\)".*/\1/'
             type_cmd = f"blkid | grep \'LABEL=\"{EXTERNAL_HD}\"\' | grep -o \'TYPE=\"[^\"]*\"\' | sed \'s/.*TYPE=\"\([^\"]*\)\".*/\1/\'"
-            HD_type = subprocess.run(type_cmd, shell=True, capture_output=True, text=True).strip().replace('"', '')
-            print(HD_type)
+            HD_type = subprocess.run(type_cmd, shell=True, capture_output=True, text=True)
+            type_output = HD_type.strip().replace('"', '')
+            print(type_output)
 
             # User feed back:
-            print(f"UUID found: {output_string}, of type: {HD_type}")
+            print(f"UUID found: {output_string}, of type: {type_output}")
             print("Making file mount")
 
             # Make dir to mount drive:
@@ -266,7 +267,7 @@ def mount_HD_from_config(config_data):
             print("Mount succsessfull, editing fstab")
 
             # Edit fstab to mount drive on boot:
-            fstab_entry = f"UUID={output_string}    {mount_location_str}    {HD_type}    defaults,errors=remount-ro 0    1\n"
+            fstab_entry = f"UUID={output_string}    {mount_location_str}    {type_output}    defaults,errors=remount-ro 0    1\n"
             with open('/etc/fstab','a') as f:
                 f.write(fstab_entry)
             
