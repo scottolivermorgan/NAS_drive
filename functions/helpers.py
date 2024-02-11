@@ -249,8 +249,12 @@ def mount_HD_from_config(config_data):
             # Format str:
             output_string = UUID.stdout.strip().replace('"', '')
 
+            # Get format type
+            pattern = r'TYPE="([^"]+)"'
+            HD_type = re.search(pattern, input_string).group(1)
+
             # User feed back:
-            print("UUID found:", output_string)
+            print(f"UUID found: {output_string}, of type: {HD_type}")
             print("Making file mount")
 
             # Make dir to mount drive:
@@ -259,7 +263,7 @@ def mount_HD_from_config(config_data):
             print("Mount succsessfull, editing fstab")
 
             # Edit fstab to mount drive on boot:
-            fstab_entry = f"UUID={output_string}    {mount_location_str}    ntfs    defaults,errors=remount-ro 0    1"
+            fstab_entry = f"UUID={output_string}    {mount_location_str}    {HD_type}    defaults,errors=remount-ro 0    1"
             with open('/etc/fstab','a') as f:
                 f.write(fstab_entry)
             

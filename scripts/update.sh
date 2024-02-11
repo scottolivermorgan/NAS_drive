@@ -7,7 +7,8 @@ echo "Upgrading packages"
 apt-get upgrade
 
 echo "Installing Python Dependancies"
-sudo python pip install -r requirements.txt
+cd /home/$USER/NAS_drive
+sudo pip install -r requirements.txt
 
 echo "Updates complete, rebooting"
 sudo reboot
