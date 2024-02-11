@@ -250,9 +250,10 @@ def mount_HD_from_config(config_data):
             output_string = UUID.stdout.strip().replace('"', '')
             
             # Get format type
-            var = subprocess.run(['blkid'], shell=True, capture_output=True, text=True)
-            pattern = r'TYPE="([^"]+)"'
-            HD_type = re.search(pattern, var).group(1)
+            # blkid | grep 'LABEL="HD_1"' | grep 'TYPE=' 
+            # blkid | grep 'LABEL="HD_1"' | grep -o 'TYPE="[^"]*"' | sed 's/.*TYPE="\([^"]*\)".*/\1/'
+            type_cmd = f"blkid | grep \'LABEL=\"{EXTERNAL_HD}\"\' | grep -o \'TYPE=\"[^\"]*\"\' | sed \'s/.*TYPE=\"\([^\"]*\)\".*/\1/\'"
+            HD_type = subprocess.run(type_cmd, shell=True, capture_output=True, text=True)
             print(HD_type)
 
             # User feed back:
