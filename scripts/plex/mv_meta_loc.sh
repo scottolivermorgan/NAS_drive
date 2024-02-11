@@ -18,7 +18,7 @@ echo "#
 [Service]
 #
 #  Move the data directory
-Environment="PLEX_MEDIA_SERVER_APPLICATION_SUPPORT_DIR=/media/hardrive1/Media/metadata"
+Environment="PLEX_MEDIA_SERVER_APPLICATION_SUPPORT_DIR=/media/'$PLEX_DATA_LOC'/Media/metadata"
 #
 #  These values are only needed if you wish to change user & group
 #User=chuck

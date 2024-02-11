@@ -45,6 +45,7 @@ if shutdown_switch == 'y':
     subprocess.run(["sh", "scripts/shutdown_switch/shutdown.sh"])
 
 if plex == 'y':
+    os.environ["PLEX_DATA_LOC"] = 'HD_1'
     subprocess.run(["sudo", "sh", "scripts/plex/plex-installation.sh"])
     subprocess.run(["sudo", "sh", "scripts/plex/mv_meta_loc.sh"])
 
