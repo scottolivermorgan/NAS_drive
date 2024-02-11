@@ -16,7 +16,8 @@ ext_hd = input("Attach external Hard drive? y/n? ")
 ag_bu = input("Configure air gapped backup y/n? ")
 shutdown_switch = input("Configure shutdown switch y/n? ")
 plex = input("Install Plex server y/n? ")
-security = input("Harden security settings?")
+security = input("Harden security settings y/n?")
+reboot = input("Reboot after y/n?")
 
 #env = {"UN": UN}
 os.environ["UN"] = UN
@@ -53,4 +54,6 @@ if security == 'y':
     print(" Hardening security")
     #subprocess.run(["yes", "|", "sudo", "sh", "scripts/harden_security/auto_patch.sh"])
     subprocess.run(["sudo", "sh", "scripts/harden_security/auto_patch.sh"])
+
+if reboot == 'y':
     subprocess.run(["sudo", "reboot"])
