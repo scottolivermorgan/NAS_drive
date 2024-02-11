@@ -75,7 +75,8 @@ retry cmd, else if error persits Run:
 ``yes | sudo sh NAS_drive/scripts/update.sh``
 
 - On reboot run
-``sudo sh NAS_drive/main.sh``
+``sudo python main.py``
+~~``sudo sh NAS_drive/main.sh``~~
 follow prompts, reboots on completion
 
 - finaly run 
