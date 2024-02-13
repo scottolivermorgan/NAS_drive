@@ -2,6 +2,7 @@ import json
 from helpers import power_on
 import time
 import subprocess
+import RPi.GPIO as GPIO
 
 def backup_HD(config_data):
     
@@ -16,9 +17,10 @@ def backup_HD(config_data):
         print(f"Mounting {back_up_drive_name} hard drive")
         power_on(signal_pin, ON=True)
         time.sleep(20)
-        print("Syncing {back_up_drive_name} drive with {EXTERNAL_DRIVE}")
+        print(f"Syncing {back_up_drive_name} drive with {EXTERNAL_HD}")
 
-        rsync_cmd = f"rsync -av --log-file=\"/home/$USER/NAS_drive/logs/sync_log.log\" /media/{EXTERNAL_HD}/* /media/$USER/{back_up_drive_name} "
+        rsync_cmd = f"rsync -av --log-file=\"/home/$USER/NAS_drive/logs/sync_log.log\" /media/{EXTERNAL_HD}/* /media/$USER/{back_up_drive_name}"
+        print(rsync_cmd)
         sync = subprocess.run(rsync_cmd, shell=True, capture_output=True, text=True)
         
         time.sleep(20)#
@@ -26,7 +28,7 @@ def backup_HD(config_data):
         power_on(signal_pin, ON=False)
 
 if __name__ == "__main__":
-    fp = "home/scott/NAS_drive/functions/config.json" # change user
+    fp = "/home/scott/NAS_drive/config.json" # change user
 
     # Open and read the config.json file:
     with open(fp, 'r') as config_file:
