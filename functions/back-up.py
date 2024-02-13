@@ -1,6 +1,7 @@
 import json
 from helpers import power_on
 import time
+import subprocess
 
 def backup_HD(config_data):
     
@@ -18,6 +19,7 @@ def backup_HD(config_data):
         print("Syncing {back_up_drive_name} drive with {EXTERNAL_DRIVE}")
 
         rsync_cmd = f"rsync -av --log-file=\"/home/$USER/NAS_drive/logs/sync_log.log\" /media/{EXTERNAL_HD}/* /media/$USER/{back_up_drive_name} "
+        sync = subprocess.run(rsync_cmd, shell=True, capture_output=True, text=True)
         
         time.sleep(20)#
         print("Closing airgap")
