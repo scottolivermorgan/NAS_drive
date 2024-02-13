@@ -20,7 +20,7 @@ def backup_HD(config_data):
         time.sleep(20)
         print(f"Syncing {back_up_drive_name} drive with {EXTERNAL_HD}")
 
-        rsync_cmd = f"rsync -av --log-file=\"/home/{os.getenv['USER']}/NAS_drive/logs/sync_log.log\" /media/{EXTERNAL_HD}/* /media/{os.getenv['USER']}/{back_up_drive_name}"
+        rsync_cmd = f"rsync -av --log-file=\"/home/{os.getenv('USER')}/NAS_drive/logs/sync_log.log\" /media/{EXTERNAL_HD}/* /media/{os.getenv('USER')}/{back_up_drive_name}"
         print(rsync_cmd)
         sync = subprocess.run(rsync_cmd, shell=True, capture_output=True, text=True)
         
