@@ -3,12 +3,12 @@
       "HD_1": {
         "name": "HD_1",
         "back_up_name": "BU_2",
-        "GPIO_pin" : 17
+        "GPIO_pin" : 18
       },
       "HD_2": {
         "name": "HD_2",
         "back_up_name": "BU_2",
-        "GPIO_pin" : 18
+        "GPIO_pin" : 17
       }
     }
   }
