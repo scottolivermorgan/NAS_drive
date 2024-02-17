@@ -6,8 +6,12 @@ apt-get install apt-transport-https
 echo deb https://downloads.plex.tv/repo/deb public main | sudo tee /etc/apt/sources.list.d/plexmediaserver.list
 curl https://downloads.plex.tv/plex-keys/PlexSign.key | sudo apt-key add -
 
+echo "Installig plexmediaserver"
 apt update
 apt install plexmediaserver
+
+echo "Checking plex server status"
+sudo systemctl status plexmediaserver
 
 
 # Add the Plex repositories to the “apt” keyrings directory.

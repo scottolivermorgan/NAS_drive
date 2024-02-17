@@ -3,14 +3,17 @@
 # https://forums.plex.tv/t/customizing-your-plex-configuration/205443
 # intended for those systems where cat /proc/1/comm returns systemd
 
+echo "Stopping plex media server"
 systemctl stop plexmediaserver
 
+echo "Making meta data dir"
 mkdir /etc/systemd/system/plexmediaserver.service.d
 
 cd /etc/systemd/system/plexmediaserver.service.d
 
-# create metatdata dir in custom location before below
+# Create metatdata dir in custom location before below
 
+echo "Create metatdata dir in custom location"
 echo "#
 # Customize Plex's config
 #
@@ -27,8 +30,10 @@ Environment="PLEX_MEDIA_SERVER_APPLICATION_SUPPORT_DIR=/media/'$PLEX_DATA_LOC'/M
 # This is needed to change the default umask     
 UMask=0002    # this must be octal    - See warning below " >override.conf
 
+echo " Reloading daeomn"
 systemctl daemon-reload
 
+echo "Retarting plex server"
 systemctl start plexmediaserver
 
 
