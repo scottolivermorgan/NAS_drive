@@ -20,9 +20,21 @@ def backup_HD(config_data):
         time.sleep(20)
         print(f"Syncing {back_up_drive_name} drive with {EXTERNAL_HD}")
 
-        rsync_cmd = f"rsync -av --log-file=\"/home/{os.getenv('USER')}/NAS_drive/logs/sync_log.log\" /media/{EXTERNAL_HD}/* /media/{os.getenv('USER')}/{back_up_drive_name}"
+        #rsync_cmd = f"rsync -av --log-file=\"/home/{os.getenv('USER')}/NAS_drive/logs/sync_log.log\" /media/{EXTERNAL_HD}/* /media/{os.getenv('USER')}/{back_up_drive_name}"
+        #print(rsync_cmd)
+        #sync = subprocess.run(rsync_cmd, shell=True, capture_output=True, text=True)
+        log_file_path = f"/home/{os.getenv('USER')}/NAS_drive/logs/sync_log.log"
+        rsync_cmd = f"rsync -av --log-file='{log_file_path}' /media/{EXTERNAL_HD}/* /media/{os.getenv('USER')}/{back_up_drive_name}"
         print(rsync_cmd)
-        sync = subprocess.run(rsync_cmd, shell=True, capture_output=True, text=True)
+
+        # Open log file in append mode so that logs get appended
+        with open(log_file_path, 'a') as log_file:
+            sync = subprocess.run(rsync_cmd, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
+            # Write stdout and stderr to both console and log file
+            print(sync.stdout)
+            print(sync.stderr)
+            log_file.write(sync.stdout)
+            log_file.write(sync.stderr)
         
         time.sleep(20)#
         print("Closing airgap")
