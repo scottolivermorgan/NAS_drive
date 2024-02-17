@@ -72,7 +72,8 @@ retry cmd, else if error persits Run:
     and re- try the clone cmd
 
 - Update packages and reboot Pi:
-``yes | sudo sh NAS_drive/scripts/update.sh``
+``sh NAS_drive/scripts/update.sh``
+~~``yes | sudo sh NAS_drive/scripts/update.sh``~~
 
 - On reboot run
 ``sudo python main.py``
