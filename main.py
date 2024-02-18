@@ -17,7 +17,7 @@ ag_bu = input("Configure air gapped backup y/n? ")
 shutdown_switch = input("Configure shutdown switch y/n? ")
 plex = input("Install Plex server y/n? ")
 if plex =='y':
-    data_dir_location = input("Enter meta data location eg: /media/HD_1")
+    data_dir_location = input("Enter meta data location eg: /media/HD_1/Media/metadata: ")
     os.environ['PLEX_DATA_LOC'] = data_dir_location
 security = input("Harden security settings y/n?")
 reboot = input("Reboot after y/n?")
@@ -51,7 +51,7 @@ if shutdown_switch == 'y':
 if plex == 'y':
     os.environ["PLEX_DATA_LOC"] = 'HD_1'
     subprocess.run(["sudo", "sh", "scripts/plex/plex-installation.sh"])
-    subprocess.run(["sh", "scripts/plex/mv_meta_loc.sh"])
+    subprocess.run(["sudo", "sh", "scripts/plex/mv_meta_loc.sh"])
 
 if security == 'y':
     print(" Hardening security")
