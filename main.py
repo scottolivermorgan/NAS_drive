@@ -51,7 +51,7 @@ if shutdown_switch == 'y':
 if plex == 'y':
     os.environ["PLEX_DATA_LOC"] = 'HD_1'
     subprocess.run(["sudo", "sh", "scripts/plex/plex-installation.sh"])
-    subprocess.run(["sudo", "sh", "scripts/plex/mv_meta_loc.sh"])
+    subprocess.run(["sh", "scripts/plex/mv_meta_loc.sh"])
 
 if security == 'y':
     print(" Hardening security")

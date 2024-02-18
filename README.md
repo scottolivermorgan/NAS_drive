@@ -72,7 +72,7 @@ retry cmd, else if error persits Run:
     and re- try the clone cmd
 
 - Update packages and reboot Pi:
-``sh NAS_drive/scripts/update.sh``
+``sudo sh NAS_drive/scripts/update.sh``
 ~~``yes | sudo sh NAS_drive/scripts/update.sh``~~
 
 - On reboot run
