@@ -33,6 +33,10 @@ if nc_option == 'y':
     subprocess.run(["sh", "scripts/nextcloud/nextcloud-dependancies.sh"])
     subprocess.run(["sh", "scripts/nextcloud/nextcloud-installation.sh"])
     subprocess.run(["sh", "scripts/nextcloud/nextcloud-setup.sh"])
+    scan_drive = input("Scan external drive (could take hours) y/n?: ")
+    if scan_drive == 'y':
+        scan_cmd = "sudo -u www-data php /var/www/nextcloud/occ files:scan --all --verbose"
+        subprocess.run(scan_cmd, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
 
 if ext_hd == 'y':
     print("initialising hard drives")
