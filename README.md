@@ -61,6 +61,11 @@ Insert SD and turn on Pi, navigate to router on local network (192.168.1.1 for m
 
 __Note:__ if this has been done before and is fresh installation, navigate to C://users/user/.ssh/known_hosts and delete previous fingerprint.
 
+- if using raspberian Lite first run:
+`sudo apt-get install git -y`
+`sudo apt install python3-pip -y`
+`sudo pip install -r requirements.txt --break-system-packages`
+
  - Clone this repo:
 ``git clone https://github.com/scottolivermorgan/NAS_drive.git``
 
