@@ -1,12 +1,10 @@
 import hashlib
-import json
 import subprocess
 import RPi.GPIO as GPIO
 from datetime import datetime
 import random
 import os
 from dotenv import load_dotenv
-import re
 import time
 
 def power_on(RELAY_CHANNEL, ON) -> None:
@@ -129,7 +127,7 @@ def select_random_location(folder_path):
     random_location = random.choice(all_files)
     return random_location
 
-def pre_sync_hash_verification() -> bool:
+def pre_sync_hash_verification(config_data) -> bool:
     """
     Perform pre-synchronization hash verification between a source and destination hash.
 
@@ -140,21 +138,27 @@ def pre_sync_hash_verification() -> bool:
     Returns:
         bool: True if the source hash matches the adjusted destination hash, False otherwise.
     """
-    # Set enviroment variables
     load_dotenv()
-    src = os.getenv("SRC_VALIDATION_HASH_LOC")
-    dst = os.getenv("DST_VALIDATION_HASH_LOC")
-
-    with open(src, 'r', encoding="utf8") as f:
-        src_hash = f.readlines()
-
-    with open(dst, 'r', encoding="utf8") as f:
-        dst_hash = f.readlines()
-        dst_hash = hash_offset(dst_hash[0], reset=True)
-
-    if src_hash[0] == dst_hash:
-        return True
-    return False
+    checks = []
+    for object in config_data['HD_map']:
+        # get drive mapping details:
+        EXTERNAL_HD = config_data["HD_map"][object]["name"]
+        # Set enviroment variables
+        src = os.getenv(f"{EXTERNAL_HD}_SRC_VALIDATION_HASH_LOC")
+        dst = os.getenv(f"{EXTERNAL_HD}_DST_VALIDATION_HASH_LOC")
+    
+        with open(src, 'r', encoding="utf8") as f:
+            src_hash = f.readlines()
+    
+        with open(dst, 'r', encoding="utf8") as f:
+            dst_hash = f.readlines()
+            dst_hash = hash_offset(dst_hash[0], reset=True)
+    
+        if src_hash[0] == dst_hash:
+            checks.append(True)
+        else:
+            checks.append(False)
+    return checks
 
 def hash_offset(hash_key: str, reset: bool) -> str:
     """
@@ -289,22 +293,33 @@ def mount_HD_from_config(config_data):
     return drive_mapping
     
 def hash_init(config_data):
+    """
+    Initializes hash values for source and destination directories of external hard drives.
+
+    Args:
+        config_data (dict): A dictionary containing configuration data.
+            It should have a key 'HD_map' containing information about external hard drives.
+
+    Returns:
+        None
+
+    Raises:
+        KeyError: If 'HD_map' key is missing in config_data or if required keys are not found within 'HD_map' entries.
+
+    Note:
+        This function assumes the structure of the 'config_data' dictionary to have the following keys:
+        - 'HD_map': A dictionary where keys are identifiers for each external hard drive and values are dictionaries containing:
+            - 'name': Name of the external hard drive.
+            - 'back_up_name': Backup name of the external hard drive.
+            - 'GPIO_pin': GPIO pin of the external hard drive.
+    """
     for index, object in enumerate(config_data['HD_map']):
         # get drive mapping details:
         EXTERNAL_HD = config_data["HD_map"][object]["name"]
-        back_up_drive_name = hd_name = config_data["HD_map"][object]["back_up_name"]
-        signal_pin= hd_name = config_data["HD_map"][object]["GPIO_pin"]
 
         SOURCE_DIR = os.getcwd()
         DESTINATION_DIR = f"/media/{EXTERNAL_HD}"
 
-
-        #print("dst = ",DESTINATION_DIR)
-
-        """
-        locs = [select_random_location(SOURCE_DIR),
-                 select_random_location(DESTINATION_DIR)]
-        """
         locs = [select_random_location(SOURCE_DIR),
                  DESTINATION_DIR]
 
@@ -315,38 +330,74 @@ def hash_init(config_data):
             f.write(f"{EXTERNAL_HD}_DST_VALIDATION_HASH_LOC = '{hash_locations[1]}'")
         print("hash checks written")
 
-
 def backup_HD(config_data):
-    
+    """
+    Backs up data from specified external hard drives to designated backup drives.
+
+    Args:
+        config_data (dict): A dictionary containing configuration data for hard drive mapping.
+
+    Returns:
+        None
+
+    Raises:
+        Any exceptions raised during subprocess execution.
+
+    Note:
+        This function assumes the presence of a `power_on` function for controlling GPIO pins,
+        and requires the `time`, `os`, and `subprocess` modules to be imported.
+
+    Example:
+        config_data = {
+            'HD_map': {
+                'drive1': {
+                    'name': 'External_HD1',
+                    'back_up_name': 'Backup_HD1',
+                    'GPIO_pin': 18
+                },
+                'drive2': {
+                    'name': 'External_HD2',
+                    'back_up_name': 'Backup_HD2',
+                    'GPIO_pin': 19
+                }
+            }
+        }
+        backup_HD(config_data)
+    """
+
     print("Closing airgap")
+    checks = pre_sync_hash_verification(config_data)
+    
+    if False in checks:
+        print('Verification failed')
+        return 1
+    else:
+        for object in config_data['HD_map']:
 
-    for object in config_data['HD_map']:
-        # get drive mapping details:
-        EXTERNAL_HD = config_data["HD_map"][object]["name"]
-        back_up_drive_name = hd_name = config_data["HD_map"][object]["back_up_name"]
-        signal_pin= hd_name = config_data["HD_map"][object]["GPIO_pin"]
+            print('Verification sucsessfull')
+            # get drive mapping details:
+            EXTERNAL_HD = config_data["HD_map"][object]["name"]
+            back_up_drive_name = hd_name = config_data["HD_map"][object]["back_up_name"]
+            signal_pin= hd_name = config_data["HD_map"][object]["GPIO_pin"]
         
-        print(f"Mounting {back_up_drive_name} hard drive")
-        power_on(signal_pin, ON=True)
-        time.sleep(20)
-        print(f"Syncing {back_up_drive_name} drive with {EXTERNAL_HD}")
+            print(f"Mounting {back_up_drive_name} hard drive")
+            power_on(signal_pin, ON=True)
+            time.sleep(20)
+            print(f"Syncing {back_up_drive_name} drive with {EXTERNAL_HD}")
 
-        #rsync_cmd = f"rsync -av --log-file=\"/home/{os.getenv('USER')}/NAS_drive/logs/sync_log.log\" /media/{EXTERNAL_HD}/* /media/{os.getenv('USER')}/{back_up_drive_name}"
-        #print(rsync_cmd)
-        #sync = subprocess.run(rsync_cmd, shell=True, capture_output=True, text=True)
-        log_file_path = f"/home/{os.getenv('USER')}/NAS_drive/logs/sync_log.log"
-        rsync_cmd = f"sudo rsync -av --log-file='{log_file_path}' /media/{EXTERNAL_HD}/* /media/{os.getenv('USER')}/{back_up_drive_name}"
-        print(rsync_cmd)
+            log_file_path = f"/home/{os.getenv('USER')}/NAS_drive/logs/sync_log.log"
+            rsync_cmd = f"sudo rsync -av --log-file='{log_file_path}' /media/{EXTERNAL_HD}/* /media/{os.getenv('USER')}/{back_up_drive_name}"
+            print(rsync_cmd)
 
-        # Open log file in append mode so that logs get appended
-        with open(log_file_path, 'a') as log_file:
-            sync = subprocess.run(rsync_cmd, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
-            # Write stdout and stderr to both console and log file
-            print(sync.stdout)
-            print(sync.stderr)
-            log_file.write(sync.stdout)
-            log_file.write(sync.stderr)
+            # Open log file in append mode so that logs get appended
+            with open(log_file_path, 'a') as log_file:
+                sync = subprocess.run(rsync_cmd, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
+                # Write stdout and stderr to both console and log file
+                print(sync.stdout)
+                print(sync.stderr)
+                log_file.write(sync.stdout)
+                log_file.write(sync.stderr)
         
-        time.sleep(20)
-        print("Closing airgap")
-        power_on(signal_pin, ON=False)
+            time.sleep(20)
+            print("Closing airgap")
+            power_on(signal_pin, ON=False)
