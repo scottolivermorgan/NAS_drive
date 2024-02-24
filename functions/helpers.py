@@ -90,7 +90,7 @@ def create_hash_file(paths):
             else:
                 file.write(hash_hex)
 
-    print(f"Hash saved to {file_name}")
+        print(f"Hash saved to {file_name}")
     return fn
 
 def select_random_location(folder_path):
@@ -323,6 +323,7 @@ def hash_init(config_data):
 
         locs = [select_random_location(SOURCE_DIR),
                  DESTINATION_DIR]
+        print(f'Creating hash files in {locs}')
 
         hash_locations = create_hash_file(locs)
 
