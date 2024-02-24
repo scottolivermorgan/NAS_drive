@@ -82,6 +82,7 @@ def create_hash_file(paths):
     for path in paths:
         file_name = f"{path}/hash_{current_datetime.strftime('%Y-%m-%d_%H-%M-%S')}.txt"
         fn.append(file_name)
+        print("path = ", path)
         with open(file_name, 'w') as file:
             if path == paths[-1]:
                 offset_hash = hash_offset(hash_hex, reset=False)
