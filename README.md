@@ -4,6 +4,7 @@ TODO:
 # Pre steps
 - Rename main external hard drive to HD_1 and back up to BU_1, follow ths convention
 for all subsequent drives and add these details (alongsde the signal pin) to config.json.
+Make a dir to store Plex metadata on HD_1 i.e. HD_1/Media/metadata.
 
 - _note_ Synch drives before setting up as MUCH quciker if large and popultated (use Free file sync).
 
@@ -77,8 +78,7 @@ retry cmd, else if error persits Run:
 ``sudo sh scripts/update.sh``
 
 - After reboot, reconnect via SSH and run:
-``cd NAS_drive``
-``sudo python main.py``
+``cd NAS_drive && sudo python main.py``
 
 follow onscreen prompts, halfway through you wll be prompted to enable external
 drives for nextcloud follow instrutions below.
