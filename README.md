@@ -70,8 +70,7 @@ retry cmd, else if error persits Run:
     and re- try the clone cmd
 
 - Install Python requirements:
-``cd NAS_drive``
-`sudo pip install -r requirements.txt --break-system-packages`
+`cd NAS_drive && sudo pip install -r requirements.txt --break-system-packages`
 
  
 - Update packages and reboot Pi:

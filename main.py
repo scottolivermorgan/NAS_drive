@@ -45,7 +45,7 @@ if ext_hd == 'y':
 
 if ag_bu == 'y':
     print("Initialising backup routine")
-    hash_init(config_data)
+    initalise_hashes = hash_init(config_data)
     subprocess.run(["sh", "scripts/backup_drive/schedule-backup.sh"])
 
 if shutdown_switch == 'y':
