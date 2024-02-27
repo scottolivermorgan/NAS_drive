@@ -11,12 +11,12 @@ with open(fp, 'r') as config_file:
 
 #hash_init(config_data)
 c = 18
-power_on(c, ON=False
-#ex = "BU_1"
-#subprocess.run(["sudo", "mkdir", f"/media/{ex}"])
-#cmd = f"lsblk -o LABEL,UUID | grep \"{ex}\" | awk '{{print $2}}'"
-#x = subprocess.run(cmd, shell=True, capture_output=True, text=True)
-#output_string = x.stdout.strip().replace('"', '')
-#print(output_string)
-#
-#z = subprocess.run(["sudo", "mount", "-U", output_string, f"/media/{ex}"])
+power_on(c, ON=True)
+ex = "BU_1"
+subprocess.run(["sudo", "mkdir", f"/media/{ex}"])
+cmd = f"lsblk -o LABEL,UUID | grep \"{ex}\" | awk '{{print $2}}'"
+x = subprocess.run(cmd, shell=True, capture_output=True, text=True)
+output_string = x.stdout.strip().replace('"', '')
+print(output_string)
+
+z = subprocess.run(["sudo", "mount", "-U", output_string, f"/media/{ex}"])
