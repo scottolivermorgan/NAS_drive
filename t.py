@@ -15,7 +15,8 @@ power_on(c, ON=True)
 ex = "BU_1"
 #subprocess.run(["sudo", "mkdir", f"/media/{ex}"])
 cmd = f"lsblk -o LABEL,UUID | grep \"{ex}\" | awk '{{print $2}}'"
-x = subprocess.run(cmd)
+x = subprocess.run(cmd, shell=True, capture_output=True, text=True)
+output_string = x.stdout.strip().replace('"', '')
 print(x)
 #lsblk -o PATH,UUID | grep "BU_1"
 
