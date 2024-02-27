@@ -17,7 +17,7 @@ ex = "BU_1"
 cmd = f"lsblk -o LABEL,UUID | grep \"{ex}\" | awk '{{print $2}}'"
 x = subprocess.run(cmd, shell=True, capture_output=True, text=True)
 output_string = x.stdout.strip().replace('"', '')
-print(x)
+print(output_string)
 #lsblk -o PATH,UUID | grep "BU_1"
 
 
