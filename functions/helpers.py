@@ -294,8 +294,9 @@ def mount_HD_from_config(config_data):
             print("Failed to retrieve UUID.")
     
     # mount drives added to fstab
-    print("Mounting new exrenal hard drives")
+    print("Mounting new extenal hard drives")
     mount_drives = subprocess.run(["sudo", "mount", "-a"])
+    dameon_reload = subprocess.run(["sudo", "systemctl", "daemon-reload"])
         
     return drive_mapping
     
