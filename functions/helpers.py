@@ -275,12 +275,14 @@ def mount_HD_from_config(config_data):
             # Make dir to mount drive:
             mount_location_str = f"/media/{EXTERNAL_HD}"
             MOUNT_DIR = subprocess.run(["sudo", "mkdir", mount_location_str])
-            print("Mount succsessfull, editing fstab")
+            print("Mount point created, updating fstab")
 
             # Edit fstab to mount drive on boot:
             fstab_entry = f"UUID={output_string}    {mount_location_str}    {type_output}    defaults,errors=remount-ro 0    1\n"
             with open('/etc/fstab','a') as f:
                 f.write(fstab_entry)
+
+            
             
             # Update dict with HD details:
             drive_mapping[EXTERNAL_HD] = {'back_up_name': back_up_drive_name,
@@ -290,6 +292,9 @@ def mount_HD_from_config(config_data):
 
         else:
             print("Failed to retrieve UUID.")
+    
+    # mount drives added to fstab
+    mount_drives = subprocess.run(["sudo", "mount", "-a"])
         
     return drive_mapping
     
