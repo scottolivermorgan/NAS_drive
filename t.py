@@ -1,7 +1,7 @@
 import json
 import subprocess
 import os
-from functions.helpers import mount_HD_from_config, hash_init
+from functions.helpers import power_on
 
 fp = "config.json"
 
@@ -9,4 +9,15 @@ fp = "config.json"
 with open(fp, 'r') as config_file:
     config_data = json.load(config_file)
 
-hash_init(config_data)
+#hash_init(config_data)
+c = 18
+power_on(c, ON=True)
+ex = "BU_1"
+#subprocess.run(["sudo", "mkdir", f"/media/{ex}"])
+cmd = f"lsblk -o LABEL,UUID | grep \"{ex}\" | awk '{{print $2}}'"
+x = subprocess.run(cmd)
+print(x)
+#lsblk -o PATH,UUID | grep "BU_1"
+
+
+#sudo mount -U <UUID> /mnt/mydrive

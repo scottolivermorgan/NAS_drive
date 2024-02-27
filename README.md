@@ -69,7 +69,7 @@ retry cmd, else if error persits Run:
     ``git config --global http.version HTTP/1.1``
     and re- try the clone cmd
 
-- Install Python requirements:
+- Install Python requirements:sudo sh scripts/update.sh
 `cd NAS_drive && sudo pip install -r requirements.txt --break-system-packages`
 
  
@@ -179,3 +179,8 @@ https://sourceforge.net/projects/win32diskimager/
 
 Select read option to save, operation can take 10 -20 mins.
 ![WI4](./assets/SD_backup/wI_4.png)
+
+
+
+__NOTES__
+`lsblk -o PATH,FSTYPE,LABEL,UUID | grep "BU_1"`
