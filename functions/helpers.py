@@ -274,6 +274,7 @@ def mount_HD_from_config(config_data):
 
             # Make dir to mount drive:
             mount_location_str = f"/media/{EXTERNAL_HD}"
+            subprocess.run(["sudo", "mkdir", f"/media/{back_up_drive_name}"])
             MOUNT_DIR = subprocess.run(["sudo", "mkdir", mount_location_str])
             print("Mount point created, updating fstab")
 
@@ -392,6 +393,11 @@ def backup_HD(config_data):
             print(f"Mounting {back_up_drive_name} hard drive")
             power_on(signal_pin, ON=True)
             time.sleep(20)
+            mount_cmd = f"lsblk -o LABEL,UUID | grep \"{back_up_drive_name}\" | awk '{{print $2}}'"
+            BU_UUID = subprocess.run(mount_cmd, shell=True, capture_output=True, text=True)
+            output_string = BU_UUID.stdout.strip().replace('"', '')
+
+            mount_drive = subprocess.run(["sudo", "mount", "-U", output_string, f"/media/{back_up_drive_name}"])
             print(f"Syncing {back_up_drive_name} drive with {EXTERNAL_HD}")
 
             log_file_path = f"/home/{os.getenv('USER')}/NAS_drive/logs/sync_log.log"
