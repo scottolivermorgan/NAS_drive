@@ -2,7 +2,7 @@ import json
 import subprocess
 import os
 from functions.helpers import power_on
-import sleep
+import time
 
 fp = "config.json"
 
@@ -13,7 +13,7 @@ with open(fp, 'r') as config_file:
 #hash_init(config_data)
 c = 18
 power_on(c, ON=True)
-sleep(10)
+time.sleep(10)
 ex = "BU_1"
 subprocess.run(["sudo", "mkdir", f"/media/{ex}"])
 cmd = f"lsblk -o LABEL,UUID | grep \"{ex}\" | awk '{{print $2}}'"

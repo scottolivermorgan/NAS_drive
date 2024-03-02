@@ -401,7 +401,7 @@ def backup_HD(config_data):
             print(f"Syncing {back_up_drive_name} drive with {EXTERNAL_HD}")
 
             log_file_path = f"/home/{os.getenv('USER')}/NAS_drive/logs/sync_log.log"
-            rsync_cmd = f"sudo rsync -av --log-file='{log_file_path}' /media/{EXTERNAL_HD}/* /media/{os.getenv('USER')}/{back_up_drive_name}"
+            rsync_cmd = f"sudo rsync -av --log-file='{log_file_path}' /media/{EXTERNAL_HD}/* /media/{back_up_drive_name}"
             print(rsync_cmd)
 
             # Open log file in append mode so that logs get appended
