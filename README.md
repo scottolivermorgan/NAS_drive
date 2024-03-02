@@ -184,3 +184,9 @@ Select read option to save, operation can take 10 -20 mins.
 
 __NOTES__
 `lsblk -o PATH,FSTYPE,LABEL,UUID | grep "BU_1"`
+lsblk -o LABEL,UUID | grep "BU_1"
+
+lsblk -o LABEL,UUID | grep "BU_1" | awk '{print $2}'
+sudo mkdir /mnt/mydrive
+
+sudo mount -U <UUID> /mnt/mydrive
