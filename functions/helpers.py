@@ -399,11 +399,12 @@ def backup_HD(config_data):
             print(f"Mounting {back_up_drive_name} hard drive")
             power_on(signal_pin, ON=True)
             time.sleep(20)
-            mount_cmd = f"lsblk -o LABEL,UUID | grep \"{back_up_drive_name}\" | awk '{{print $2}}'"
+            mount_cmd = f"lsblk -o LABEL,UUID | grep {back_up_drive_name} | awk '{{print $2}}'"
             BU_UUID = subprocess.run(
                 mount_cmd, shell=True, capture_output=True, text=True
             )
             output_string = BU_UUID.stdout.strip().replace('"', "")
+            print(f"UUID found: {output_string}")
 
             mount_drive = subprocess.run(
                 ["sudo", "mount", "-U", output_string, f"/media/{back_up_drive_name}"]
