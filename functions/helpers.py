@@ -7,6 +7,7 @@ import os
 from dotenv import load_dotenv
 import time
 
+
 def power_on(RELAY_CHANNEL, ON) -> None:
     """
     Turns on the power by setting the GPIO output to high for the specified relay channel.
@@ -64,7 +65,7 @@ def create_hash_file(paths):
     The function creates a hash file for the current datetime using SHA-256.
     The hash is written to a text file, and the file is saved in the specified
     directories. The file name format is 'hash_YYYY-MM-DD_HH-MM-SS.txt'.
-    If multiple paths are provided, the hash is written with an offset using 
+    If multiple paths are provided, the hash is written with an offset using
     the `hash_offset` function to ensure uniqueness across files.
     """
     # Get the current datetime
@@ -83,7 +84,7 @@ def create_hash_file(paths):
         file_name = f"{path}/hash_{current_datetime.strftime('%Y-%m-%d_%H-%M-%S')}.txt"
         fn.append(file_name)
         print("path = ", path)
-        with open(file_name, 'w') as file:
+        with open(file_name, "w") as file:
             if path == paths[-1]:
                 offset_hash = hash_offset(hash_hex, reset=False)
                 file.write(offset_hash)
@@ -92,6 +93,7 @@ def create_hash_file(paths):
 
         print(f"Hash saved to {file_name}")
     return fn
+
 
 def select_random_location(folder_path):
     """
@@ -128,6 +130,7 @@ def select_random_location(folder_path):
     random_location = random.choice(all_files)
     return random_location
 
+
 def pre_sync_hash_verification(config_data) -> bool:
     """
     Perform pre-synchronization hash verification between a source and destination hash.
@@ -141,25 +144,26 @@ def pre_sync_hash_verification(config_data) -> bool:
     """
     load_dotenv()
     checks = []
-    for object in config_data['HD_map']:
+    for object in config_data["HD_map"]:
         # get drive mapping details:
         EXTERNAL_HD = config_data["HD_map"][object]["name"]
         # Set enviroment variables
         src = os.getenv(f"{EXTERNAL_HD}_SRC_VALIDATION_HASH_LOC")
         dst = os.getenv(f"{EXTERNAL_HD}_DST_VALIDATION_HASH_LOC")
-    
-        with open(src, 'r', encoding="utf8") as f:
+
+        with open(src, "r", encoding="utf8") as f:
             src_hash = f.readlines()
-    
-        with open(dst, 'r', encoding="utf8") as f:
+
+        with open(dst, "r", encoding="utf8") as f:
             dst_hash = f.readlines()
             dst_hash = hash_offset(dst_hash[0], reset=True)
-    
+
         if src_hash[0] == dst_hash:
             checks.append(True)
         else:
             checks.append(False)
     return checks
+
 
 def hash_offset(hash_key: str, reset: bool) -> str:
     """
@@ -172,22 +176,23 @@ def hash_offset(hash_key: str, reset: bool) -> str:
     Returns:
         str: The resulting offset string, where each character is adjusted based
         on the 'reset' flag.
-        
+
     Example:
         >>> hash_offset("abc123", True)
         '`ba098'
-        
+
         >>> hash_offset("xyz789", False)
         'yz{890'
     """
-    offset = ''
+    offset = ""
     for i in hash_key:
         if reset:
-            offset += (chr(ord(i) - 1))
+            offset += chr(ord(i) - 1)
         else:
-            offset += (chr(ord(i) + 1))
+            offset += chr(ord(i) + 1)
 
     return offset
+
 
 def mount_HD_from_config(config_data):
     """
@@ -236,12 +241,12 @@ def mount_HD_from_config(config_data):
 
     drive_mapping = {}
 
-    for object in config_data['HD_map']:
+    for object in config_data["HD_map"]:
         # get drive mapping details:
         EXTERNAL_HD = config_data["HD_map"][object]["name"]
         print(f"Found {EXTERNAL_HD}")
         back_up_drive_name = hd_name = config_data["HD_map"][object]["back_up_name"]
-        signal_pin= hd_name = config_data["HD_map"][object]["GPIO_pin"]
+        signal_pin = hd_name = config_data["HD_map"][object]["GPIO_pin"]
 
         # Build shell cmd's to pass to subprocesses:
         # Look up UUID of eternal hd and set as an environment variable
@@ -249,22 +254,23 @@ def mount_HD_from_config(config_data):
         # parse for uuid, strip 'uuid=', strip leading whitespace.
         UUID_cmd = f"blkid --match-token \"LABEL={EXTERNAL_HD}\" | grep -o ' UUID=\"[^\"]*\"' | sed 's/UUID=\"//' | sed 's/^ *//'"
         UUID = subprocess.run(UUID_cmd, shell=True, capture_output=True, text=True)
-        #type_cmd = f"blkid | grep \'LABEL=\"{EXTERNAL_HD}\"\' | grep -o \'TYPE=\"[^\"]*\"\' | sed \'s/.*TYPE=\"\([^\"]*\)\".*/\1/\'"
-        #HD_type = subprocess.run(type_cmd, shell=True, capture_output=True, text=True)
+        # type_cmd = f"blkid | grep \'LABEL=\"{EXTERNAL_HD}\"\' | grep -o \'TYPE=\"[^\"]*\"\' | sed \'s/.*TYPE=\"\([^\"]*\)\".*/\1/\'"
+        # HD_type = subprocess.run(type_cmd, shell=True, capture_output=True, text=True)
         # If UUID found, format and add to fstab file to boot
         if UUID.returncode == 0:
             # Format str:
-            output_string = UUID.stdout.strip().replace('"', '')
-            
+            output_string = UUID.stdout.strip().replace('"', "")
+
             # Get HD format type
             HD_type_cmd = f"blkid | grep 'LABEL=\"{EXTERNAL_HD}\"' | awk -F 'TYPE=' '{{print $2}}' | awk -F '\"' '{{print $2}}'"
-            HD_type = subprocess.run(HD_type_cmd, shell=True, capture_output=True, text=True)
-            
+            HD_type = subprocess.run(
+                HD_type_cmd, shell=True, capture_output=True, text=True
+            )
+
             # Get format type
-            # blkid | grep 'LABEL="HD_1"' | grep 'TYPE=' 
+            # blkid | grep 'LABEL="HD_1"' | grep 'TYPE='
             # blkid | grep 'LABEL="HD_1"' | grep -o 'TYPE="[^"]*"' | sed 's/.*TYPE="\([^"]*\)".*/\1/'
-            
-            
+
             type_output = HD_type.stdout.strip()
             print(type_output)
 
@@ -280,27 +286,28 @@ def mount_HD_from_config(config_data):
 
             # Edit fstab to mount drive on boot:
             fstab_entry = f"UUID={output_string}    {mount_location_str}    {type_output}    defaults,errors=remount-ro 0    1\n"
-            with open('/etc/fstab','a') as f:
+            with open("/etc/fstab", "a") as f:
                 f.write(fstab_entry)
 
-            
-            
             # Update dict with HD details:
-            drive_mapping[EXTERNAL_HD] = {'back_up_name': back_up_drive_name,
-                                          'signal_pin': signal_pin,
-                                          'UUID': UUID,
-                                          'mount_loc': MOUNT_DIR}
+            drive_mapping[EXTERNAL_HD] = {
+                "back_up_name": back_up_drive_name,
+                "signal_pin": signal_pin,
+                "UUID": UUID,
+                "mount_loc": MOUNT_DIR,
+            }
 
         else:
             print("Failed to retrieve UUID.")
-    
+
     # mount drives added to fstab
     print("Mounting new extenal hard drives")
     mount_drives = subprocess.run(["sudo", "mount", "-a"])
     dameon_reload = subprocess.run(["sudo", "systemctl", "daemon-reload"])
-        
+
     return drive_mapping
-    
+
+
 def hash_init(config_data):
     """
     Initializes hash values for source and destination directories of external hard drives.
@@ -322,16 +329,15 @@ def hash_init(config_data):
             - 'back_up_name': Backup name of the external hard drive.
             - 'GPIO_pin': GPIO pin of the external hard drive.
     """
-    for index, object in enumerate(config_data['HD_map']):
+    for index, object in enumerate(config_data["HD_map"]):
         # get drive mapping details:
         EXTERNAL_HD = config_data["HD_map"][object]["name"]
 
         SOURCE_DIR = os.getcwd()
         DESTINATION_DIR = f"/media/{EXTERNAL_HD}"
 
-        locs = [select_random_location(SOURCE_DIR),
-                 DESTINATION_DIR]
-        print(f'Creating hash files in {locs}')
+        locs = [select_random_location(SOURCE_DIR), DESTINATION_DIR]
+        print(f"Creating hash files in {locs}")
 
         hash_locations = create_hash_file(locs)
 
@@ -339,6 +345,7 @@ def hash_init(config_data):
             f.write(f"{EXTERNAL_HD}_SRC_VALIDATION_HASH_LOC = '{hash_locations[0]}'\n")
             f.write(f"{EXTERNAL_HD}_DST_VALIDATION_HASH_LOC = '{hash_locations[1]}'")
         print("hash checks written")
+
 
 def backup_HD(config_data):
     """
@@ -377,27 +384,30 @@ def backup_HD(config_data):
 
     print("Closing airgap")
     checks = pre_sync_hash_verification(config_data)
-    
+
     if False in checks:
-        print('Verification failed')
+        print("Verification failed")
         return 1
     else:
-        for object in config_data['HD_map']:
-
-            print('Verification sucsessfull')
+        for object in config_data["HD_map"]:
+            print("Verification sucsessfull")
             # get drive mapping details:
             EXTERNAL_HD = config_data["HD_map"][object]["name"]
             back_up_drive_name = hd_name = config_data["HD_map"][object]["back_up_name"]
-            signal_pin= hd_name = config_data["HD_map"][object]["GPIO_pin"]
-        
+            signal_pin = hd_name = config_data["HD_map"][object]["GPIO_pin"]
+
             print(f"Mounting {back_up_drive_name} hard drive")
             power_on(signal_pin, ON=True)
             time.sleep(20)
             mount_cmd = f"lsblk -o LABEL,UUID | grep \"{back_up_drive_name}\" | awk '{{print $2}}'"
-            BU_UUID = subprocess.run(mount_cmd, shell=True, capture_output=True, text=True)
-            output_string = BU_UUID.stdout.strip().replace('"', '')
+            BU_UUID = subprocess.run(
+                mount_cmd, shell=True, capture_output=True, text=True
+            )
+            output_string = BU_UUID.stdout.strip().replace('"', "")
 
-            mount_drive = subprocess.run(["sudo", "mount", "-U", output_string, f"/media/{back_up_drive_name}"])
+            mount_drive = subprocess.run(
+                ["sudo", "mount", "-U", output_string, f"/media/{back_up_drive_name}"]
+            )
             print(f"Syncing {back_up_drive_name} drive with {EXTERNAL_HD}")
 
             log_file_path = f"/home/{os.getenv('USER')}/NAS_drive/logs/sync_log.log"
@@ -405,14 +415,20 @@ def backup_HD(config_data):
             print(rsync_cmd)
 
             # Open log file in append mode so that logs get appended
-            with open(log_file_path, 'a') as log_file:
-                sync = subprocess.run(rsync_cmd, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
+            with open(log_file_path, "a") as log_file:
+                sync = subprocess.run(
+                    rsync_cmd,
+                    shell=True,
+                    stdout=subprocess.PIPE,
+                    stderr=subprocess.PIPE,
+                    text=True,
+                )
                 # Write stdout and stderr to both console and log file
                 print(sync.stdout)
                 print(sync.stderr)
                 log_file.write(sync.stdout)
                 log_file.write(sync.stderr)
-        
+
             time.sleep(20)
             print("Closing airgap")
             power_on(signal_pin, ON=False)

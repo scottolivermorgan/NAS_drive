@@ -7,8 +7,8 @@ if __name__ == "__main__":
     fp = f"/home/{os.getenv('USER')}/NAS_drive/config.json"
 
     # Open and read the config.json file:
-    with open(fp, 'r') as config_file:
+    with open(fp, "r") as config_file:
         config_data = json.load(config_file)
-    
+
     # Sync all drives to designated air gapped backups.
     backup_HD(config_data)
