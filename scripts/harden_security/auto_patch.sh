@@ -1,3 +1,5 @@
+#!/bin/bash
+
 # Add package to install security fixes every day.
 echo "Installing unattended-upgrades"
 apt install unattended-upgrades -y
