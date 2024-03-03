@@ -4,7 +4,7 @@ from helpers import backup_HD
 
 if __name__ == "__main__":
     # Path to hard drives config file.
-    fp = f"/home/{os.getenv('USER')}/NAS_drive/config.json"
+    fp = f"/home/{os.getenv('SUDO_USER')}/NAS_drive/config.json"
 
     # Open and read the config.json file:
     with open(fp, "r") as config_file:

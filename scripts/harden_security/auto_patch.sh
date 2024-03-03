@@ -5,7 +5,7 @@ echo "Installing unattended-upgrades"
 apt install unattended-upgrades -y
 
 # Add mail utils for update to root user.
-echo "IInstalling mailutils"
+echo "Installing mailutils"
 apt install mailutils -y
 
 # Instsll fail2ban
