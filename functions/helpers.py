@@ -431,5 +431,10 @@ def backup_HD(config_data):
                 log_file.write(sync.stderr)
 
             time.sleep(20)
+            print(f"Unmounting drive: {back_up_drive_name}")
+            unmount_drive = subprocess.run(
+                ["sudo", "umount", f"/media/{back_up_drive_name}"]
+                )
+
             print("Closing airgap")
             power_on(signal_pin, ON=False)

@@ -68,8 +68,8 @@ if plex == "y":
 
 if security == "y":
     print(" Hardening security")
-    # subprocess.run(["yes", "|", "sudo", "sh", "scripts/harden_security/auto_patch.sh"])
     subprocess.run(["sudo", "sh", "scripts/harden_security/auto_patch.sh"])
+    subprocess.run(["sudo", "sh", "scripts/harden_security/update_schedule.sh"])
 
 if reboot == "y":
     subprocess.run(["sudo", "reboot"])
