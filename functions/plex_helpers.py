@@ -1,7 +1,7 @@
 import os
 import shutil
 
-def organize_files(input_path):
+def organize_movie_files_into_dirs(input_path):
     """Organizes files in the specified directory by creating a directory for each file 
     and moving the file into that directory.
 
@@ -52,6 +52,6 @@ if __name__ == "__main__":
     if org_files == "y":
         input_path = input("Enter directory, e.g.: /movies ")
         try:
-            organize_files(input_path)
+            organize_movie_files_into_dirs(input_path)
         except:
             print("Invalid path")
