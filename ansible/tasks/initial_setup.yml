@@ -1,0 +1,31 @@
+# This Ansible playbook performs system maintenance tasks on a Debian-based system.
+# It updates the apt package list cache, upgrades all installed apt packages to their latest versions,
+# installs specified packages (Git and SQLite), and sets up a cron job to automatically update and upgrade
+# the system at 5:00 AM daily.
+
+- name: Update apt-get repo and cache
+  become: true  # This task requires escalated privileges
+  apt: 
+    update_cache: yes  # Updates the apt package list cache
+    cache_valid_time: 3600  # Specifies the cache validity time in seconds
+
+- name: Upgrade all apt packages
+  become: true  # This task requires escalated privileges
+  apt: 
+    upgrade: dist  # Upgrades all packages to their latest available versions
+
+- name: Install packages
+  become: true  # This task requires escalated privileges
+  apt: 
+    pkg:  # Specifies the list of packages to install
+      - git  # Installs the Git version control system
+      - pip  # Installs Python package manager pip.
+      - sqlite3  # Installs the SQLite database engine
+
+- name: Crontab - setup update and upgrade
+  become: true  # This task requires escalated privileges
+  cron: 
+    name: "Update and upgrade"  # Specifies the name of the cron job
+    minute: "0"  # Specifies the minute when the cron job will run (0th minute)
+    hour: "5"  # Specifies the hour when the cron job will run (5th hour, i.e., 5:00 AM)
+    job: "apt update -q -y && apt dist-upgrade -q -y"  # Specifies the command to execute as the cron job, updating and upgrading the system silently and automatically

@@ -1,0 +1,12 @@
+# This Ansible playbook performs basic debugging tasks on the 'vms' hosts.
+- name: Debug  # A descriptive name for the playbook, indicating its purpose.
+  hosts: vms  # Specifies the target hosts where the tasks will be executed.
+
+  tasks:  # Defines a list of tasks to be executed on the specified hosts.
+
+    - name: Ping my hosts  # Describes the purpose of the task.
+      ansible.builtin.ping:  # Executes the 'ping' module to check if hosts are reachable.
+
+    - name: Print message  # Describes the purpose of the task.
+      ansible.builtin.debug:  # Executes the 'debug' module to print a message.
+        msg: Hello world  # Specifies the message to be printed.

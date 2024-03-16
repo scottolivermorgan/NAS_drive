@@ -1,0 +1,28 @@
+# Playbook to automate the installation of Git and configure global Git settings.
+
+# Task to install Git using the apt package manager.
+- name: Install Git
+  apt:
+    name: git
+    state: present
+
+# Task to set up the default text editor for Git to be nano.
+- name: Setup editor
+  git_config:
+    name: core.editor  # Git configuration key for default editor
+    scope: global      # Apply globally for all users
+    value: nano        # Value set to nano, a lightweight text editor
+
+# Task to configure the email associated with Git commits.
+- name: Setup email
+  git_config:
+    name: user.email          # Git configuration key for user email
+    scope: global            # Apply globally for all users
+    value: "{{ git_user_email }}"  # Value taken from a variable git_user_email, provided externally
+
+# Task to configure the username associated with Git commits.
+- name: Setup name
+  git_config:
+    name: user.name          # Git configuration key for user name
+    scope: global           # Apply globally for all users
+    value: "{{ git_user_name }}"  # Value taken from a variable git_user_name, provided externally
