@@ -1,0 +1,20 @@
+---
+# yamllint disable rule:line-length
+- name: Setup Machine
+  hosts: target_group
+  gather_facts: false
+  become: true
+
+  tasks:
+    - name: Install requirements
+      apt:
+        update_cache: true
+        pkg:
+          - python3
+          - flake8
+          - pylint
+          - python3-pip
+        state: latest
+      register: task_result
+      until: not task_result.failed
+      retries: 1
