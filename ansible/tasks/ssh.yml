@@ -2,7 +2,7 @@
 
 - name: Update sshd_config
   become: true  # Enable privilege escalation to perform actions as a superuser
-  blockinfile:  # Insert a block of text into a file if it doesn't already exist
+  ansible.builtin.blockinfile:  # Insert a block of text into a file if it doesn't already exist
     dest: "/etc/ssh/sshd_config"  # Destination file where the block will be inserted
     insertafter: "^Include /etc/ssh/sshd_config"  # Insert the block after this line if found
     block: |  # Multi-line block of text to insert into the file
@@ -14,7 +14,7 @@
 
 - name: Restart sshd service
   become: true  # Enable privilege escalation
-  service:  # Manage system services
+  ansible.builtin.service:  # Manage system services
     name: sshd  # Name of the SSH daemon service
     state: restarted  # Ensure the service is restarted
     enabled: true  # Ensure the service is enabled to start on boot
@@ -25,13 +25,15 @@
     type: ed25519  # Use Ed25519 key type for stronger security
 
 - name: Capture pub key
-  shell: cat "{{ ansible_env.HOME }}/.ssh/id_ed25519.pub"  # Execute a shell command to read the public key file
+  ansible.builtin.command: cat "{{ ansible_env.HOME }}/.ssh/id_ed25519.pub"  # Execute a shell command to read the public key file
   register: ssh_key  # Register the output of the shell command in a variable
+  changed_when: ssh_key.rc != 0
 
 - name: Print pub key
-  debug:  # Print debug information
+  ansible.builtin.debug:  # Print debug information
     msg: "{{ ssh_key.stdout }}"  # Output the contents of the public key
 
-- pause:  # Pause playbook execution and prompt for manual intervention
+- name: Pause playbook execution and prompt for manual intervention
+  ansible.builtin.pause:  # Pause playbook execution and prompt for manual intervention
     prompt: "Please enter the above ssh public key to GitHub and then press a key"  # Display a prompt message
     echo: y # Allow user input to be echoed back
