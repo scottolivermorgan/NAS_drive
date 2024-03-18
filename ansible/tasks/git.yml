@@ -26,3 +26,9 @@
     name: user.name          # Git configuration key for user name
     scope: global           # Apply globally for all users
     value: "{{ git_user_name }}"  # Value taken from a variable git_user_name, provided externally
+
+- name: Clone repository
+  ansible.builtin.git:
+    repo: https://github.com/scottolivermorgan/NAS_drive.git
+    dest: /home/{{ ansible_env.USER }}/NAS_drive
+    version: HEAD
