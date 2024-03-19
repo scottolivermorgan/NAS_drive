@@ -1,0 +1,28 @@
+- name: Pull Komga Docker image
+  # Use the community.docker.docker_image module to pull the latest Jellyfin Docker image
+  community.docker.docker_image:
+    name: gotson/komga:latest  # Specify the name of the Docker image
+    source: pull  # Specify to pull the image from the Docker Hub
+
+- name: Run Komga Docker container
+  # Use the community.docker.docker_container module to run the Jellyfin Docker container
+  community.docker.docker_container:
+    name: komga  # Specify the name of the Docker container
+    image: gotson/komga:latest  # Specify the image for the container
+    state: started  # Specify to start the container
+    restart_policy: always  # Specify to always restart the container if it stops
+    published_ports:
+      - "25600:25600"  # Specify the port mapping from host to container (host_port:container_port)
+                      # Adjust port as needed, for example, if port 8096 is already in use
+    timeout: 240  # Specify the timeout period for starting the container (in seconds)
+
+
+
+#docker create \
+# --name=komga \
+# --user 1000:1000 \
+# -p 25600:25600 \
+# --mount type=bind,source=/path/to/config,target=/config \
+# --mount type=bind,source=/path/to/data,target=/data \
+# --restart unless-stopped \
+# gotson/komga
