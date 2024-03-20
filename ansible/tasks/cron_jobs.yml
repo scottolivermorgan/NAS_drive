@@ -1,0 +1,7 @@
+
+- name: Add line to cron tab
+  ansible.builtin.cron:
+    name: "Backup script"
+    minute: "0"
+    hour: "5"
+    job: "python /home/{{ ansible_user }}/NAS_drive/functions/back-up.py >> /home/{{ ansible_user }}/NAS_drive/logs/back_up_cron.log 2>&1"

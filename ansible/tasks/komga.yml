@@ -1,22 +1,21 @@
+# This playbook pulls the latest Komga Docker image and runs a container using that image.
+
+# Pull the latest Komga Docker image
 - name: Pull Komga Docker image
-  # Use the community.docker.docker_image module to pull the latest Jellyfin Docker image
   community.docker.docker_image:
-    name: gotson/komga:latest  # Specify the name of the Docker image
-    source: pull  # Specify to pull the image from the Docker Hub
+    name: gotson/komga:latest
+    source: pull
 
+# Run Komga Docker container
 - name: Run Komga Docker container
-  # Use the community.docker.docker_container module to run the Jellyfin Docker container
   community.docker.docker_container:
-    name: komga  # Specify the name of the Docker container
-    image: gotson/komga:latest  # Specify the image for the container
-    state: started  # Specify to start the container
-    restart_policy: always  # Specify to always restart the container if it stops
+    name: komga
+    image: gotson/komga:latest
+    state: started
+    restart_policy: always  # Always restart the container if it stops
     published_ports:
-      - "25600:25600"  # Specify the port mapping from host to container (host_port:container_port)
-                      # Adjust port as needed, for example, if port 8096 is already in use
-    timeout: 240  # Specify the timeout period for starting the container (in seconds)
-
-
+      - "25600:25600"  # Port mapping from host to container
+    timeout: 240  # Timeout period (seconds)
 
 #docker create \
 # --name=komga \

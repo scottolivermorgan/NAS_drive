@@ -1,0 +1,4 @@
+- name: Initialise external hard drives
+  ansible.builtin.command:
+   cmd: |
+    sudo python /home/{{ ansible_user }}/NAS_drive/functions/HD_init.py

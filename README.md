@@ -1,3 +1,53 @@
+### Config control node
+Clone this repo
+`git clone https://github.com/scottolivermorgan/NAS_drive.git && cd NAS_drive`
+
+You need to install Ansible. For that use:
+`pip install -r requirements.txt`
+
+Get host IP
+`sudo apt install net-tools`
+`ifconfig`
+
+edit inventory.yml host and name
+
+edit main.yml git name and email
+
+### Testing
+## Ansibledocker build .
+cd to test dir
+`cd tests/ansible`
+
+`ssh-keygen -t rsa`
+
+first time, build docker file
+`docker build .`
+
+
+## First debug the connection:
+ensure .shh/.... empty first 
+`ansible-playbook -i inventory.yml debug.yml`
+
+If everything works, run the full suite:
+
+`ansible-playbook -i inventory.yml main.yml -vv`
+
+
+# serices
+jellyfin
+http://192.168.1.9:8096
+
+komga
+http://192.168.1.9:25600
+
+nextcloud
+http://192.168.1.9:80
+
+
+
+
+
+
 TODO:
 - script to automate gui config on NC
 - script to automate gui config on Plex.

@@ -1,19 +1,18 @@
 # This playbook pulls the latest Jellyfin Docker image and runs a container using that image.
 
+# Pull the latest Jellyfin Docker image
 - name: Pull Jellyfin Docker image
-  # Use the community.docker.docker_image module to pull the latest Jellyfin Docker image
   community.docker.docker_image:
-    name: jellyfin/jellyfin:latest  # Specify the name of the Docker image
-    source: pull  # Specify to pull the image from the Docker Hub
+    name: jellyfin/jellyfin:latest
+    source: pull
 
+# Run the Jellyfin Docker container
 - name: Run Jellyfin Docker container
-  # Use the community.docker.docker_container module to run the Jellyfin Docker container
   community.docker.docker_container:
-    name: jellyfin  # Specify the name of the Docker container
-    image: jellyfin/jellyfin:latest  # Specify the image for the container
-    state: started  # Specify to start the container
-    restart_policy: always  # Specify to always restart the container if it stops
+    name: jellyfin
+    image: jellyfin/jellyfin:latest
+    state: started
+    restart_policy: always  # Restart the container if it stops
     published_ports:
-      - "8096:8096"  # Specify the port mapping from host to container (host_port:container_port)
-                      # Adjust port as needed, for example, if port 8096 is already in use
-    timeout: 120  # Specify the timeout period for starting the container (in seconds)
+      - "8096:8096"  # Port mapping (host_port:container_port)
+    timeout: 120  # Timeout (seconds)
