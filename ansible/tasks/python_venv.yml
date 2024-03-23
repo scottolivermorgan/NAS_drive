@@ -4,19 +4,13 @@
     state: present
 
 - name: Create virtual environment
-  ansible.builtin.command: 
-   cmd: |
-    python -m venv /home/{{ ansible_user }}/NAS_drive/venv
+  ansible.builtin.command:
+    cmd: |
+     python -m venv /home/{{ ansible_user }}/NAS_drive/venv
   args:
-   creates: /home/{{ ansible_user }}/NAS_drive/venv
-
-#- name: Activate virtual environment
-#  ansible.builtin.command: 
-#   cmd: |
-#    source venv/bin/activate
-#   chdir: /home/{{ ansible_user }}/NAS_drive
+    creates: /home/{{ ansible_user }}/NAS_drive/venv
 
 - name: Install Python requirements
   ansible.builtin.pip:
-   virtualenv: /home/{{ ansible_user }}/NAS_drive/venv
-   requirements: /home/{{ ansible_user }}/NAS_drive/requirements.txt
+    virtualenv: /home/{{ ansible_user }}/NAS_drive/venv
+    requirements: /home/{{ ansible_user }}/NAS_drive/requirements.txt

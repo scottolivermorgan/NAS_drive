@@ -6,7 +6,20 @@
     name: nextcloud:latest
     source: pull
 
-# Run the Jellyfin Docker container
+- name: Create directories
+  become: true
+  ansible.builtin.file:
+    path: "{{ item }}"
+    state: directory
+    mode: '0755'
+  loop:
+    - /mnt/external/nextcloud
+    - /mnt/external/apps
+    - /mnt/external/config
+    - /mnt/external/data
+    - /mnt/external/theme
+
+# Run the Nextcloud Docker container
 - name: Run Nextcloud Docker container
   community.docker.docker_container:
     name: nextcloud
@@ -16,11 +29,9 @@
     published_ports:
       - "80:80"  # Port mapping (host_port:container_port)
     timeout: 240  # Timeout for starting the container (seconds)
-
-
-#sudo docker run -d -p 80:80 --name nextcloud --restart unless-stopped \
-#-v /mnt/external/nextcloud:/var/www/html \
-#-v /mnt/external/apps:/var/www/html/custom_apps \
-#-v /mnt/external/config:/var/www/html/config \
-#-v /mnt/external/data:/var/www/html/data \
-#-v /mnt/external/theme:/var/www/html/themes nextcloud 
+    volumes:
+      - "/mnt/external/nextcloud:/var/www/html"
+      - "/mnt/external/apps:/var/www/html/custom_apps"
+      - "/mnt/external/config:/var/www/html/config"
+      - "/mnt/external/data:/var/www/html/data" # TODO make scalable
+      - "/mnt/external/theme:/var/www/html/themes"

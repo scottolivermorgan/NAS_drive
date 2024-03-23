@@ -1,5 +1,15 @@
 # This playbook pulls the latest Komga Docker image and runs a container using that image.
 
+# Create directories required by komga
+- name: Create directories
+  become: true
+  ansible.builtin.file:
+    path: "{{ item }}"
+    state: directory
+    mode: '0755'
+  loop:
+    - /mnt/komga/config
+
 # Pull the latest Komga Docker image
 - name: Pull Komga Docker image
   community.docker.docker_image:
@@ -16,12 +26,6 @@
     published_ports:
       - "25600:25600"  # Port mapping from host to container
     timeout: 240  # Timeout period (seconds)
-
-#docker create \
-# --name=komga \
-# --user 1000:1000 \
-# -p 25600:25600 \
-# --mount type=bind,source=/path/to/config,target=/config \
-# --mount type=bind,source=/path/to/data,target=/data \
-# --restart unless-stopped \
-# gotson/komga
+    volumes:
+      - "/mnt/komga/config:/config"
+      - "/media/HD_1:/data"

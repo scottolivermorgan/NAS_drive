@@ -1,5 +1,15 @@
 # This playbook pulls the latest Jellyfin Docker image and runs a container using that image.
 
+- name: Create directories
+  become: true
+  ansible.builtin.file:
+    path: "{{ item }}"
+    state: directory
+    mode: '0755'
+  loop:
+    - /mnt/jellyfin/config
+    - /mnt/jellyfin/cache
+
 # Pull the latest Jellyfin Docker image
 - name: Pull Jellyfin Docker image
   community.docker.docker_image:
@@ -16,3 +26,7 @@
     published_ports:
       - "8096:8096"  # Port mapping (host_port:container_port)
     timeout: 120  # Timeout (seconds)
+    volumes:
+      - "/media/HD_1:/media/HD_1"  # Mount external hard drive
+      - "/mnt/jellyfin/config:/config"
+      - "/mnt/jellyfin/cache:/cache"
