@@ -48,23 +48,23 @@ if nc_option == "y":
             text=True,
         )
 
-if ext_hd == "y":
-    print("initialising hard drives")
-    drive_mapping = mount_HD_from_config(config_data)
-    dummy = input("enable external storage via nextcloud GUI, type y when enabled.")
+#if ext_hd == "y":
+#    print("initialising hard drives")
+#    drive_mapping = mount_HD_from_config(config_data)
+#    dummy = input("enable external storage via nextcloud GUI, type y when enabled.")
 
-if ag_bu == "y":
-    print("Initialising backup routine")
-    initalise_hashes = hash_init(config_data)
-    subprocess.run(["sh", "scripts/backup_drive/schedule-backup.sh"])
+#if ag_bu == "y":
+#    print("Initialising backup routine")
+#    initalise_hashes = hash_init(config_data)
+#    subprocess.run(["sh", "scripts/backup_drive/schedule-backup.sh"])
 
 if shutdown_switch == "y":
     print("Configuring shutdown switch")
     subprocess.run(["sh", "scripts/shutdown_switch/shutdown.sh"])
 
-if plex == "y":
-    subprocess.run(["sudo", "sh", "scripts/plex/plex-installation.sh"])
-    subprocess.run(["sh", "scripts/plex/mv_meta_loc.sh"])
+#if plex == "y":
+#    subprocess.run(["sudo", "sh", "scripts/plex/plex-installation.sh"])
+#    subprocess.run(["sh", "scripts/plex/mv_meta_loc.sh"])
 
 if security == "y":
     print(" Hardening security")
