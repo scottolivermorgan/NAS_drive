@@ -33,5 +33,6 @@
       - "/mnt/external/nextcloud:/var/www/html"
       - "/mnt/external/apps:/var/www/html/custom_apps"
       - "/mnt/external/config:/var/www/html/config"
-      - "/mnt/external/data:/var/www/html/data" # TODO make scalable
+      #- "/mnt/external/data:/var/www/html/data" # TODO make scalable
       - "/mnt/external/theme:/var/www/html/themes"
+      - "/media/HD_1:/var/www/html/data" 

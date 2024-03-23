@@ -4,5 +4,5 @@
       venv/bin/python -m functions.HD_init
     chdir: /home/{{ ansible_user }}/NAS_drive
   become: true
-  register: init_hd
-  changed_when: true
+  args:
+    creates: /media/HD_1
