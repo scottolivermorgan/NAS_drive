@@ -12,6 +12,7 @@
 
 # Pull the latest Jellyfin Docker image
 - name: Pull Jellyfin Docker image
+  become: true
   community.docker.docker_image:
     name: jellyfin/jellyfin:latest
     source: pull

@@ -2,6 +2,7 @@
 
 # Pull the latest nextcloud Docker image
 - name: Pull Nextcloud Docker image
+  become: true
   community.docker.docker_image:
     name: nextcloud:latest
     source: pull
@@ -13,11 +14,11 @@
     state: directory
     mode: '0755'
   loop:
-    - /mnt/external/nextcloud
-    - /mnt/external/apps
-    - /mnt/external/config
-    - /mnt/external/data
-    - /mnt/external/theme
+    - /mnt/nextcloud/nextcloud
+    - /mnt/nextcloud/apps
+    - /mnt/nextcloud/config
+    - /mnt/nextcloud/data
+    - /mnt/nextcloud/theme
 
 # Run the Nextcloud Docker container
 - name: Run Nextcloud Docker container
@@ -30,9 +31,9 @@
       - "80:80"  # Port mapping (host_port:container_port)
     timeout: 240  # Timeout for starting the container (seconds)
     volumes:
-      - "/mnt/external/nextcloud:/var/www/html"
-      - "/mnt/external/apps:/var/www/html/custom_apps"
-      - "/mnt/external/config:/var/www/html/config"
-      #- "/mnt/external/data:/var/www/html/data" # TODO make scalable
-      - "/mnt/external/theme:/var/www/html/themes"
-      - "/media/HD_1:/var/www/html/data" 
+      - "/mnt/nextcloud/nextcloud:/var/www/html"
+      - "/mnt/nextcloud/apps:/var/www/html/custom_apps"
+      - "/mnt/nextcloud/config:/var/www/html/config"
+      - "/mnt/nextcloud/data:/var/www/html/data"
+      - "/mnt/nextcloud/theme:/var/www/html/themes"
+      - "/media/HD_1:/media/HD_1" 

@@ -12,6 +12,7 @@
 
 # Pull the latest Komga Docker image
 - name: Pull Komga Docker image
+  become: true
   community.docker.docker_image:
     name: gotson/komga:latest
     source: pull
