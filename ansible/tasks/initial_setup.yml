@@ -27,5 +27,5 @@
   ansible.builtin.cron:
     name: "Update and upgrade"  # Specifies the name of the cron job
     minute: "0"  # Specifies the minute when the cron job will run (0th minute)
-    hour: "5"  # Specifies the hour when the cron job will run (5th hour, i.e., 5:00 AM)
+    hour: "4"  # Specifies the hour when the cron job will run (5th hour, i.e., 5:00 AM)
     job: "apt update -q -y && apt dist-upgrade -q -y"

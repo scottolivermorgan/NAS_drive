@@ -19,6 +19,7 @@
 
 # Run Komga Docker container
 - name: Run Komga Docker container
+  become: true
   community.docker.docker_container:
     name: komga
     image: gotson/komga:latest

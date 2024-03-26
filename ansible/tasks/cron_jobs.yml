@@ -1,4 +1,5 @@
 - name: Add line to cron tab
+  become: true
   ansible.builtin.cron:
     name: "Backup script"
     minute: "0"

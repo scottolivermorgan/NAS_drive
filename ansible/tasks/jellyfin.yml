@@ -19,6 +19,7 @@
 
 # Run the Jellyfin Docker container
 - name: Run Jellyfin Docker container
+  become: true
   community.docker.docker_container:
     name: jellyfin
     image: jellyfin/jellyfin:latest

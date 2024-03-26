@@ -18,10 +18,13 @@ edit main.yml git name and email
 cd to test dir
 `cd tests/ansible`
 
-`ssh-keygen -t rsa`
+~~`ssh-keygen -t rsa`~~
 
 first time, build docker file
-`docker build .`
+docker build -t t .
+~~`docker build .`~~
+`docker-compose up`
+
 
 
 ## First debug the connection:

@@ -22,6 +22,7 @@
 
 # Run the Nextcloud Docker container
 - name: Run Nextcloud Docker container
+  become: true
   community.docker.docker_container:
     name: nextcloud
     image: nextcloud:latest
@@ -31,9 +32,17 @@
       - "80:80"  # Port mapping (host_port:container_port)
     timeout: 240  # Timeout for starting the container (seconds)
     volumes:
-      - "/mnt/nextcloud/nextcloud:/var/www/html"
-      - "/mnt/nextcloud/apps:/var/www/html/custom_apps"
-      - "/mnt/nextcloud/config:/var/www/html/config"
-      - "/mnt/nextcloud/data:/var/www/html/data"
-      - "/mnt/nextcloud/theme:/var/www/html/themes"
-      - "/media/HD_1:/media/HD_1" 
+      #
+      - "nextcloud:/var/www/html"
+      #- "/mnt/nextcloud/apps:/var/www/html/custom_apps"
+      #- "/mnt/nextcloud/config:/var/www/html/config"
+      #- "/mnt/nextcloud/data:/var/www/html/data"
+      #- "/mnt/nextcloud/theme:/var/www/html/themes"
+      #- "/media/HD_1:/media/HD_1"
+    #links:
+    #  - "mariadb"
+    env:
+      MYSQL_HOST: "mariadb"
+      MYSQL_DATABASE: "nextcloud"
+      MYSQL_USER: "nextcloud"
+      MYSQL_PASSWORD: "test"

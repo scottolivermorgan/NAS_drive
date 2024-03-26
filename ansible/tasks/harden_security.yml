@@ -1,0 +1,55 @@
+- name: Install fail2ban and ufw
+  become: true
+  ansible.builtin.apt:
+    name: "{{ item }}"
+    state: present
+  loop:
+    - fail2ban
+    - ufw
+
+- name: Open HTTP port
+  become: true
+  community.general.ufw:
+    rule: allow
+    port: 80
+
+- name: Open HTTPS port
+  become: true
+  community.general.ufw:
+    rule: allow
+    port: 443
+
+- name: Open Jellyfin port
+  become: true
+  community.general.ufw:
+    rule: allow
+    port: 8096
+
+- name: Open Komga port
+  become: true
+  community.general.ufw:
+    rule: allow
+    port: 25600
+
+- name: Open SSH port
+  become: true
+  community.general.ufw:
+    rule: allow
+    port: 22
+
+- name: Open SSH port #####################
+  become: true
+  community.general.ufw:
+    rule: allow
+    port: 3306
+
+- name: Enable UFW
+  become: true
+  #become_method: sudo
+  #become_user: root
+  ansible.builtin.shell: ufw --force enable
+  args:
+    executable: /bin/bash
+  #notify:
+   # - restart ufw service
+

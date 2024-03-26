@@ -40,6 +40,7 @@
       - containerd.io  # Container runtime
       - docker-buildx-plugin  # Docker Buildx plugin
       - docker-compose-plugin  # Docker Compose plugin
+      - docker-compose
 
 - name: Reboot the machine to make the docker.service start
   # Ansible task to reboot the machine to ensure Docker service starts
