@@ -5,7 +5,7 @@ import subprocess
 #TODO mkdir FIRST if dosent exist
 def sync_directories():
     source_dir = "/mnt/jellyfin"
-    destination_dir = "/media/HD_1/Media/metadata/jellyfin"
+    destination_dir = "/media/HD_1/Media/metadata/"
 
     # Construct rsync command
     rsync_command = [
@@ -29,7 +29,7 @@ def sync_directories():
 # Function to restore Jellyfin data from external hard drive to local.
 def restore_metadata():
     source_directory = "/media/HD_1/Media/metadata/jellyfin"
-    destination_directory = "/mnt/jellyfin"
+    destination_directory = "/mnt/"
 
     # Construct the rsync command
     rsync_command = [
