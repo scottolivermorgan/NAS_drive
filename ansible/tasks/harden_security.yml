@@ -45,11 +45,8 @@
 
 - name: Enable UFW
   become: true
-  #become_method: sudo
-  #become_user: root
   ansible.builtin.shell: ufw --force enable
   args:
     executable: /bin/bash
-  #notify:
-   # - restart ufw service
+
 
