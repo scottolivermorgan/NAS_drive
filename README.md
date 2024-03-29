@@ -104,39 +104,6 @@ Set hotsname as Pi , enable SSH and select use password authentication.
 Save and write SD, takes a few minutes.
 Insert SD and turn on Pi, navigate to router on local network (192.168.1.1 for me) and login to router, navigate to connected devices and find Pi address.
 
-# Update Pi
-- On network connected computer open terminal/Powershell and run the following command, if this is the first time connecting you will be prompted for ssh fingerprint, type yes.
-
-    ``ssh <username>@192.168.1.x -v``
-
-__Note:__ if this has been done before and is fresh installation, navigate to C://users/user/.ssh/known_hosts and delete previous fingerprint.
-
-- As using raspberian Lite we need Git and pip so run:
-`sudo apt-get install git -y`
-`sudo apt install python3-pip -y`
-
-- Clone this repo:
-``git clone https://github.com/scottolivermorgan/NAS_drive.git``
-
-__Note:__ if the following error occurs:
-``error: RPC failed; curl 16 Error in the HTTP2 framing layer``
-
-retry cmd, else if error persits Run:
-    ``git config --global http.version HTTP/1.1``
-    and re- try the clone cmd
-
-- Install Python requirements:sudo sh scripts/update.sh
-`cd NAS_drive && sudo pip install -r requirements.txt --break-system-packages`
-
- 
-- Update packages and reboot Pi:
-``sudo sh scripts/update.sh``
-
-- After reboot, reconnect via SSH and run:
-``cd NAS_drive && sudo python main.py``
-
-follow onscreen prompts, halfway through you wll be prompted to enable external
-drives for nextcloud follow instrutions below.
 
 # Enable External Storage via GUI
 Access nextcloud at 192.169.1.x/nextcloud fill out form adding user and usng
@@ -155,18 +122,6 @@ Wait several seconds, again select user icon at top right and select Administrat
 Select External storage tab on left and add name, Local, and add mount point defined in mount-drives.sh - /media/hardrive1
 ![addExt1](./assets/nextcloud_add_external_drive/nc4.png)
 
-Return to the terminal, enter y and hit enter, reboots on completion
-
-- After reboot, reconnect via SSH and run:
-``sudo -u www-data php /var/www/nextcloud/occ files:scan --all --verbose``
-__Note:__ Can take up to 2 hours.
-
-__Note:__ SSH port changed from 22 to 1111
-
-Access Plex at 192.168.1.x:32400/web -x dependant on your local network.
-
-Sign in/create account and addexternal lib via GUI
-Add Libary > harddrive1 (in this case as has been set in previouse steps)
 
 Relay wiring:
 
