@@ -43,10 +43,14 @@
     rule: allow
     port: 3306
 
+- name: Open Glances port
+  become: true
+  community.general.ufw:
+    rule: allow
+    port: 61208
+
 - name: Enable UFW
   become: true
   ansible.builtin.shell: ufw --force enable
   args:
     executable: /bin/bash
-
-

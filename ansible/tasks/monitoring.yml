@@ -1,0 +1,26 @@
+#- name: Install python-dev
+#  become: true
+#  ansible.builtin.apt:
+#    name: python-dev
+#    state: present
+
+#- name: Install Glances
+#  ansible.builtin.pip:
+#    name: glances[all]
+#    virtualenv: /home/{{ ansible_user }}/NAS_drive/venv
+
+#- name: Install glances python package
+#  ansible.builtin.pip:
+#    name: glances[all]
+
+#- name: Run glances in webserver mode
+#  ansible.builtin.command:
+#    cmd: venv/bin/python -m glances -w
+
+- name: Initialise external hard drives
+  ansible.builtin.shell:
+    cmd: |
+      source venv/bin/activate
+      glances -w
+    chdir: /home/{{ ansible_user }}/NAS_drive
+  become: true
