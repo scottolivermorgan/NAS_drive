@@ -5,16 +5,22 @@
 #  become: true
 
 
-- name: Run Glances container
-  docker_container:
-    name: Glances
-    hostname: Glances
-    image: docker.io/nicolargo/glances
-    restart_policy: always
-    env:
-      GLANCES_OPT: "-w"
-    volumes:
-      - glances_config:/glances/conf
-      - /var/run/docker.sock:/var/run/docker.sock:ro
-    network_mode: host
-    pid_mode: host
+#- name: Run Glances container
+#  docker_container:
+#    name: Glances
+#    hostname: Glances
+#    image: docker.io/nicolargo/glances
+#    restart_policy: always
+#    env:
+#      GLANCES_OPT: "-w"
+#    volumes:
+#      - glances_config:/glances/conf
+#      - /var/run/docker.sock:/var/run/docker.sock:ro
+#    network_mode: host
+#    pid_mode: host
+
+- name: Create and start Glance and InfluxDB
+  become: true
+  community.docker.docker_compose_v2:
+    project_src: /home/scott/NAS_drive/ansible/tasks/test_compose
+  register: output
