@@ -1,4 +1,4 @@
-from komga_helpers import sync_directories
+from library.helpers import sync_komga_directories
 
 if __name__ == "__main__":
-    var = sync_directories()
+    var = sync_komga_directories()
