@@ -1,4 +1,4 @@
-from library.jellyfin_helpers import sync_directories
+from jellyfin_helpers import sync_directories
 
 if __name__ == "__main__":
     var = sync_directories()

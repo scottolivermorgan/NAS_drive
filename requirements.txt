@@ -10,6 +10,7 @@ dill==0.3.7
 exceptiongroup==1.2.0
 ffmpeg-python==0.2.0
 future==1.0.0
+Glances==3.4.0.5
 importlib-resources==5.0.7
 iniconfig==2.0.0
 isort==5.12.0
