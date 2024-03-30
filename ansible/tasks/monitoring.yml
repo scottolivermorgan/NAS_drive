@@ -1,8 +1,41 @@
-#- name: Run glances in webserver mode
-#  ansible.builtin.shell:
-#    cmd: |
-#      docker run -d --name=Glances --hostname=Glances --restart="always" --network=host -e GLANCES_OPT="-w" -v glances_config:/glances/conf -v /var/run/docker.sock:/var/run/docker.sock:ro --pid host docker.io/nicolargo/glances
-#  become: true
+
+- name: Ensure /etc/glances directory exists
+  become: true
+  ansible.builtin.file:
+    path: /etc/glances
+    state: directory
+
+- name: Create glances.conf file
+  become: true
+  ansible.builtin.file:
+    path: /etc/glances/glances.conf
+    state: touch
+
+- name: Add content to glances.conf
+  become: true
+  ansible.builtin.blockinfile:
+    path: /etc/glances/glances.conf
+    block: |
+      [influxdb2]
+      host=localhost
+      port=8086
+      protocol=http
+      org=nicolargo
+      bucket=glances
+      token=EjFUTWe8U-MIseEAkaVIgVnej_TrnbdvEcRkaB1imstW7gapSqy6_6-8XD-yd51V0zUUpDy-kAdVD1purDLuxA==
+      # Set the interval between two exports (in seconds)
+      # If the interval is set to 0, the Glances refresh time is used (default behavor)
+      #interval=0
+      # Prefix will be added for all measurement name
+      # Ex: prefix=foo
+      #     => foo.cpu
+      #     => foo.mem
+      # You can also use dynamic values
+      #prefix=foo
+      # Following tags will be added for all measurements
+      # You can also use dynamic values.
+      # Note: hostname is always added as a tag
+      #tags=foo:bar,spam:eggs,domain:`domainname`
 
 
 #- name: Run Glances container
@@ -19,6 +52,7 @@
 #    network_mode: host
 #    pid_mode: host
 
+    
 - name: Create and start Glance and InfluxDB
   become: true
   community.docker.docker_compose_v2:

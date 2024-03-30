@@ -1,13 +1,15 @@
-#version: '3.7'
-#
+version: '3.7'
+
 #services:
 #  influxdb:
 #    image: influxdb:latest
 #    container_name: influxdb
 #    ports:
 #      - "8086:8086"
+#    #volumes:
+#    #  - influxdb_data:/var/lib/influxdb
 #    volumes:
-#      - influxdb_data:/var/lib/influxdb
+#      - $MAINDIR/influxdb/db:/var/lib/influxdb
 #    environment:
 #      - INFLUXDB_DB=glances
 #      - INFLUXDB_ADMIN_USER=admin
@@ -18,63 +20,48 @@
 #  glances:
 #    image: nicolargo/glances:latest
 #    container_name: glances
-#    network_mode: "host"
+#    #network_mode: "host"
 #    environment:
 #      - GLANCES_OPT=--export influxdb
 #      - GLANCES_OPT=-q
-#      #- INFLUXDB_HOST=influxdb
-#      #- INFLUXDB_PORT=8086
-#      #- INFLUXDB_USER=glances
-#      #- INFLUXDB_PASSWORD=glancespassword
-#      #- INFLUXDB_DB=glances
+#      - INFLUXDB_HOST=influxdb
+#      - INFLUXDB_PORT=8086
+#      - INFLUXDB_USER=glances
+#      - INFLUXDB_PASSWORD=glancespassword
+#      - INFLUXDB_DB=glances
 #    restart: always
-#
+#    ports:
+#      - "61208:61208"
+#    pid: host
+
 #volumes:
 #  influxdb_data:
 #    driver: local
-version: '3.7'
 
 services:
+  glances:
+      image: nicolargo/glances:latest
+      container_name: glances
+      restart: unless-stopped
+      privileged: true
+      security_opt:
+        - no-new-privileges:true
+      ports:
+        - "61208:61208"
+      pid: host
+      volumes:
+        - /etc/glances/glances.conf:/glances/conf # Use this if you want to add a glances.conf file
+        - /var/run/docker.sock:/var/run/docker.sock:ro
+      environment:
+        GLANCES_OPT: "-C /glances/conf/glances.conf  --export influxdb"
+  
   influxdb:
-    image: influxdb:latest
+    image: influxdb2
     container_name: influxdb
+    restart: always
+    security_opt:
+      - no-new-privileges:true
     ports:
       - "8086:8086"
     volumes:
-      - influxdb_data:/var/lib/influxdb
-    environment:
-      - INFLUXDB_DB=glances
-      - INFLUXDB_ADMIN_USER=admin
-      - INFLUXDB_ADMIN_PASSWORD=adminpassword
-      - INFLUXDB_USER=glances
-      - INFLUXDB_USER_PASSWORD=glancespassword
-
-  glances:
-    image: nicolargo/glances:latest
-    container_name: glances
-    network_mode: "host"
-    environment:
-      - GLANCES_OPT=--export influxdb
-      - GLANCES_OPT=-q
-    restart: always
-
-  grafana:
-    image: grafana/grafana:latest
-    container_name: grafana
-    ports:
-      - "3000:3000"
-    depends_on:
-      - influxdb
-    environment:
-      - GF_SECURITY_ADMIN_PASSWORD=adminpassword
-      - GF_SECURITY_ADMIN_USER=admin
-      - GF_DATABASE_TYPE=influxdb
-      - GF_DATABASE_URL=http://influxdb:8086
-      - GF_DATABASE_NAME=glances
-      - GF_DATABASE_USER=glances
-      - GF_DATABASE_PASSWORD=glancespassword
-    restart: always
-
-volumes:
-  influxdb_data:
-    driver: local
+      - $MAINDIR/influxdb/db:/var/lib/influxdb
