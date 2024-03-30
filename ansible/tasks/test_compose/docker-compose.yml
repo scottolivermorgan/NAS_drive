@@ -1,4 +1,4 @@
-version: '3.7'
+#version: '3.7'
 
 #services:
 #  influxdb:
@@ -38,30 +38,63 @@ version: '3.7'
 #  influxdb_data:
 #    driver: local
 
+#services:
+#  glances:
+#      image: nicolargo/glances:latest
+#      container_name: glances
+#      restart: unless-stopped
+#      privileged: true
+#      security_opt:
+#        - no-new-privileges:true
+#      ports:
+#        - "61208:61208"
+#      pid: host
+#      volumes:
+#        - /etc/glances/glances.conf:/glances/conf # Use this if you want to add a glances.conf file
+#        - /var/run/docker.sock:/var/run/docker.sock:ro
+#      environment:
+#        GLANCES_OPT: "-C /glances/conf/glances.conf  --export influxdb"
+#  
+#  influxdb:
+#    image: influxdb:latest
+#    container_name: influxdb
+#    restart: always
+#    security_opt:
+#      - no-new-privileges:true
+#    ports:
+#      - "8086:8086"
+#    volumes:
+#      - influxdb_data:/var/lib/influxdb
+
+version: '3.8'
+
 services:
   glances:
-      image: nicolargo/glances:latest
-      container_name: glances
-      restart: unless-stopped
-      privileged: true
-      security_opt:
-        - no-new-privileges:true
-      ports:
-        - "61208:61208"
-      pid: host
-      volumes:
-        - /etc/glances/glances.conf:/glances/conf # Use this if you want to add a glances.conf file
-        - /var/run/docker.sock:/var/run/docker.sock:ro
-      environment:
-        GLANCES_OPT: "-C /glances/conf/glances.conf  --export influxdb"
+    image: nicolargo/glances:latest
+    container_name: glances
+    restart: unless-stopped
+    privileged: true
+    security_opt:
+      - no-new-privileges=true
+    ports:
+      - "61208:61208"
+    pid: host
+    volumes:
+      - /etc/glances/glances.conf:/glances/conf # Use this if you want to add a glances.conf file
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+    environment:
+      GLANCES_OPT: "-C /glances/conf/glances.conf --export influxdb"
   
   influxdb:
-    image: influxdb2
+    image: influxdb:latest
     container_name: influxdb
     restart: always
     security_opt:
-      - no-new-privileges:true
+      - no-new-privileges=true
     ports:
       - "8086:8086"
     volumes:
-      - $MAINDIR/influxdb/db:/var/lib/influxdb
+      - influxdb_data:/var/lib/influxdb
+
+volumes:
+  influxdb_data:
