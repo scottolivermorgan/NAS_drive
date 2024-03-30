@@ -84,9 +84,11 @@ services:
       - /var/run/docker.sock:/var/run/docker.sock:ro
     environment:
       GLANCES_OPT: "-C /glances/conf/glances.conf --export influxdb"
+
   
   influxdb:
-    image: influxdb:latest
+    build: .
+    #image: influxdb:latest
     container_name: influxdb
     restart: always
     security_opt:
