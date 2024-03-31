@@ -45,6 +45,7 @@
 #
 
 - name: Run Glances container
+  become: true
   docker_container:
     name: Glances
     hostname: Glances
