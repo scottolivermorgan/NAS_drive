@@ -12,9 +12,16 @@ def process_directories(input_dir):
             x = os.listdir(sub_dir_path)
             for i in x:
                 source_dir = f'{sub_dir_path}/{i}'
+                
                 destination_dir = input_dir+'/output/'+f'{d} - {i}'
-                print(f'Copying from {source_dir} to {destination_dir}')
-                shutil.copytree(source_dir, destination_dir)
+                try:
+                    new_name = destination_dir.split('(')[0].strip()
+                    print(f'Copying from {source_dir} to {new_name}')
+                    shutil.copytree(source_dir, new_name)
+                except:
+                    print(f'Copying from {source_dir} to {destination_dir}')
+                    shutil.copytree(source_dir, destination_dir)
+
 
 if __name__ == "__main__":
     org_files = input("Org ebooks? y/n?")
