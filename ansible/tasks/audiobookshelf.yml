@@ -1,4 +1,4 @@
-- name: Create and start Nextcloud and mariaDB
+- name: Create and start AudioBookShelf
   become: true
   community.docker.docker_compose_v2:
     project_src: /home/scott/NAS_drive/ansible/tasks/docker_compose_abs
