@@ -1,0 +1,19 @@
+services:
+  subsonic:
+    image: hurricane/subsonic
+    container_name: subsonic
+    restart: unless-stopped
+    #environment:
+    #  - PUID=1000 # Set the user ID for file permissions
+    #  - PGID=1000 # Set the group ID for file permissions
+    #  - TZ=Your/Timezone # Set your timezone
+    volumes:
+      - /mnt/subsonic/config:/config # Persist Subsonic configuration
+      - /media/HD_1/Media/Music/Scott:/music # Path to your music files
+      #- /path/to/podcasts:/podcasts # Path to your podcast files
+      #- /path/to/playlists:/playlists # Path to your playlists
+    ports:
+      - "4040:4040" # Subsonic web interface port
+      - "4443:4443" # Subsonic HTTPS port
+      - "6767:6767" # Subsonic streaming port
+    # Add any additional ports if required
