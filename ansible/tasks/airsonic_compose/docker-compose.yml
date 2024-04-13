@@ -1,0 +1,21 @@
+services:
+  airsonic-advanced:
+    image: lscr.io/linuxserver/airsonic-advanced:latest
+    container_name: airsonic-advanced
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=Etc/UTC
+      #- CONTEXT_PATH= #optional
+      #- JAVA_OPTS= #optional
+    volumes:
+      - /mnt/subsonic/config:/config
+      - /media/HD_1/Media/Music/Scott:/music
+      #- /path/to/playlists:/playlists
+      #- /path/to/podcasts:/podcasts
+      #- /path/to/other media:/media #optional
+    ports:
+      - 4042:4040
+    #devices:
+    #  - /dev/snd:/dev/snd #optional
+    restart: unless-stopped
