@@ -1,25 +1,38 @@
-services:
+volumes:
   ampache:
-    image: ampache/ampache
-    ports:
-      - "8070:80"
-    volumes:
-      - ./data:/var/www/html/ampache/config
-      - /media/HD_1/Media/Music:/media/music
-    environment:
-      - MYSQL_HOST=db
-      - MYSQL_USER=ampache
-      - MYSQL_PASSWORD=ampache
-      - MYSQL_DATABASE=ampache
-    depends_on:
-      - db
+  db:
 
+services:
   db:
     image: mysql
+    restart: always
+    volumes:
+      - db:/var/lib/mysql
+    container_name: mysql
     environment:
       - MYSQL_ROOT_PASSWORD=rootpassword
       - MYSQL_DATABASE=ampache
       - MYSQL_USER=ampache
       - MYSQL_PASSWORD=ampache
+    networks: ampache_network
+
+
+  app:
+    image: ampache:latest
+    ports:
+      - "8070:80"
+    container_name: ampache_test
     volumes:
-      - db:/var/lib/mysql
+      - ./data:/var/www/html/ampache/config
+      - /media/HD_1/Media/Music:/media/music
+    restart: always
+    environment:
+      - MYSQL_HOST=db
+      - MYSQL_USER=ampache
+      - MYSQL_PASSWORD=ampache
+      - MYSQL_DATABASE=ampache
+    #depends_on:
+    #  - db
+networks:
+  ampache_network:
+    driver: bridge
