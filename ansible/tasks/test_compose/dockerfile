@@ -1,9 +1,0 @@
-# Use an existing base image
-FROM influxdb:latest
-
-# Install any dependencies
-RUN apt-get update && apt-get install -y \
-    python3 \
-    python3-pip
-
-RUN pip install influxdb --break-system-packages

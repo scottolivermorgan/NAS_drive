@@ -1,4 +1,0 @@
-[ZoneTransfer]
-ZoneId=3
-ReferrerUrl=http://192.168.1.9:8080/install.php?action=create_config
-HostUrl=http://192.168.1.9:8080/install.php?action=create_config

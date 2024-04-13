@@ -65,6 +65,7 @@ http://192.168.1.9:8080
 
 
 
+
 TODO:
 - script to automate gui config on NC
 - script to automate gui config on Plex.
