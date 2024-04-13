@@ -5,6 +5,8 @@ Clone this repo
 You need to install Ansible. For that use:
 `pip install -r requirements.txt`
 
+`ansible-galaxy collection install -r requirements.yml --force`
+
 Get host IP
 `sudo apt install net-tools`
 `ifconfig`
@@ -52,6 +54,11 @@ http://192.168.1.9:61208
 influxdb
 http://192.168.1.9:8086
 
+audiobookshelf
+http://192.168.1.9:13378
+
+Ampache
+http://192.168.1.9:8080
 
 
 
