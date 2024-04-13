@@ -1,5 +1,3 @@
-version: '3'
-
 services:
   ampache:
     image: ampache/ampache:latest
@@ -8,7 +6,7 @@ services:
     ports:
       - 8080:80
     volumes:
-      - ./data/config:/var/www/config
-      - ./data/log:/var/log/ampache
+      - /mnt/ampache/config:/var/www/config
+      - /mnt/ampache/log:/var/log/ampache
+      - /mnt/ampache/mysql:/var/lib/mysql
       - /media/HD_1:/media
-      - ./data/mysql:/var/lib/mysql

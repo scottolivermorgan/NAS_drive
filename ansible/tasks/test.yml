@@ -1,0 +1,5 @@
+- name: Create and start Ampache
+  become: true
+  community.docker.docker_compose_v2:
+    project_src: /home/scott/NAS_drive/ansible/tasks/test
+  register: output

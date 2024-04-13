@@ -1,3 +1,15 @@
+# Create directories required by komga
+- name: Create directories
+  become: true
+  ansible.builtin.file:
+    path: "{{ item }}"
+    state: directory
+    mode: '0777'
+  loop:
+    - /mnt/ampache/config
+    - /mnt/ampache/log
+    - /mnt/ampache/mysql
+
 - name: Create and start Ampache
   become: true
   community.docker.docker_compose_v2:
