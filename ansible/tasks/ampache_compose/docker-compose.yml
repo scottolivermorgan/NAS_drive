@@ -1,0 +1,14 @@
+version: '3'
+
+services:
+  ampache:
+    image: ampache/ampache:latest
+    container_name: ampache
+    restart: unless-stopped
+    ports:
+      - 8080:80
+    volumes:
+      - ./data/config:/var/www/config
+      - ./data/log:/var/log/ampache
+      - /media/HD_1:/media
+      - ./data/mysql:/var/lib/mysql
