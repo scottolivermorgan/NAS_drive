@@ -1,5 +1,5 @@
 - name: Create and start Nextcloud and mariaDB
   become: true
   community.docker.docker_compose_v2:
-    project_src: /home/scott/NAS_drive/ansible/tasks/docker_compose
+    project_src: /home/scott/NAS_drive/ansible/tasks/nextcloud_compose
   register: output

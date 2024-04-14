@@ -27,7 +27,7 @@ docker build -t t .
 ~~`docker build .`~~
 `docker-compose up`
 
-
+`docker logs ampache`
 
 ## First debug the connection:
 ensure .shh/.... empty first 

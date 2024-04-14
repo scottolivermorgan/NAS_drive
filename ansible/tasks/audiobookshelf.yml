@@ -1,5 +1,5 @@
 - name: Create and start AudioBookShelf
   become: true
   community.docker.docker_compose_v2:
-    project_src: /home/scott/NAS_drive/ansible/tasks/docker_compose_abs
+    project_src: /home/scott/NAS_drive/ansible/tasks/abs_compose
   register: output
