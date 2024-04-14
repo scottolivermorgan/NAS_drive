@@ -6,9 +6,9 @@
     state: directory
     mode: '0777'
   loop:
-    - /mnt/ampache/config
-    - /mnt/ampache/log
-    - /mnt/ampache/mysql
+    - /media/HD_1/Media/metadata/ampache/config #/mnt/ampache/config
+    - /media/HD_1/Media/metadata/amapche/log #/mnt/ampache/log
+    - /media/HD_1/Media/metadata/ampache/mysql #/mnt/ampache/mysql
 
 - name: Create and start Ampache
   become: true

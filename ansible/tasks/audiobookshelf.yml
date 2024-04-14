@@ -1,3 +1,14 @@
+# Create directories required by komga
+- name: Create directories
+  become: true
+  ansible.builtin.file:
+    path: "{{ item }}"
+    state: directory
+    mode: '0777'
+  loop:
+    - /media/HD_1/Media/metadata/audio_bookshelf/metadata
+    - /media/HD_1/Media/metadata/audio_bookshelf/config
+
 - name: Create and start AudioBookShelf
   become: true
   community.docker.docker_compose_v2:
