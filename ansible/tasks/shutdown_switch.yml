@@ -1,7 +1,7 @@
 - name: Shutdown switch
   ansible.builtin.shell:
     cmd: |
-      sudo insert='python /home/'$USER'/NAS_drive/functions/shutdown.py &'
+      insert='python /home/'$USER'/NAS_drive/functions/shutdown.py &'
       file='/etc/rc.local'
       sed -i "19 i $insert" $file
   register: shutdown_switch
