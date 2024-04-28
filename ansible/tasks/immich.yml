@@ -1,0 +1,15 @@
+# Create directories required by komga
+- name: Create directories
+  become: true
+  ansible.builtin.file:
+    path: "{{ item }}"
+    state: directory
+    mode: '0777'
+  loop:
+    - /media/HD_1/Media/metadata/immich/postgres
+
+- name: Create and start Immich
+  become: true
+  community.docker.docker_compose_v2:
+    project_src: /home/scott/NAS_drive/ansible/tasks/immich_compose
+  register: output
