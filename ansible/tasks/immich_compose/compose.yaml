@@ -16,8 +16,8 @@ services:
     volumes:
       - /media/HD_1/Media/Pictures:/usr/src/app/upload
       - /etc/localtime:/etc/localtime:ro
-    env_file:
-      - .env
+    #env_file:
+    #  - .env
     ports:
       - 2283:3001
     depends_on:
@@ -35,8 +35,8 @@ services:
     volumes:
       - /media/HD_1/Media/Pictures:/usr/src/app/upload
       - /etc/localtime:/etc/localtime:ro
-    env_file:
-      - .env
+    #env_file:
+    #  - .env
     depends_on:
       - redis
       - database
@@ -52,8 +52,8 @@ services:
     #   service: cpu # set to one of [armnn, cuda, openvino, openvino-wsl] for accelerated inference - use the `-wsl` version for WSL2 where applicable
     volumes:
       - model-cache:/cache
-    env_file:
-      - .env
+    #env_file:
+    #  - .env
     restart: always
 
   redis:
