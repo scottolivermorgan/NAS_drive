@@ -65,9 +65,12 @@ services:
     container_name: immich_postgres
     image: registry.hub.docker.com/tensorchord/pgvecto-rs:pg14-v0.2.0@sha256:90724186f0a3517cf6914295b5ab410db9ce23190a2d9d0b9dd6463e3fa298f0
     environment:
-      POSTGRES_PASSWORD: test
-      POSTGRES_USER: postgres
-      POSTGRES_DB: immich
+      #- POSTGRES_PASSWORD=test
+      #- POSTGRES_USER=postgres
+      #- POSTGRES_DB=immich
+      - DB_PASSWORD=test
+      - DB_USERNAME=postgres
+      - DB_DATABASE_NAME=immich
     volumes:
       - /media/HD_1/Media/metadata/immich/postgres:/var/lib/postgresql/data
     restart: always
