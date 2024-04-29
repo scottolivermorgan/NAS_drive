@@ -1,23 +1,10 @@
-- name: Create postgres user if not exist
-  become: true
-  ansible.builtin.user:
-    name: postgres
-    state: present
-
-- name: Create directories and postgres user if not exist
-  become: true
-  ansible.builtin.file:
-    path: "{{ item }}"
-    state: directory
-    mode: '0777'
-  loop:
-    - /media/HD_1/Media/metadata/immich/postgres
-  environment:
-    PGUSER: postgres
-  when: ansible_user != "postgres"
-
-# Create directories required by komga
-#- name: Create directories
+#- name: Create postgres user if not exist
+#  become: true
+#  ansible.builtin.user:
+#    name: postgres
+#    state: present
+#
+#- name: Create directories and postgres user if not exist
 #  become: true
 #  ansible.builtin.file:
 #    path: "{{ item }}"
@@ -25,8 +12,26 @@
 #    mode: '0777'
 #  loop:
 #    - /media/HD_1/Media/metadata/immich/postgres
+#  environment:
+#    PGUSER: postgres
+#  when: ansible_user != "postgres"
 
-#postgres
+ Create directories required by immich
+- name: Create directories
+  become: true
+  ansible.builtin.file:
+    path: "{{ item }}"
+    state: directory
+    mode: '0777'
+  loop:
+    - /media/HD_1/Media/metadata/immich/postgres
+
+
+- name: Copy .env file
+  ansible.builtin.copy:
+    src: immich_compose/.env
+    dest: /home/scott/NAS_drive/ansible/tasks/immich_compose/.env
+
 
 - name: Create and start Immich
   become: true

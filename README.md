@@ -51,14 +51,11 @@ http://192.168.1.9:8000
 glances
 http://192.168.1.9:61208
 
-influxdb
-http://192.168.1.9:8086
-
 audiobookshelf
 http://192.168.1.9:13378
 
-Ampache
-http://192.168.1.9:8080
+Immich
+http://192.168.1.9:2283
 
 
 
