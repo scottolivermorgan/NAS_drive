@@ -1,22 +1,4 @@
-#- name: Create postgres user if not exist
-#  become: true
-#  ansible.builtin.user:
-#    name: postgres
-#    state: present
-#
-#- name: Create directories and postgres user if not exist
-#  become: true
-#  ansible.builtin.file:
-#    path: "{{ item }}"
-#    state: directory
-#    mode: '0777'
-#  loop:
-#    - /media/HD_1/Media/metadata/immich/postgres
-#  environment:
-#    PGUSER: postgres
-#  when: ansible_user != "postgres"
-
- Create directories required by immich
+# Create directories required by immich
 - name: Create directories
   become: true
   ansible.builtin.file:
@@ -25,14 +7,15 @@
     mode: '0777'
   loop:
     - /media/HD_1/Media/metadata/immich/postgres
+    - /media/HD_1/Media/Pictures/immich
 
-
+# Copy enviroment vars required by docker compose file to host
 - name: Copy .env file
   ansible.builtin.copy:
     src: immich_compose/.env
     dest: /home/scott/NAS_drive/ansible/tasks/immich_compose/.env
 
-
+# Run Immich docker compose
 - name: Create and start Immich
   become: true
   community.docker.docker_compose_v2:
