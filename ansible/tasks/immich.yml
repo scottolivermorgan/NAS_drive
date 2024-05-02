@@ -9,6 +9,7 @@
     - /media/HD_1/Media/Pictures/immich
 
 - name: Create user 999
+  become: true
   user:
     name: "999"
 
