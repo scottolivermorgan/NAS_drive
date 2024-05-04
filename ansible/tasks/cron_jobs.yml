@@ -22,3 +22,12 @@
     hour: "5"
     job: "python /home/{{ ansible_user }}/NAS_drive/functions/back-up.py >> /home/{{ ansible_user }}/NAS_drive/logs/back_up_cron.log 2>&1"
 
+- name: Add immich db back up to cron tab
+  become: true
+  ansible.builtin.cron:
+    name: "Immich DB backup"
+    minute: "0"
+    hour: "4"
+    job: "rsync -avz /home/{{ ansible_user }}/NAS_drive/ansible/tasks/immich_compose/postgres/ /media/HD_1/Media/metadata/immich/postgres/
+"
+

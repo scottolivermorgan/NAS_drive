@@ -1,5 +1,5 @@
 # Create directories required by immich
-- name: Create directories
+- name: Create directory for immich storage
   become: true
   ansible.builtin.file:
     path: "{{ item }}"
@@ -8,19 +8,11 @@
   loop:
     - /media/HD_1/Media/Pictures/immich
 
-- name: Create user 999
-  become: true
-  user:
-    name: "999"
-
-- name: Create directories required by immich
-  become: true
+- name: Create back up directory immich db
   ansible.builtin.file:
     path: "{{ item }}"
     state: directory
     mode: '0777'
-    owner: "999"
-    group: "999"
   loop:
     - /media/HD_1/Media/metadata/immich/postgres
 
