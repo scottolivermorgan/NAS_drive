@@ -537,7 +537,7 @@ def restore_komga_metadata():
 
 def sync_immich_directories():
     source_dir = "/home/scott/NAS_drive/ansible/tasks/immich_compose/postgres"
-    destination_dir = "/media/HD_1/Media/metadata/immich/postgres/"
+    destination_dir = "/media/HD_1/Media/metadata/immich/postgres"
 
     # Construct rsync command
     rsync_command = [
