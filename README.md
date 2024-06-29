@@ -1,3 +1,34 @@
+##TODO
+  - DATA:
+   - BU:
+    - TV Shows on BU namespaced.
+    - Verify other media on BU not.
+   - HD:
+    - verify and validate audiobookshelf
+    - verify and validate komga
+    - verify and validate jellyfin
+  - Immich:
+   - figure out how to best implement current photos integration.
+  Services:
+   - Combine glances with influx db & Grafana
+  Ext4:
+   - Verify jellyfin working
+   - verify nextcloud
+   - verify audiobookshelf
+   - verify komga
+   - verify glances
+   - verify immich
+  Codebase:
+   - rm redundant metadata backups (from SD card)
+   - fix off switch  (root?)
+   - implement .evnv for creds ondocker compose.
+  - Airgap:
+   - reimplement once ext4 version.
+   - implement NTFY
+  - General:
+   - improve/centralise/document ALL logging.
+
+
 ### Config control node
 Clone this repo
 `git clone https://github.com/scottolivermorgan/NAS_drive.git && cd NAS_drive`
@@ -58,6 +89,32 @@ Immich
 http://192.168.1.9:2283
 
 
+
+
+# sync
+sudo rsync -av /media/HD_1/Documents /media/BU_1/Documents
+sudo rsync -av /media/HD_1/Games /media/BU_1/Games
+sudo rsync -av /media/HD_1/Scott /media/BU_1/Scott
+sudo rsync -av /media/HD_1/Jacqueline /media/BU_1/Jacqueline
+
+sudo rsync -av /media/HD_1/Media/Books /media/BU_1/Media/Books
+sudo rsync -av /media/HD_1/Media/Audiobooks /media/BU_1/Media/Audiobooks
+sudo rsync -av /media/HD_1/Media/Courses /media/BU_1/Media/Courses
+sudo rsync -av /media/HD_1/Media/Movies /media/BU_1/Media/Movies
+sudo rsync -av /media/HD_1/Media/Documentaries /media/BU_1/Media/Documentaries
+sudo rsync -av /media/HD_1/Media/'Documentary Series' /media/BU_1/Media/'Documentary Series'
+sudo rsync -av /media/HD_1/Media/Music /media/BU_1/Media/Music
+sudo rsync -av /media/HD_1/Media/Pictures /media/BU_1/Media/Pictures
+sudo rsync -av /media/HD_1/Media/'Stand Up Series' /media/BU_1/Media/'Stand Up Series'
+sudo rsync -av /media/HD_1/Media/'Stand Up Shows' /media/BU_1/Media/'Stand Up Shows'
+sudo rsync -av /media/HD_1/Media/'Video clips' /media/BU_1/Media/'Video clips'
+
+sudo rsync -av /media/HD_1/Media/'TV Shows' /media/BU_1/Media/'TV Shows'
+
+#TV Shows/Foundation (2021)/Season 1/Foundation S01E02.mp4
+TV Shows/The Witcher (2019)/Season 03/The.Witcher.S03E05.720p.NF.WEBRip.x264-GalaxyTV.mkv
+TV Shows/The Witcher (2019)/Season 03/The.Witcher.S03E06.720p.NF.WEBRip.x264-GalaxyTV.mkv
+TV Shows/The Witcher (2019)/Season 03/The.Witcher.S03E07.720p.NF.WEBRip.x264-GalaxyTV.mkv
 
 
 
