@@ -399,7 +399,9 @@ def backup_HD(config_data):
             print(f"Mounting {back_up_drive_name} hard drive")
             power_on(signal_pin, ON=True)
             time.sleep(20)
-            mount_cmd = f"lsblk -o LABEL,UUID | grep {back_up_drive_name} | awk '{{print $2}}'"
+            mount_cmd = (
+                f"lsblk -o LABEL,UUID | grep {back_up_drive_name} | awk '{{print $2}}'"
+            )
             BU_UUID = subprocess.run(
                 mount_cmd, shell=True, capture_output=True, text=True
             )
@@ -434,16 +436,18 @@ def backup_HD(config_data):
             print(f"Unmounting drive: {back_up_drive_name}")
             unmount_drive = subprocess.run(
                 ["sudo", "umount", f"/media/{back_up_drive_name}"]
-                )
+            )
 
             print("Closing airgap")
             power_on(signal_pin, ON=False)
+
 
 import subprocess
 
 # Function to sync local Jellyfin metadata to external hard drive.
 
-#TODO mkdir FIRST if dosent exist
+
+# TODO mkdir FIRST if dosent exist
 def sync_jellyfin_directories():
     source_dir = "/mnt/jellyfin"
     destination_dir = "/media/HD_1/Media/metadata/"
@@ -454,7 +458,7 @@ def sync_jellyfin_directories():
         "-av",  # Options for archive mode and verbose output
         "--delete",  # Delete extraneous files from destination directories
         source_dir,
-        destination_dir
+        destination_dir,
     ]
 
     try:
@@ -465,8 +469,7 @@ def sync_jellyfin_directories():
         print(f"Error syncing directories: {e}")
 
 
-
-#TODO mkdir FIRST if dosent exist
+# TODO mkdir FIRST if dosent exist
 # Function to restore Jellyfin data from external hard drive to local.
 def restore_jellyfin_metadata():
     source_directory = "/media/HD_1/Media/metadata/jellyfin"
@@ -477,7 +480,7 @@ def restore_jellyfin_metadata():
         "rsync",
         "-avz",  # Options: archive, verbose, compress
         source_directory,
-        destination_directory
+        destination_directory,
     ]
 
     try:
@@ -487,7 +490,9 @@ def restore_jellyfin_metadata():
     except subprocess.CalledProcessError as e:
         print(f"Error syncing directories: {e}")
 
+
 import subprocess
+
 
 def sync_komga_directories():
     source_dir = "/mnt/komga"
@@ -499,7 +504,7 @@ def sync_komga_directories():
         "-av",  # Options for archive mode and verbose output
         "--delete",  # Delete extraneous files from destination directories
         source_dir,
-        destination_dir
+        destination_dir,
     ]
 
     try:
@@ -510,8 +515,7 @@ def sync_komga_directories():
         print(f"Error syncing directories: {e}")
 
 
-
-#TODO mkdir FIRST if dosent exist
+# TODO mkdir FIRST if dosent exist
 # Function to restore Jellyfin data from external hard drive to local.
 def restore_komga_metadata():
     source_directory = "/media/HD_1/Media/metadata/komga"
@@ -522,7 +526,7 @@ def restore_komga_metadata():
         "rsync",
         "-avz",  # Options: archive, verbose, compress
         source_directory,
-        destination_directory
+        destination_directory,
     ]
 
     try:
@@ -533,7 +537,8 @@ def restore_komga_metadata():
         print(f"Error syncing directories: {e}")
 
 
-#rsync -avz /home/{{ ansible_user }}/NAS_drive/ansible/tasks/immich_compose/postgres/ /media/HD_1/Media/metadata/immich/postgres/
+# rsync -avz /home/{{ ansible_user }}/NAS_drive/ansible/tasks/immich_compose/postgres/ /media/HD_1/Media/metadata/immich/postgres/
+
 
 def sync_immich_directories():
     source_dir = "/home/scott/NAS_drive/ansible/tasks/immich_compose/postgres/"
@@ -545,7 +550,7 @@ def sync_immich_directories():
         "-av",  # Options for archive mode and verbose output
         "--delete",  # Delete extraneous files from destination directories
         source_dir,
-        destination_dir
+        destination_dir,
     ]
 
     try:
@@ -556,19 +561,20 @@ def sync_immich_directories():
         print(f"Error syncing directories: {e}")
 
 
-
-#TODO mkdir FIRST if dosent exist
+# TODO mkdir FIRST if dosent exist
 # Function to restore Jellyfin data from external hard drive to local.
 def restore_immich_metadata():
     source_directory = "/media/HD_1/Media/metadata/immich/postgres/"
-    destination_directory = "/home/scott/NAS_drive/ansible/tasks/immich_compose/postgres"
+    destination_directory = (
+        "/home/scott/NAS_drive/ansible/tasks/immich_compose/postgres"
+    )
 
     # Construct the rsync command
     rsync_command = [
         "rsync",
         "-avz",  # Options: archive, verbose, compress
         source_directory,
-        destination_directory
+        destination_directory,
     ]
 
     try:

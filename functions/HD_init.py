@@ -7,10 +7,10 @@ if __name__ == "__main__":
     current_dir = os.path.dirname(os.path.abspath(__file__))
 
     # Navigate to the config directory
-    config_dir = os.path.join(current_dir, '..', 'config')
+    config_dir = os.path.join(current_dir, "..", "config")
 
     # Open the config.json file
-    config_path = os.path.join(config_dir, 'config.json')
+    config_path = os.path.join(config_dir, "config.json")
 
     # Open and read the config.json file:
     with open(config_path, "r") as config_file:

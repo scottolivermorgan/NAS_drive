@@ -1,8 +1,9 @@
 import os
 import shutil
 
+
 def organize_movie_files_into_dirs(input_path):
-    """Organizes files in the specified directory by creating a directory for each file 
+    """Organizes files in the specified directory by creating a directory for each file
     and moving the file into that directory.
 
     Args:
@@ -29,23 +30,24 @@ def organize_movie_files_into_dirs(input_path):
     if not os.path.exists(input_path):
         print("The specified path does not exist.")
         return
-    
+
     # Scan the input path
     for item in os.listdir(input_path):
         item_path = os.path.join(input_path, item)
-        
+
         # Check if it's a file
         if os.path.isfile(item_path):
             # Create a directory with the same name as the file
             directory_name = os.path.splitext(item)[0]
             directory_path = os.path.join(input_path, directory_name)
-            
+
             # Check if the directory already exists
             if not os.path.exists(directory_path):
                 os.makedirs(directory_path)
-            
+
             # Move the file into the directory
             shutil.move(item_path, os.path.join(directory_path, item))
+
 
 if __name__ == "__main__":
     org_files = input("Put movie files in their own directories y/n?")
