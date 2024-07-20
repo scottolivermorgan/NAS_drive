@@ -1,8 +1,5 @@
 ##TODO
   - DATA:
-   - BU:
-    - TV Shows on BU namespaced.
-    - Verify other media on BU not.
    - HD:
     - verify and validate audiobookshelf
     - verify and validate komga
@@ -11,19 +8,10 @@
    - figure out how to best implement current photos integration.
   Services:
    - Combine glances with influx db & Grafana
-  Ext4:
-   - Verify jellyfin working
-   - verify nextcloud
-   - verify audiobookshelf
-   - verify komga
-   - verify glances
-   - verify immich
   Codebase:
-   - rm redundant metadata backups (from SD card)
    - fix off switch  (root?)
    - implement .evnv for creds ondocker compose.
   - Airgap:
-   - reimplement once ext4 version.
    - implement NTFY
   - General:
    - improve/centralise/document ALL logging.
@@ -58,8 +46,6 @@ docker build -t t .
 ~~`docker build .`~~
 `docker-compose up`
 
-`docker logs ampache`
-
 ## First debug the connection:
 ensure .shh/.... empty first 
 `ansible-playbook -i inventory.yml debug.yml`
@@ -89,40 +75,6 @@ Immich
 http://192.168.1.9:2283
 
 
-
-
-# sync
-sudo rsync -av /media/HD_1/Documents /media/BU_1/Documents
-sudo rsync -av /media/HD_1/Games /media/BU_1/Games
-sudo rsync -av /media/HD_1/Scott /media/BU_1/Scott
-sudo rsync -av /media/HD_1/Jacqueline /media/BU_1/Jacqueline
-
-sudo rsync -av /media/HD_1/Media/Books /media/BU_1/Media/Books
-sudo rsync -av /media/HD_1/Media/Audiobooks /media/BU_1/Media/Audiobooks
-sudo rsync -av /media/HD_1/Media/Courses /media/BU_1/Media/Courses
-sudo rsync -av /media/HD_1/Media/Movies /media/BU_1/Media/Movies
-sudo rsync -av /media/HD_1/Media/Documentaries /media/BU_1/Media/Documentaries
-sudo rsync -av /media/HD_1/Media/'Documentary Series' /media/BU_1/Media/'Documentary Series'
-sudo rsync -av /media/HD_1/Media/Music /media/BU_1/Media/Music
-sudo rsync -av /media/HD_1/Media/Pictures /media/BU_1/Media/Pictures
-sudo rsync -av /media/HD_1/Media/'Stand Up Series' /media/BU_1/Media/'Stand Up Series'
-sudo rsync -av /media/HD_1/Media/'Stand Up Shows' /media/BU_1/Media/'Stand Up Shows'
-sudo rsync -av /media/HD_1/Media/'Video clips' /media/BU_1/Media/'Video clips'
-
-sudo rsync -av /media/HD_1/Media/'TV Shows' /media/BU_1/Media/'TV Shows'
-
-#TV Shows/Foundation (2021)/Season 1/Foundation S01E02.mp4
-TV Shows/The Witcher (2019)/Season 03/The.Witcher.S03E05.720p.NF.WEBRip.x264-GalaxyTV.mkv
-TV Shows/The Witcher (2019)/Season 03/The.Witcher.S03E06.720p.NF.WEBRip.x264-GalaxyTV.mkv
-TV Shows/The Witcher (2019)/Season 03/The.Witcher.S03E07.720p.NF.WEBRip.x264-GalaxyTV.mkv
-
-
-
-
-
-TODO:
-- script to automate gui config on NC
-- script to automate gui config on Plex.
 # Pre steps
 - Rename main external hard drive to HD_1 and back up to BU_1, follow ths convention
 for all subsequent drives and add these details (alongsde the signal pin) to config.json.
@@ -232,15 +184,6 @@ add domain name to
 
 Set up port fowarding rules on router
 
-# Resolve Nextcloud security prompts
-- The PHP memory limit is below the recommended value of 512MB
-``sudo nano /etc/php/8.1/apach2/php.ini``
-change line:
-
-``memory_limit = 128M``
-to
-``memory_limit = 1G``
-
 # Create Backup Image of Pi SD
 Download & install imaging software:
 https://sourceforge.net/projects/win32diskimager/
@@ -256,14 +199,3 @@ https://sourceforge.net/projects/win32diskimager/
 
 Select read option to save, operation can take 10 -20 mins.
 ![WI4](./assets/SD_backup/wI_4.png)
-
-
-
-__NOTES__
-`lsblk -o PATH,FSTYPE,LABEL,UUID | grep "BU_1"`
-lsblk -o LABEL,UUID | grep "BU_1"
-
-lsblk -o LABEL,UUID | grep "BU_1" | awk '{print $2}'
-sudo mkdir /mnt/mydrive
-
-sudo mount -U <UUID> /mnt/mydrive
