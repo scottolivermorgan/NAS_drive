@@ -6,14 +6,6 @@
 #    hour: "4"
 #    job: "python /home/{{ ansible_user }}/NAS_drive/functions/komga_metadata.py >> /home/{{ ansible_user }}/NAS_drive/logs/back_up_cron.log 2>&1"
 
-#- name: Add Jellyfin metadata back up to cron tab
-#  become: true
-#  ansible.builtin.cron:
-#    name: "Jellyfin metadata backup script"
-#    minute: "30"
-#    hour: "4"
-#    job: "python /home/{{ ansible_user }}/NAS_drive/functions/jellyfin_metadata.py >> /home/{{ ansible_user }}/NAS_drive/logs/back_up_cron.log 2>&1"
-
 - name: Add HD back up to cron tab
   become: true
   ansible.builtin.cron:
