@@ -2,6 +2,7 @@ import os
 import json
 import sys
 import time
+import RPi.GPIO as gpio
 
 SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
 sys.path.append(os.path.dirname(SCRIPT_DIR))
