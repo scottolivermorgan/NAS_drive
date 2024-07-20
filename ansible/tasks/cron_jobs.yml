@@ -1,18 +1,18 @@
-- name: Add Komga metadata back up to cron tab
-  become: true
-  ansible.builtin.cron:
-    name: "Komga metadata backup script"
-    minute: "15"
-    hour: "4"
-    job: "python /home/{{ ansible_user }}/NAS_drive/functions/komga_metadata.py >> /home/{{ ansible_user }}/NAS_drive/logs/back_up_cron.log 2>&1"
+#- name: Add Komga metadata back up to cron tab
+#  become: true
+#  ansible.builtin.cron:
+#    name: "Komga metadata backup script"
+#    minute: "15"
+#    hour: "4"
+#    job: "python /home/{{ ansible_user }}/NAS_drive/functions/komga_metadata.py >> /home/{{ ansible_user }}/NAS_drive/logs/back_up_cron.log 2>&1"
 
-- name: Add Jellyfin metadata back up to cron tab
-  become: true
-  ansible.builtin.cron:
-    name: "Jellyfin metadata backup script"
-    minute: "30"
-    hour: "4"
-    job: "python /home/{{ ansible_user }}/NAS_drive/functions/jellyfin_metadata.py >> /home/{{ ansible_user }}/NAS_drive/logs/back_up_cron.log 2>&1"
+#- name: Add Jellyfin metadata back up to cron tab
+#  become: true
+#  ansible.builtin.cron:
+#    name: "Jellyfin metadata backup script"
+#    minute: "30"
+#    hour: "4"
+#    job: "python /home/{{ ansible_user }}/NAS_drive/functions/jellyfin_metadata.py >> /home/{{ ansible_user }}/NAS_drive/logs/back_up_cron.log 2>&1"
 
 - name: Add HD back up to cron tab
   become: true
@@ -20,14 +20,14 @@
     name: "External HD backup script"
     minute: "0"
     hour: "5"
-    job: "python /home/{{ ansible_user }}/NAS_drive/functions/back-up.py >> /home/{{ ansible_user }}/NAS_drive/logs/back_up_cron.log 2>&1"
+    job: "HOME=/home/{{ ansible_user }} USER={{ ansible_user }} python /home/{{ ansible_user }}/NAS_drive/functions/back-up.py >> /home/{{ ansible_user }}/NAS_drive/logs/back_up_cron.log 2>&1"
 
-- name: Add immich db back up to cron tab
-  become: true
-  ansible.builtin.cron:
-    name: "Immich DB backup"
-    minute: "0"
-    hour: "4"
-    job: "rsync -avz /home/{{ ansible_user }}/NAS_drive/ansible/tasks/immich_compose/postgres/ /media/HD_1/Media/metadata/immich/postgres/
-"
+#- name: Add immich db back up to cron tab
+#  become: true
+#  ansible.builtin.cron:
+#    name: "Immich DB backup"
+#    minute: "0"
+#    hour: "4"
+#    job: "HOME=/home/{{ ansible_user }} USER={{ ansible_user }} rsync -avz /home/{{ ansible_user }}/NAS_drive/ansible/tasks/immich_compose/postgres/ /media/HD_1/Media/metadata/immich/postgres/
+#"
 
