@@ -11,3 +11,8 @@ from library.helpers import power_on
 
 power_on(18, ON=True)
 time.sleep(20)
+power_on(18, ON=False)
+
+power_on(17, ON=True)
+time.sleep(20)
+power_on(17, ON=False)
