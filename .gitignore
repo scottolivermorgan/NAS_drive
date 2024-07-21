@@ -4,8 +4,8 @@ venv
 .pdm-python
 .vscode
 
-main.yml
-inventory.yml
+ansible/main.yml
+ansible/inventory.yml
 
 archive/
 
