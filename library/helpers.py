@@ -393,8 +393,8 @@ def backup_HD(config_data):
             print("Verification sucsessfull")
             # get drive mapping details:
             EXTERNAL_HD = config_data["HD_map"][object]["name"]
-            back_up_drive_name = hd_name = config_data["HD_map"][object]["back_up_name"]
-            signal_pin = hd_name = config_data["HD_map"][object]["GPIO_pin"]
+            back_up_drive_name = config_data["HD_map"][object]["back_up_name"]
+            signal_pin = config_data["HD_map"][object]["GPIO_pin"]
 
             print(f"Mounting {back_up_drive_name} hard drive")
             power_on(signal_pin, ON=True)
