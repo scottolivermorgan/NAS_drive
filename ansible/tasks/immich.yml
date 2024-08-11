@@ -7,6 +7,7 @@
     mode: '0777'
   loop:
     - /media/HD_1/Media/Pictures/immich
+    - /media/HD_1/Media/metadata/immich/postgres
 
 # Copy enviroment vars required by docker compose file to host
 - name: Copy .env file
