@@ -13,4 +13,4 @@
     mode: '0777'
   loop:
     - /media/HD_1/Media
-    - /media/HD_1/Media/metadata
+    - /media/HD_1/Media/Metadata

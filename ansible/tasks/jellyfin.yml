@@ -7,8 +7,8 @@
     state: directory
     mode: '0755'
   loop:
-    - /media/HD_1/Media/metadata/jellyfin/config
-    - /media/HD_1/Media/metadata/jellyfin/cache
+    - /media/HD_1/Media/Metadata/jellyfin/config
+    - /media/HD_1/Media/Metadata/jellyfin/cache
 
 # Pull the latest Jellyfin Docker image
 - name: Pull Jellyfin Docker image
@@ -30,5 +30,5 @@
     timeout: 120  # Timeout (seconds)
     volumes:
       - "/media/HD_1:/media/HD_1"  # Mount external hard drive
-      - "/media/HD_1/Media/metadata/jellyfin/config:/config"
-      - "/media/HD_1/Media/metadata/jellyfin/cache:/cache"
+      - "/media/HD_1/Media/Metadata/jellyfin/config:/config"
+      - "/media/HD_1/Media/Metadata/jellyfin/cache:/cache"

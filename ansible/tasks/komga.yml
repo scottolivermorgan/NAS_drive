@@ -8,7 +8,7 @@
     state: directory
     mode: '0755'
   loop:
-    - /media/HD_1/Media/metadata/komga/config
+    - /media/HD_1/Media/Metadata/komga/config
 
 # Pull the latest Komga Docker image
 - name: Pull Komga Docker image
@@ -29,5 +29,5 @@
       - "25600:25600"  # Port mapping from host to container
     timeout: 240  # Timeout period (seconds)
     volumes:
-      - "/media/HD_1/Media/metadata/komga/config:/config"
+      - "/media/HD_1/Media/Metadata/komga/config:/config"
       - "/media/HD_1:/data"
