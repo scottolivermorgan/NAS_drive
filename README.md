@@ -16,6 +16,28 @@
   - General:
    - improve/centralise/document ALL logging.
 
+# Versions
+### OS:
+- Raspberry Pi OS Lite
+- Release date: July 4th 2024
+- System: 64-bit
+- Kernel version: 6.6
+- Debian version: 12 (bookworm)
+### Nextcloud
+- FE - nextcloud:29.0.2
+- BE - mariadb:11.4.2
+### Jellyfin
+- jellyfin:latest
+### Glances
+- docker.io/nicolargo/glances
+### Komga
+- gotson/komga:latest
+### Immich
+ - v1.118.2
+ - immich-server:v1.103.1
+### Audiobookshelf
+- 2.15.0
+
 
 ### Config control node
 Clone this repo
