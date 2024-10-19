@@ -14,7 +14,7 @@
 - name: Pull Komga Docker image
   become: true
   community.docker.docker_image:
-    name: gotson/komga:latest
+    name: gotson/komga:1.14.1
     source: pull
 
 # Run Komga Docker container
@@ -22,7 +22,7 @@
   become: true
   community.docker.docker_container:
     name: komga
-    image: gotson/komga:latest
+    image: gotson/komga:1.14.1
     state: started
     restart_policy: always  # Always restart the container if it stops
     published_ports:
