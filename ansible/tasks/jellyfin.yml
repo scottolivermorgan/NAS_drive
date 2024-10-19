@@ -14,7 +14,7 @@
 - name: Pull Jellyfin Docker image
   become: true
   community.docker.docker_image:
-    name: jellyfin/jellyfin:latest
+    name: jellyfin/jellyfin:2024101405
     source: pull
 
 # Run the Jellyfin Docker container
@@ -22,7 +22,7 @@
   become: true
   community.docker.docker_container:
     name: jellyfin
-    image: jellyfin/jellyfin:latest
+    image: jellyfin/jellyfin:2024101405
     state: started
     restart_policy: always  # Restart the container if it stops
     published_ports:
