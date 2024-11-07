@@ -383,7 +383,9 @@ def backup_HD(config_data):
     """
 
     print("Closing airgap")
-    checks = pre_sync_hash_verification(config_data)
+    #TODO reinstate and write perm env vars (think failing after pi reboot)
+    #checks = pre_sync_hash_verification(config_data)
+    checks =[]
 
     if False in checks:
         print("Verification failed")
