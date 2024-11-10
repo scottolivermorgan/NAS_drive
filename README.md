@@ -96,6 +96,8 @@ http://192.168.1.9:13378
 Immich
 http://192.168.1.9:2283
 
+Tandoor
+http://192.168.1.9:8081
 
 # Pre steps
 - Rename main external hard drive to HD_1 and back up to BU_1, follow ths convention
