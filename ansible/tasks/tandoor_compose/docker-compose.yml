@@ -3,7 +3,7 @@ services:
     restart: always
     image: postgres:16-alpine
     volumes:
-      - ./postgresql:/var/lib/postgresql/data
+      - /media/HD_1/Media/Recipies/tandoor/postgres:/var/lib/postgresql/data
     env_file:
       - ./.env
 

@@ -1,12 +1,14 @@
-# Create directories required by immich
-#- name: Create directory for tamdoor storage
-#  become: true
-#  ansible.builtin.file:
-#    path: "{{ item }}"
-#    state: directory
-#    mode: '0777'
-#  loop:
-#    - /media/HD_1/Media/Pictures/immich
+# Create directories required by Tandoor
+- name: Create directory for tandoor storage
+  become: true
+  ansible.builtin.file:
+    path: "{{ item }}"
+    state: directory
+    mode: '0777'
+  loop:
+    - /media/HD_1/Media/Recipies/tandoor
+    - /media/HD_1/Media/Recipies/tandoor/postgres
+    - /media/HD_1/Media/Recipies/tandoor/mediafiles
 
 # Copy enviroment vars required by docker compose file to host
 - name: Copy .env file
