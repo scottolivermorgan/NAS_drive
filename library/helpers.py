@@ -389,6 +389,8 @@ def backup_HD(config_data):
 
     if False in checks:
         print("Verification failed")
+        command = ['curl', '-d', 'Hashchecks failed, backup failed', 'http://192.168.1.9:8090/backup_status']
+        ntfy_call = subprocess.run(command, capture_output=True)
         return 1
     else:
         for object in config_data["HD_map"]:
@@ -428,6 +430,12 @@ def backup_HD(config_data):
                     stderr=subprocess.PIPE,
                     text=True,
                 )
+                if sync.returncode != 0:
+                    command = ['curl', '-d', 'rsync backup failed', 'http://192.168.1.9:8090/backup_status']
+                    ntfy_call = subprocess.run(command, capture_output=True)
+                else:
+                    command = ['curl', '-d', 'Backup Succsesfull', 'http://192.168.1.9:8090/backup_status']
+                    ntfy_call = subprocess.run(command, capture_output=True)
                 # Write stdout and stderr to both console and log file
                 print(sync.stdout)
                 print(sync.stderr)
