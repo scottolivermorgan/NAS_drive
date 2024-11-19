@@ -1,6 +1,6 @@
 import hashlib
 import subprocess
-#import RPi.GPIO as GPIO
+import RPi.GPIO as GPIO
 from datetime import datetime
 import random
 import os
