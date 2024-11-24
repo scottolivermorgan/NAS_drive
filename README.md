@@ -40,7 +40,11 @@
 
 
 ### Config control node
-if windows install wsl
+Windows:
+WSL https://learn.microsoft.com/en-us/windows/wsl/install
+- Open PowerShell or Windows Command Prompt in administrator mode by right-clicking and selecting "Run as administrator" & run
+`wsl --install`
+Once installed restart machine
 
 - Install ansible
 `sudo apt-add-repository ppa:ansible/ansible`
@@ -50,32 +54,50 @@ if windows install wsl
 Clone this repo
 `git clone https://github.com/scottolivermorgan/NAS_drive.git && cd NAS_drive`
 
+clone `inventory.yml.example` rename to `inventory.yml` & add your name and pi IP address.
+
+clone `main.yml.example` rename to `main.yml` & add your git email & name.
+
+if python venv not installed then
+`sudo apt install python3.12-venv`
+
+create virtual env
+`python3 -m venv .venv`
+
+activate it with
+`source .venv/bin/activate`
+
 You need to install Ansible. For that use:
 `pip install -r requirements.txt`
 
-`ansible-galaxy collection install -r requirements.yml --force`
+~~`ansible-galaxy collection install -r requirements.yml --force`~~
 
-Get host IP
-`sudo apt install net-tools`
-`ifconfig`
+~~Get host IP~~
+~~`sudo apt install net-tools`~~
+~~`ifconfig`~~
 
-edit inventory.yml host and name
-
-edit main.yml git name and email
 
 ### Testing
 ## Ansibledocker build .
-cd to test dir
+~~cd to test dir~~
 `cd tests/ansible`
 
 ~~`ssh-keygen -t rsa`~~
 
-first time, build docker file
-docker build -t t .
+~~first time, build docker file~~
+~~docker build -t t .~~
 ~~`docker build .`~~
-`docker-compose up`
+~~`docker-compose up`~~
 
 ## First debug the connection:
+
+## copy ssh keys from windows to ubuntu and
+`chmod 600 /home/<user>/.ssh/id_rsa`
+
+
+
+
+`cd ansible`
 ensure .shh/.... empty first 
 `ansible-playbook -i inventory.yml debug.yml`
 

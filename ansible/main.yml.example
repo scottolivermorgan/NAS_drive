@@ -4,10 +4,6 @@
     swap_size_mb: 1024
     git_user_email: "<email>"
     git_user_name: "<name>"
-    zerotier_network_id: "<network_id>"
-    airsane_build_dir: "{{ ansible_env.HOME }}/Projects/AirSane-build/"
-    usb_device_path: "/dev/sda1"
-    usb_mount_path: "/media/usb-drive"
   tasks:
     - name: Initial setup
       ansible.builtin.include_tasks:
@@ -64,6 +60,10 @@
     - name: Immich
       ansible.builtin.include_tasks:
         file: tasks/immich.yml
+
+    - name: Tandoor
+      ansible.builtin.include_tasks:
+        file: tasks/tandoor.yml
 
     - name: Glances
       ansible.builtin.include_tasks:
