@@ -40,6 +40,13 @@
 
 
 ### Config control node
+if windows install wsl
+
+- Install ansible
+`sudo apt-add-repository ppa:ansible/ansible`
+`sudo apt update`
+`sudo apt install ansible`
+
 Clone this repo
 `git clone https://github.com/scottolivermorgan/NAS_drive.git && cd NAS_drive`
 
