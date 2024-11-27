@@ -91,9 +91,10 @@ You need to install Ansible. For that use:
 
 ## First debug the connection:
 
-## copy ssh keys from windows to ubuntu and
+ copy ssh keys from windows to ubuntu and
 `chmod 600 /home/<user>/.ssh/id_rsa`
 
+-set .env in compose dirs
 
 
 

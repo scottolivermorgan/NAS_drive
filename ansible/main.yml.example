@@ -65,6 +65,10 @@
       ansible.builtin.include_tasks:
         file: tasks/tandoor.yml
 
+    - name: NTFY
+      ansible.builtin.include_tasks:
+        file: tasks/ntfy.yml
+
     - name: Glances
       ansible.builtin.include_tasks:
         file: tasks/monitoring.yml
