@@ -6,9 +6,10 @@
     state: directory
     mode: '0777'
   loop:
-    - /media/HD_1/Media/Recipies/tandoor
-    - /media/HD_1/Media/Recipies/tandoor/postgres
-    - /media/HD_1/Media/Recipies/tandoor/mediafiles
+    - /media/HD_1/Media/Recipes
+    - /media/HD_1/Media/Recipes/tandoor
+    - /media/HD_1/Media/Recipes/tandoor/postgres
+    - /media/HD_1/Media/Recipes/tandoor/mediafiles
 
 # Copy enviroment vars required by docker compose file to host
 - name: Copy .env file

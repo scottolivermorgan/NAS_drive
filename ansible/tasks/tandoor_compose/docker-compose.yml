@@ -3,13 +3,13 @@ services:
     restart: always
     image: postgres:16-alpine
     volumes:
-      - /media/HD_1/Media/Recipies/tandoor/postgres:/var/lib/postgresql/data
+      - /media/HD_1/Media/Recipes/tandoor/postgres:/var/lib/postgresql/data
     env_file:
       - ./.env
 
   web_recipes:
     restart: always
-    image: vabene1111/recipes:1.5.20
+    image: vabene1111/recipes:1.5.24
 
     env_file:
       - ./.env
@@ -17,7 +17,7 @@ services:
       - staticfiles:/opt/recipes/staticfiles
       # Do not make this a bind mount, see https://docs.tandoor.dev/install/docker/#volumes-vs-bind-mounts
       - nginx_config:/opt/recipes/nginx/conf.d
-      - /media/HD_1/Media/Recipies/tandoor/mediafiles:/opt/recipes/mediafiles
+      - /media/HD_1/Media/Recipes/tandoor/mediafiles:/opt/recipes/mediafiles
     depends_on:
       - db_recipes
 
@@ -34,7 +34,7 @@ services:
       # Do not make this a bind mount, see https://docs.tandoor.dev/install/docker/#volumes-vs-bind-mounts
       - nginx_config:/etc/nginx/conf.d:ro
       - staticfiles:/static:ro
-      - /media/HD_1/Media/Recipies/tandoor/mediafiles:/media:ro
+      - /media/HD_1/Media/Recipes/tandoor/mediafiles:/media:ro
 
 volumes:
   nginx_config:
