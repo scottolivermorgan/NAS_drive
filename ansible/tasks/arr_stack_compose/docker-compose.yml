@@ -1,28 +1,5 @@
----
 version: "3.7"
 services:
-#  # https://github.com/haugene/docker-transmission-openvpn
-#  transmission:
-#    image: haugene/transmission-openvpn:latest
-#    container_name: transmission
-#    restart: always
-#    ports:
-#      - "9091:9091"
-#    # https://haugene.github.io/docker-transmission-openvpn/config-options/
-#    environment:
-#      - OPENVPN_PROVIDER=<FILL>
-#      - OPENVPN_CONFIG=<FILL>
-#      - OPENVPN_USERNAME=<FILL>
-#      - OPENVPN_PASSWORD=<FILL>
-#      - WEBPROXY_ENABLED=false
-#      - LOCAL_NETWORK=192.168.0.0/16
-#      - TRANSMISSION_WEB_UI=flood-for-transmission
-#    volumes:
-#      - /media/downloads:/data
-#      - /etc/localtime:/etc/localtime:ro
-#    cap_add:
-#      - NET_ADMIN
-
   # https://github.com/linuxserver/docker-radarr
   radarr:
     image: linuxserver/radarr:latest
@@ -38,6 +15,8 @@ services:
       - /media/radarr:/config
       - /media/movies:/movies
       - /media/downloads/completed:/downloads
+    networks:
+      - bridge_network
 
   # https://github.com/linuxserver/docker-sonarr
   sonarr:
@@ -54,6 +33,8 @@ services:
       - /media/sonarr:/config
       - /media/tv:/tv
       - /media/downloads/completed:/downloads
+    networks:
+      - bridge_network
 
   # https://github.com/linuxserver/docker-prowlarr
   prowlarr:
@@ -71,24 +52,32 @@ services:
     volumes:
       - /media/prowlarr:/config
       - /media/downloads/watch:/downloads  # transmission watch directory
+    networks:
+      - bridge_network
 
-#  # https://github.com/dperson/samba
-#  samba:
-#    image: dperson/samba:latest
-#    container_name: samba
-#    restart: always
-#    # NOTE: see https://github.com/dperson/samba#troubleshooting
-#    deploy:
-#      resources:
-#        limits:
-#          memory: 512M
-#    ports:
-#      - "139:139"
-#      - "445:445"
-#    environment:
-#      - USERID=1000
-#      - GROUPID=1000
-#      - SHARE=Media;/media
-#      - TZ=Europe/Amsterdam
-#    volumes:
-#      - /media:/media
+  # Optional: Uncomment and configure the samba service if needed
+  # https://github.com/dperson/samba
+  # samba:
+  #   image: dperson/samba:latest
+  #   container_name: samba
+  #   restart: always
+  #   deploy:
+  #     resources:
+  #       limits:
+  #         memory: 512M
+  #   ports:
+  #     - "139:139"
+  #     - "445:445"
+  #   environment:
+  #     - USERID=1000
+  #     - GROUPID=1000
+  #     - SHARE=Media;/media
+  #     - TZ=Europe/Amsterdam
+  #   volumes:
+  #     - /media:/media
+  #   networks:
+  #     - bridge_network
+
+networks:
+  bridge_network:
+    driver: bridge
