@@ -1,5 +1,26 @@
 version: "3.7"
 services:
+  qbittorrent:
+    image: lscr.io/linuxserver/qbittorrent:latest
+    container_name: qbittorrent
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=Etc/UTC
+      - WEBUI_PORT=9080
+      - TORRENTING_PORT=6881
+    volumes:
+      - /media/qbittorrent/appdata:/config
+      - /media/downloads/completed:/downloads #optional
+    ports:
+      - 9080:9080
+      - 6881:6881
+      - 6881:6881/udp
+    restart: unless-stopped
+    networks:
+      - bridge_network
+
+
   # https://github.com/linuxserver/docker-radarr
   radarr:
     image: linuxserver/radarr:latest
