@@ -69,6 +69,10 @@
       ansible.builtin.include_tasks:
         file: tasks/ntfy.yml
 
+    - name: ARR stack
+      ansible.builtin.include_tasks:
+        file: tasks/arr_stack.yml
+
     - name: Glances
       ansible.builtin.include_tasks:
         file: tasks/monitoring.yml
