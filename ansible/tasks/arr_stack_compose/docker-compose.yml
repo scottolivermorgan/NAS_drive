@@ -76,6 +76,26 @@ services:
     networks:
       - bridge_network
 
+
+  services:
+  bazarr:
+    image: lscr.io/linuxserver/bazarr:latest
+    container_name: bazarr
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=Etc/UTC
+    volumes:
+      - /media/bazarr/config:/config
+      - /media/movies:/movies
+      - /media/tv:/tv
+    ports:
+      - 6767:6767
+    restart: unless-stopped
+    networks:
+      - bridge_network
+
+
   # Optional: Uncomment and configure the samba service if needed
   # https://github.com/dperson/samba
   # samba:

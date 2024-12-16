@@ -97,6 +97,12 @@
     rule: allow
     port: 9696
 
+- name: Prowlarr port
+  become: true
+  community.general.ufw:
+    rule: allow
+    port: 6767
+
 - name: Enable UFW
   become: true
   ansible.builtin.shell: ufw --force enable
