@@ -97,7 +97,7 @@
     rule: allow
     port: 9696
 
-- name: Prowlarr port
+- name: Bazarr port
   become: true
   community.general.ufw:
     rule: allow
