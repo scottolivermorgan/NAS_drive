@@ -112,36 +112,40 @@ If everything works, run the full suite:
 `ansible-playbook -i inventory.yml main.yml -vv`
 
 
-# serices
-jellyfin
-http://192.168.1.9:8096
+# Serices
+- Audiobookshelf - http://192.168.1.9:13378
 
-komga
-http://192.168.1.9:25600
+- Bazarr - http://192.168.1.9:6767
 
-nextcloud
-http://192.168.1.9:8000
+- Glances - http://192.168.1.9:61208
 
-glances
-http://192.168.1.9:61208
+- Immich - http://192.168.1.9:2283
 
-audiobookshelf
-http://192.168.1.9:13378
+- Jellyfin - http://192.168.1.9:8096
 
-Immich
-http://192.168.1.9:2283
+- Komga - http://192.168.1.9:25600
 
-Tandoor
-http://192.168.1.9:8081
+- Nextcloud - http://192.168.1.9:8000
+
+- Prowlarr - http://192.168.1.9:9696/
+
+- qbittorrent - http://192.168.1.9:9080
+
+- Radarr - http://192.168.1.9:7878
+
+- Sonarr - http://192.168.1.9:8989
+
+- Tandoor - http://192.168.1.9:8081
+
 
 # Pre steps
 - Rename main external hard drive to HD_1 and back up to BU_1, follow ths convention
 for all subsequent drives and add these details (alongsde the signal pin) to config.json.
-Make a dir to store Plex metadata on HD_1 i.e. HD_1/Media/metadata.
+~~Make a dir to store Plex metadata on HD_1 i.e. HD_1/Media/metadata.~~
 
 - _note_ Synch drives before setting up as MUCH quciker if large and popultated (use Free file sync).
 
-- Ensure HD_1 is attatched to permenant usb and BU_1 attatched to realy controlled USB.
+~~- Ensure HD_1 is attatched to permenant usb and BU_1 attatched to realy controlled USB.~~
 
 ## Initial Pi 4 Setup
 Download SD card formating software:
