@@ -5,3 +5,12 @@
     minute: "0"
     hour: "5"
     job: "HOME=/home/{{ ansible_user }} USER={{ ansible_user }} python /home/{{ ansible_user }}/NAS_drive/functions/back-up.py >> /home/{{ ansible_user }}/NAS_drive/logs/back_up_cron.log 2>&1"
+
+
+- name: Scan and notify for new media
+  become: true
+  ansible.builtin.cron:
+    name: "Scan and notify for new media"
+    minute: "0"
+    hour: "17"
+    job: "HOME=/home/{{ ansible_user }} USER={{ ansible_user }} python /home/{{ ansible_user }}/NAS_drive/functions/notify_new_media.py"
