@@ -4,6 +4,7 @@ import RPi.GPIO as GPIO
 from datetime import datetime
 import random
 import os
+import datetime
 from dotenv import load_dotenv
 import time
 
@@ -450,3 +451,34 @@ def backup_HD(config_data):
 
             print("Closing airgap")
             power_on(signal_pin, ON=False)
+
+
+def get_files_created_today(directory):
+    # Get today's date
+    today = datetime.date.today()
+
+    # List to hold the filenames of files created today
+    files_created_today = []
+
+    # Walk through the directory and its subdirectories
+    for root, dirs, files in os.walk(directory):
+        for file in files:
+            # Get the file path
+            file_path = os.path.join(root, file)
+            
+            # Get the creation time of the file (in seconds)
+            creation_time = os.path.getctime(file_path)
+            
+            # Convert creation time to a date object
+            file_creation_date = datetime.date.fromtimestamp(creation_time)
+
+            # Compare the file creation date with today's date
+            if file_creation_date == today:
+                files_created_today.append(file_path)
+
+    # If there are no files created today, return False
+    if not files_created_today:
+        return False, files_created_today
+
+    else:
+        return True, files_created_today
