@@ -29,8 +29,8 @@ services:
         context: .  # Use the current directory where Dockerfile is located
       container_name: Glances
       hostname: Glances
-      environment:
-        - GLANCES_OPT=-w
+      #environment:
+      #  - GLANCES_OPT=-w
       volumes:
         - glances_config:/glances/conf  # Assuming `glances_config` is a Docker volume
         - /var/run/docker.sock:/var/run/docker.sock:ro  # Read-only access to Docker socket
