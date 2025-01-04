@@ -1,12 +1,12 @@
 # Create directories required by grafana
-#- name: Create directory for grafana storage
-#  become: true
-#  ansible.builtin.file:
-#    path: "{{ item }}"
-#    state: directory
-#    mode: '0777'
-#  loop:
-#    - /media/HD_1/Media/Pictures/immich
+- name: Create directory for grafana storage
+  become: true
+  ansible.builtin.file:
+    path: "{{ item }}"
+    state: directory
+    mode: '0777'
+  loop:
+    - /home/scott/NAS_drive/ansible/tasks/grafana_compose/grafana-provisioning ####################
 
 # Copy enviroment vars required by docker compose file to host
 - name: Copy grafana .env file
@@ -15,12 +15,16 @@
     dest: /home/scott/NAS_drive/ansible/tasks/grafana_compose/.env
   register: output
 
+- name: Debug the source path
+  debug:
+    msg: "The source directory is: {{ ansible_env.PWD }}/grafana_compose/grafana-provisioning"
+
+
 - name: Synchronize grafana-provisioning directory and its contents
   ansible.builtin.synchronize:
-    src: grafana_compose/grafana-provisioning/
+    src: /home/scott/NAS_drive/ansible/tasks/grafana_compose/grafana-provisioning/
     dest: /home/scott/NAS_drive/ansible/tasks/grafana_compose/grafana-provisioning/
     mode: push
-    register: output
 
 # Run Immich docker compose
 - name: Create and start Grafana

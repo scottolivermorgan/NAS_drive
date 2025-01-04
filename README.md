@@ -119,7 +119,11 @@ If everything works, run the full suite:
 
 - Glances - http://192.168.1.9:61208
 
+- Grafana - http://192.168.1.9:3001
+
 - Immich - http://192.168.1.9:2283
+
+- InfluxDB - http://192.168.1.9:8086
 
 - Jellyfin - http://192.168.1.9:8096
 
