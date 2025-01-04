@@ -25,13 +25,13 @@
 version: '3.9'
 services:
   glances:
-      #build:
-      #  context: .  # Use the current directory where Dockerfile is located
-      #container_name: Glances
-      #hostname: Glances
-      image: docker.io/nicolargo/glances
-      environment:
-         - GLANCES_OPT=-q --export influxdb2 --time 10
+      build:
+        context: .  # Use the current directory where Dockerfile is located
+      container_name: Glances
+      hostname: Glances
+      #image: docker.io/nicolargo/glances
+      #environment:
+      #   - GLANCES_OPT=-q --export influxdb2 --time 10
       #  - GLANCES_OPT=-w
       volumes:
         - glances_config:/glances/conf  # Assuming `glances_config` is a Docker volume
