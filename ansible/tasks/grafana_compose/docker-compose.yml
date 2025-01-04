@@ -1,57 +1,72 @@
-version: '3.8'
+#version: '3.8'
 
+#services:
+#  glances:
+#    build:
+#      context: .  # Use the current directory where Dockerfile is located
+#    container_name: Glances
+#    hostname: Glances
+#    environment:
+#      - GLANCES_OPT=-w
+#    volumes:
+#      - glances_config:/glances/conf  # Assuming `glances_config` is a Docker volume
+#      - /var/run/docker.sock:/var/run/docker.sock:ro  # Read-only access to Docker socket
+#    network_mode: host  # Use the host's networking
+#    pid: host  # Share the host's PID namespace
+#    restart: always  # Always restart the container if it stops
+#
+## Define any external volumes (e.g., glances_config)
+#volumes:
+#  glances_config:
+
+
+
+
+version: '3.9'
 services:
   glances:
-    build:
-      context: .  # Use the current directory where Dockerfile is located
-    container_name: Glances
-    hostname: Glances
-    environment:
-      - GLANCES_OPT=-w
-    volumes:
-      - glances_config:/glances/conf  # Assuming `glances_config` is a Docker volume
-      - /var/run/docker.sock:/var/run/docker.sock:ro  # Read-only access to Docker socket
-    network_mode: host  # Use the host's networking
-    pid: host  # Share the host's PID namespace
-    restart: always  # Always restart the container if it stops
+      build:
+        context: .  # Use the current directory where Dockerfile is located
+      container_name: Glances
+      hostname: Glances
+      environment:
+        - GLANCES_OPT=-w
+      volumes:
+        - glances_config:/glances/conf  # Assuming `glances_config` is a Docker volume
+        - /var/run/docker.sock:/var/run/docker.sock:ro  # Read-only access to Docker socket
+      network_mode: host  # Use the host's networking
+      pid: host  # Share the host's PID namespace
+      restart: always  # Always restart the container if it stops
 
-# Define any external volumes (e.g., glances_config)
+  influxdb:
+    image: influxdb:latest
+    ports:
+      - '8086:8086'
+    volumes:
+      - influxdb-storage:/var/lib/influxdb
+    environment:
+      - DOCKER_INFLUXDB_INIT_MODE=setup
+      - DOCKER_INFLUXDB_INIT_USERNAME=${INFLUXDB_USERNAME}
+      - DOCKER_INFLUXDB_INIT_PASSWORD=${INFLUXDB_PASSWORD}
+      - DOCKER_INFLUXDB_INIT_ORG=${INFLUXDB_ORG}
+      - DOCKER_INFLUXDB_INIT_BUCKET=${INFLUXDB_BUCKET}
+      - DOCKER_INFLUXDB_INIT_ADMIN_TOKEN=${INFLUXDB_ADMIN_TOKEN}
+  grafana:
+    image: grafana/grafana:latest
+    ports:
+      - '3001:3000'
+    volumes:
+      - grafana-storage:/var/lib/grafana
+      - ./grafana-provisioning/:/etc/grafana/provisioning/
+    depends_on:
+      - influxdb
+    environment:
+      - GF_SECURITY_ADMIN_USER=${GRAFANA_USERNAME}
+      - GF_SECURITY_ADMIN_PASSWORD=${GRAFANA_PASSWORD}
+      - DOCKER_INFLUXDB_INIT_ORG=${INFLUXDB_ORG}
+      - DOCKER_INFLUXDB_INIT_BUCKET=${INFLUXDB_BUCKET}
+      - DOCKER_INFLUXDB_INIT_ADMIN_TOKEN=${INFLUXDB_ADMIN_TOKEN}
 volumes:
   glances_config:
-
-
-
-
-#version: '3.9'
-#services:
-#  influxdb:
-#    image: influxdb:latest
-#    ports:
-#      - '8086:8086'
-#    volumes:
-#      - influxdb-storage:/var/lib/influxdb
-#    environment:
-#      - DOCKER_INFLUXDB_INIT_MODE=setup
-#      - DOCKER_INFLUXDB_INIT_USERNAME=${INFLUXDB_USERNAME}
-#      - DOCKER_INFLUXDB_INIT_PASSWORD=${INFLUXDB_PASSWORD}
-#      - DOCKER_INFLUXDB_INIT_ORG=${INFLUXDB_ORG}
-#      - DOCKER_INFLUXDB_INIT_BUCKET=${INFLUXDB_BUCKET}
-#      - DOCKER_INFLUXDB_INIT_ADMIN_TOKEN=${INFLUXDB_ADMIN_TOKEN}
-#  grafana:
-#    image: grafana/grafana:latest
-#    ports:
-#      - '3001:3000'
-#    volumes:
-#      - grafana-storage:/var/lib/grafana
-#      - ./grafana-provisioning/:/etc/grafana/provisioning/
-#    depends_on:
-#      - influxdb
-#    environment:
-#      - GF_SECURITY_ADMIN_USER=${GRAFANA_USERNAME}
-#      - GF_SECURITY_ADMIN_PASSWORD=${GRAFANA_PASSWORD}
-#      - DOCKER_INFLUXDB_INIT_ORG=${INFLUXDB_ORG}
-#      - DOCKER_INFLUXDB_INIT_BUCKET=${INFLUXDB_BUCKET}
-#      - DOCKER_INFLUXDB_INIT_ADMIN_TOKEN=${INFLUXDB_ADMIN_TOKEN}
-#volumes:
-#  influxdb-storage:
-#  grafana-storage:
+  influxdb-storage:
+  grafana-storage:

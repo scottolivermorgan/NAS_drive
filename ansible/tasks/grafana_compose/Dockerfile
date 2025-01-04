@@ -16,6 +16,6 @@ FROM nicolargo/glances
 COPY glances.conf /glances/conf/glances.conf 
 # Set environment variable
 ENV GLANCES_OPT="-w"
-CMD python -m glances -C /glances/conf/glances.conf $GLANCES_OPT
+CMD python -m glances -C /glances/conf/glances.conf --export influxdb $GLANCES_OPT
 
 EXPOSE 61208 61209 61210
