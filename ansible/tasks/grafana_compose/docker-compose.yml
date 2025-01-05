@@ -25,16 +25,16 @@
 version: '3.9'
 services:
   glances:
-      #build:
-      #  context: .  # Use the current directory where Dockerfile is located
-      #container_name: Glances
-      #hostname: Glances
-      image: docker.io/nicolargo/glances
+      build:
+        context: .  # Use the current directory where Dockerfile is located
+      container_name: Glances
+      hostname: Glances
+      #image: docker.io/nicolargo/glances
       environment:
          - GLANCES_OPT=-q --export influxdb2 --time 10
       #  - GLANCES_OPT=-w
       volumes:
-        - ./cfg/glances/glances.conf:/glances/conf/glances.conf
+        #- ./cfg/glances/glances.conf:/glances/conf/glances.conf
         #- glances_config:/glances/conf  # Assuming `glances_config` is a Docker volume
         - /var/run/docker.sock:/var/run/docker.sock:ro  # Read-only access to Docker socket
       network_mode: host  # Use the host's networking

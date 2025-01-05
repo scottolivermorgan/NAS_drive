@@ -12,12 +12,18 @@
 #EXPOSE 61208 61209 61210
 
 
-FROM nicolargo/glances
-COPY glances.conf /glances/conf/glances.conf 
+#FROM nicolargo/glances
+#COPY glances.conf /glances/conf/glances.conf 
 # Set environment variable #"-w"
-ENV GLANCES_OPT="-q --export influxdb2 --time 10" 
+#ENV GLANCES_OPT="-q --export influxdb2 --time 10" 
 #CMD python -m glances -C /glances/conf/glances.conf --export influxdb $GLANCES_OPT
-CMD python -m glances -C /glances/conf/glances.conf $GLANCES_OPT
+#CMD python -m glances -C /glances/conf/glances.conf $GLANCES_OPT
 #CMD python -m glances -C /glances/conf/glances.conf --export influxdb 
+#RUN pip install influxdb-client
 
-EXPOSE 61208 61209 61210
+#CMD glances --export influxdb2
+#EXPOSE 61208 61209 61210
+
+FROM nicolargo/glances:latest-full
+COPY glances.conf /glances/conf/glances.conf
+CMD python -m glances -C /glances/conf/glances.conf $GLANCES_OPT
