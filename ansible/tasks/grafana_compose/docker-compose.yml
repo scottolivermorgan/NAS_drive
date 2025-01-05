@@ -1,27 +1,3 @@
-#version: '3.8'
-
-#services:
-#  glances:
-#    build:
-#      context: .  # Use the current directory where Dockerfile is located
-#    container_name: Glances
-#    hostname: Glances
-#    environment:
-#      - GLANCES_OPT=-w
-#    volumes:
-#      - glances_config:/glances/conf  # Assuming `glances_config` is a Docker volume
-#      - /var/run/docker.sock:/var/run/docker.sock:ro  # Read-only access to Docker socket
-#    network_mode: host  # Use the host's networking
-#    pid: host  # Share the host's PID namespace
-#    restart: always  # Always restart the container if it stops
-#
-## Define any external volumes (e.g., glances_config)
-#volumes:
-#  glances_config:
-
-
-
-
 version: '3.9'
 services:
   glances:
@@ -29,13 +5,9 @@ services:
         context: .  # Use the current directory where Dockerfile is located
       container_name: Glances
       hostname: Glances
-      #image: docker.io/nicolargo/glances
       environment:
          - GLANCES_OPT=-q --export influxdb2 --time 10
-      #  - GLANCES_OPT=-w
       volumes:
-        #- ./cfg/glances/glances.conf:/glances/conf/glances.conf
-        #- glances_config:/glances/conf  # Assuming `glances_config` is a Docker volume
         - /var/run/docker.sock:/var/run/docker.sock:ro  # Read-only access to Docker socket
       network_mode: host  # Use the host's networking
       pid: host  # Share the host's PID namespace
@@ -57,6 +29,7 @@ services:
       - DOCKER_INFLUXDB_INIT_ORG=${INFLUXDB_ORG}
       - DOCKER_INFLUXDB_INIT_BUCKET=${INFLUXDB_BUCKET}
       - DOCKER_INFLUXDB_INIT_ADMIN_TOKEN=${INFLUXDB_ADMIN_TOKEN}
+
   grafana:
     image: grafana/grafana:latest
     ports:
