@@ -452,7 +452,7 @@ def backup_HD(config_data):
             print("Closing airgap")
             power_on(signal_pin, ON=False)
 
-
+"""
 def get_files_created_today(directory):
     # Get today's date
     today = datetime.date.today()
@@ -482,3 +482,4 @@ def get_files_created_today(directory):
 
     else:
         return True, files_created_today
+"""
