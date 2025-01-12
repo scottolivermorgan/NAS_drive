@@ -4,7 +4,6 @@ import RPi.GPIO as GPIO
 from datetime import datetime
 import random
 import os
-#import datetime
 from dotenv import load_dotenv
 import time
 
@@ -246,8 +245,8 @@ def mount_HD_from_config(config_data):
         # get drive mapping details:
         EXTERNAL_HD = config_data["HD_map"][object]["name"]
         print(f"Found {EXTERNAL_HD}")
-        back_up_drive_name = hd_name = config_data["HD_map"][object]["back_up_name"]
-        signal_pin = hd_name = config_data["HD_map"][object]["GPIO_pin"]
+        back_up_drive_name = config_data["HD_map"][object]["back_up_name"]
+        signal_pin = config_data["HD_map"][object]["GPIO_pin"]
 
         # Build shell cmd's to pass to subprocesses:
         # Look up UUID of eternal hd and set as an environment variable
@@ -255,8 +254,7 @@ def mount_HD_from_config(config_data):
         # parse for uuid, strip 'uuid=', strip leading whitespace.
         UUID_cmd = f"blkid --match-token \"LABEL={EXTERNAL_HD}\" | grep -o ' UUID=\"[^\"]*\"' | sed 's/UUID=\"//' | sed 's/^ *//'"
         UUID = subprocess.run(UUID_cmd, shell=True, capture_output=True, text=True)
-        # type_cmd = f"blkid | grep \'LABEL=\"{EXTERNAL_HD}\"\' | grep -o \'TYPE=\"[^\"]*\"\' | sed \'s/.*TYPE=\"\([^\"]*\)\".*/\1/\'"
-        # HD_type = subprocess.run(type_cmd, shell=True, capture_output=True, text=True)
+
         # If UUID found, format and add to fstab file to boot
         if UUID.returncode == 0:
             # Format str:
@@ -269,9 +267,6 @@ def mount_HD_from_config(config_data):
             )
 
             # Get format type
-            # blkid | grep 'LABEL="HD_1"' | grep 'TYPE='
-            # blkid | grep 'LABEL="HD_1"' | grep -o 'TYPE="[^"]*"' | sed 's/.*TYPE="\([^"]*\)".*/\1/'
-
             type_output = HD_type.stdout.strip()
             print(type_output)
 
@@ -452,7 +447,7 @@ def backup_HD(config_data):
             print("Closing airgap")
             power_on(signal_pin, ON=False)
 
-"""
+
 def get_files_created_today(directory):
     # Get today's date
     today = datetime.date.today()
@@ -482,4 +477,3 @@ def get_files_created_today(directory):
 
     else:
         return True, files_created_today
-"""
