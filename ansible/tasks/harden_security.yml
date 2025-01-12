@@ -37,11 +37,11 @@
     rule: allow
     port: 22
 
-- name: Open Glances port
-  become: true
-  community.general.ufw:
-    rule: allow
-    port: 61208
+#- name: Open Glances port
+#  become: true
+#  community.general.ufw:
+#    rule: allow
+#    port: 61208
 
 - name: Audiobookshelf port
   become: true
@@ -102,6 +102,18 @@
   community.general.ufw:
     rule: allow
     port: 6767
+
+- name: Influxdb port
+  become: true
+  community.general.ufw:
+    rule: allow
+    port: 8086
+
+- name: Grafana port
+  become: true
+  community.general.ufw:
+    rule: allow
+    port: 3001
 
 - name: Enable UFW
   become: true
