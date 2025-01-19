@@ -67,7 +67,7 @@
     rule: allow
     port: 8090
 
-- name: qbittirrent webUI port
+- name: qbittorrent webUI port
   become: true
   community.general.ufw:
     rule: allow

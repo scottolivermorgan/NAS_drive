@@ -44,6 +44,12 @@ https://www.youtube.com/watch?v=1eDUkmwDrWU
 - 2.15.0
 
 
+
+# NTFY
+subscriptions:
+- backup_status
+- media_updated
+
 ### Config control node
 Windows:
 WSL https://learn.microsoft.com/en-us/windows/wsl/install
