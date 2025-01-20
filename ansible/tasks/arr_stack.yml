@@ -1,0 +1,26 @@
+# Create directories required by arr's
+- name: Create directorys for arr stack storage
+  become: true
+  ansible.builtin.file:
+    path: "{{ item }}"
+    state: directory
+    mode: '0777'
+  loop:
+    - /media/HD_1/Media/Metadata/prowlarr
+    - /media/HD_1/Media/Metadata/sonarr
+    - /media/HD_1/Media/Metadata/radarr
+    - /media/HD_1/Media/Metadata/bazarr
+    - /media/HD_1/Media/Movies
+    - /media/HD_1/Media/TV Shows
+    - /media/HD_1/Media/Metadata/qbittorrent
+    - /media/HD_1/Media/Metadata/qbittorrent/appdata
+    - /media/HD_1/Media/Downloads
+    - /media/HD_1/Media/Downloads/completed
+    - /media/HD_1/Media/Downloads/watch
+
+# Run arr_stack docker compose
+- name: Create and start arr stack
+  become: true
+  community.docker.docker_compose_v2:
+    project_src: /home/scott/NAS_drive/ansible/tasks/arr_stack_compose
+  register: output

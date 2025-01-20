@@ -1,0 +1,16 @@
+- name: Initialise external hard drives
+  ansible.builtin.shell:
+    cmd: |
+      venv/bin/python -m functions.HD_init
+    chdir: /home/{{ ansible_user }}/NAS_drive
+  become: true
+
+- name: Create directory structure
+  become: true
+  ansible.builtin.file:
+    path: "{{ item }}"
+    state: directory
+    mode: '0777'
+  loop:
+    - /media/HD_1/Media
+    - /media/HD_1/Media/Metadata

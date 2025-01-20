@@ -1,0 +1,32 @@
+# Ansible playbook for managing swap configuration on a system.
+# It disables swap, modifies the swap size in the configuration file,
+# sets up swap, and finally enables swap.
+
+- name: Disable swap
+  # Disable swap using the 'dphys-swapfile' command
+  ansible.builtin.command: dphys-swapfile swapoff
+  become: true  # Execute the command with elevated privileges
+  #register: disble_swap
+  #changed_when: "'swapoff' in ansible_command_result.stdout"  # Consider the task changed if swap was successfully disabled
+
+- name: Edit swap
+  # Modify the configuration file '/etc/dphys-swapfile' to set the swap size
+  ansible.builtin.lineinfile:
+    path: /etc/dphys-swapfile
+    regexp: '^CONF_SWAPSIZE'  # Regular expression to find the line to be modified
+    line: "CONF_SWAPSIZE={{ swap_size_mb }}"  # Set the swap size to the value provided by 'swap_size_mb' variable
+  become: true  # Execute with elevated privileges
+
+- name: Setup swap
+  # Setup swap using the 'dphys-swapfile' command
+  ansible.builtin.command: dphys-swapfile setup
+  become: true  # Execute with elevated privileges
+  register: setup_swap
+  changed_when: setup_swap.rc != 0
+
+- name: Enable swap
+  # Enable swap using the 'dphys-swapfile' command
+  ansible.builtin.command: dphys-swapfile swapon
+  become: true  # Execute with elevated privileges
+  register: enable_swap
+  changed_when: enable_swap.rc != 0

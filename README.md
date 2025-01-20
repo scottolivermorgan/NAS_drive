@@ -1,14 +1,161 @@
-TODO:
-- script to automate gui config on NC
-- script to automate gui config on Plex.
+##
+Arr
+https://www.youtube.com/watch?v=1eDUkmwDrWU
+
+
+##TODO
+  - DATA:
+   - HD:
+    - verify and validate audiobookshelf
+    - verify and validate komga
+    - verify and validate jellyfin
+  - Immich:
+   - figure out how to best implement current photos integration.
+  Services:
+   - Combine glances with influx db & Grafana
+  Codebase:
+   - fix off switch  (root?)
+   - implement .evnv for creds ondocker compose.
+  - Airgap:
+   - implement NTFY
+  - General:
+   - improve/centralise/document ALL logging.
+
+# Versions
+### OS:
+- Raspberry Pi OS Lite
+- Release date: July 4th 2024
+- System: 64-bit
+- Kernel version: 6.6
+- Debian version: 12 (bookworm)
+### Nextcloud
+- FE - nextcloud:29.0.2
+- BE - mariadb:11.4.2
+### Jellyfin
+- jellyfin:latest
+### Glances
+- docker.io/nicolargo/glances
+### Komga
+- gotson/komga:latest
+### Immich
+ - v1.118.2
+ - immich-server:v1.103.1
+### Audiobookshelf
+- 2.15.0
+
+
+
+# NTFY
+subscriptions:
+- backup_status
+- media_updated
+
+### Config control node
+Windows:
+WSL https://learn.microsoft.com/en-us/windows/wsl/install
+- Open PowerShell or Windows Command Prompt in administrator mode by right-clicking and selecting "Run as administrator" & run
+`wsl --install`
+Once installed restart machine
+
+- Install ansible
+`sudo apt-add-repository ppa:ansible/ansible`
+`sudo apt update`
+`sudo apt install ansible`
+
+Clone this repo
+`git clone https://github.com/scottolivermorgan/NAS_drive.git && cd NAS_drive`
+
+clone `inventory.yml.example` rename to `inventory.yml` & add your name and pi IP address.
+
+clone `main.yml.example` rename to `main.yml` & add your git email & name.
+
+if python venv not installed then
+`sudo apt install python3.12-venv`
+
+create virtual env
+`python3 -m venv .venv`
+
+activate it with
+`source .venv/bin/activate`
+
+You need to install Ansible. For that use:
+`pip install -r requirements.txt`
+
+~~`ansible-galaxy collection install -r requirements.yml --force`~~
+
+~~Get host IP~~
+~~`sudo apt install net-tools`~~
+~~`ifconfig`~~
+
+
+### Testing
+## Ansibledocker build .
+~~cd to test dir~~
+`cd tests/ansible`
+
+~~`ssh-keygen -t rsa`~~
+
+~~first time, build docker file~~
+~~docker build -t t .~~
+~~`docker build .`~~
+~~`docker-compose up`~~
+
+## First debug the connection:
+
+ copy ssh keys from windows to ubuntu and
+`chmod 600 /home/<user>/.ssh/id_rsa`
+
+-set .env in compose dirs
+
+
+
+`cd ansible`
+ensure .shh/.... empty first 
+`ansible-playbook -i inventory.yml debug.yml`
+
+If everything works, run the full suite:
+
+`ansible-playbook -i inventory.yml main.yml -vv`
+
+
+# Serices
+- Audiobookshelf - http://192.168.1.9:13378
+
+- Bazarr - http://192.168.1.9:6767
+
+- Glances - http://192.168.1.9:61208
+
+- Grafana - http://192.168.1.9:3001
+
+- Immich - http://192.168.1.9:2283
+
+- InfluxDB - http://192.168.1.9:8086
+
+- Jellyfin - http://192.168.1.9:8096
+
+- Komga - http://192.168.1.9:25600
+
+- Nextcloud - http://192.168.1.9:8000
+
+- Prowlarr - http://192.168.1.9:9696/
+
+- qbittorrent - http://192.168.1.9:9080
+
+- Radarr - http://192.168.1.9:7878
+
+- Sonarr - http://192.168.1.9:8989
+
+- Tandoor - http://192.168.1.9:8081
+
+
 # Pre steps
 - Rename main external hard drive to HD_1 and back up to BU_1, follow ths convention
 for all subsequent drives and add these details (alongsde the signal pin) to config.json.
-Make a dir to store Plex metadata on HD_1 i.e. HD_1/Media/metadata.
+~~Make a dir to store Plex metadata on HD_1 i.e. HD_1/Media/metadata.~~
 
 - _note_ Synch drives before setting up as MUCH quciker if large and popultated (use Free file sync).
 
-- Ensure HD_1 is attatched to permenant usb and BU_1 attatched to realy controlled USB.
+~~- Ensure HD_1 is attatched to permenant usb and BU_1 attatched to realy controlled USB.~~
 
 ## Initial Pi 4 Setup
 Download SD card formating software:
@@ -48,39 +195,6 @@ Set hotsname as Pi , enable SSH and select use password authentication.
 Save and write SD, takes a few minutes.
 Insert SD and turn on Pi, navigate to router on local network (192.168.1.1 for me) and login to router, navigate to connected devices and find Pi address.
 
-# Update Pi
-- On network connected computer open terminal/Powershell and run the following command, if this is the first time connecting you will be prompted for ssh fingerprint, type yes.
-
-    ``ssh <username>@192.168.1.x -v``
-
-__Note:__ if this has been done before and is fresh installation, navigate to C://users/user/.ssh/known_hosts and delete previous fingerprint.
-
-- As using raspberian Lite we need Git and pip so run:
-`sudo apt-get install git -y`
-`sudo apt install python3-pip -y`
-
-- Clone this repo:
-``git clone https://github.com/scottolivermorgan/NAS_drive.git``
-
-__Note:__ if the following error occurs:
-``error: RPC failed; curl 16 Error in the HTTP2 framing layer``
-
-retry cmd, else if error persits Run:
-    ``git config --global http.version HTTP/1.1``
-    and re- try the clone cmd
-
-- Install Python requirements:sudo sh scripts/update.sh
-`cd NAS_drive && sudo pip install -r requirements.txt --break-system-packages`
-
- 
-- Update packages and reboot Pi:
-``sudo sh scripts/update.sh``
-
-- After reboot, reconnect via SSH and run:
-``cd NAS_drive && sudo python main.py``
-
-follow onscreen prompts, halfway through you wll be prompted to enable external
-drives for nextcloud follow instrutions below.
 
 # Enable External Storage via GUI
 Access nextcloud at 192.169.1.x/nextcloud fill out form adding user and usng
@@ -99,18 +213,6 @@ Wait several seconds, again select user icon at top right and select Administrat
 Select External storage tab on left and add name, Local, and add mount point defined in mount-drives.sh - /media/hardrive1
 ![addExt1](./assets/nextcloud_add_external_drive/nc4.png)
 
-Return to the terminal, enter y and hit enter, reboots on completion
-
-- After reboot, reconnect via SSH and run:
-``sudo -u www-data php /var/www/nextcloud/occ files:scan --all --verbose``
-__Note:__ Can take up to 2 hours.
-
-__Note:__ SSH port changed from 22 to 1111
-
-Access Plex at 192.168.1.x:32400/web -x dependant on your local network.
-
-Sign in/create account and addexternal lib via GUI
-Add Libary > harddrive1 (in this case as has been set in previouse steps)
 
 Relay wiring:
 
@@ -155,15 +257,6 @@ add domain name to
 
 Set up port fowarding rules on router
 
-# Resolve Nextcloud security prompts
-- The PHP memory limit is below the recommended value of 512MB
-``sudo nano /etc/php/8.1/apach2/php.ini``
-change line:
-
-``memory_limit = 128M``
-to
-``memory_limit = 1G``
-
 # Create Backup Image of Pi SD
 Download & install imaging software:
 https://sourceforge.net/projects/win32diskimager/
@@ -179,14 +272,3 @@ https://sourceforge.net/projects/win32diskimager/
 
 Select read option to save, operation can take 10 -20 mins.
 ![WI4](./assets/SD_backup/wI_4.png)
-
-
-
-__NOTES__
-`lsblk -o PATH,FSTYPE,LABEL,UUID | grep "BU_1"`
-lsblk -o LABEL,UUID | grep "BU_1"
-
-lsblk -o LABEL,UUID | grep "BU_1" | awk '{print $2}'
-sudo mkdir /mnt/mydrive
-
-sudo mount -U <UUID> /mnt/mydrive

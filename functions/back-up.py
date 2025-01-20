@@ -1,10 +1,15 @@
 import json
 import os
-from helpers import backup_HD
+import sys
+
+SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
+sys.path.append(os.path.dirname(SCRIPT_DIR))
+
+from library.helpers import backup_HD
 
 if __name__ == "__main__":
     # Path to hard drives config file.
-    fp = f"/home/{os.getenv('USER')}/NAS_drive/config.json"
+    fp = f"/home/{os.getenv('USER')}/NAS_drive/config/config.json"
 
     # Open and read the config.json file:
     with open(fp, "r") as config_file:

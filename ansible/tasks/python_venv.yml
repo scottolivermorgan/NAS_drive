@@ -1,0 +1,16 @@
+- name: Install python3-venv package
+  ansible.builtin.package:
+    name: python3-venv
+    state: present
+
+- name: Create virtual environment
+  ansible.builtin.command:
+    cmd: |
+     python -m venv /home/{{ ansible_user }}/NAS_drive/venv
+  args:
+    creates: /home/{{ ansible_user }}/NAS_drive/venv
+
+- name: Install Python requirements
+  ansible.builtin.pip:
+    virtualenv: /home/{{ ansible_user }}/NAS_drive/venv
+    requirements: /home/{{ ansible_user }}/NAS_drive/requirements.txt

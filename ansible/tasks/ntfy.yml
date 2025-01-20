@@ -1,0 +1,6 @@
+# Run ntfy docker compose
+- name: Create and start ntfy
+  become: true
+  community.docker.docker_compose_v2:
+    project_src: /home/scott/NAS_drive/ansible/tasks/ntfy_compose
+  register: output

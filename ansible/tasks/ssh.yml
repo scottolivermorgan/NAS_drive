@@ -1,0 +1,39 @@
+# Ansible playbook to configure SSH settings, generate SSH key pair, and prompt user to add SSH public key to GitHub
+
+- name: Update sshd_config
+  become: true  # Enable privilege escalation to perform actions as a superuser
+  ansible.builtin.blockinfile:  # Insert a block of text into a file if it doesn't already exist
+    dest: "/etc/ssh/sshd_config"  # Destination file where the block will be inserted
+    insertafter: "^Include /etc/ssh/sshd_config"  # Insert the block after this line if found
+    block: |  # Multi-line block of text to insert into the file
+      Protocol 2  # Set SSH protocol version to 2
+      PasswordAuthentication no  # Disable password authentication
+      PermitEmptyPasswords no  # Disallow empty passwords
+      PermitRootLogin no  # Disable root login
+      MaxAuthTries 3  # Limit the number of authentication attempts
+
+- name: Restart sshd service
+  become: true  # Enable privilege escalation
+  ansible.builtin.service:  # Manage system services
+    name: sshd  # Name of the SSH daemon service
+    state: restarted  # Ensure the service is restarted
+    enabled: true  # Ensure the service is enabled to start on boot
+
+- name: Generate the key
+  community.crypto.openssh_keypair:  # Use the community.crypto.openssh_keypair module to generate SSH key pair
+    path: "{{ ansible_env.HOME }}/.ssh/id_ed25519"  # Specify the path for the private key file
+    type: ed25519  # Use Ed25519 key type for stronger security
+
+- name: Capture pub key
+  ansible.builtin.command: cat "{{ ansible_env.HOME }}/.ssh/id_ed25519.pub"  # Execute a shell command to read the public key file
+  register: ssh_key  # Register the output of the shell command in a variable
+  changed_when: ssh_key.rc != 0
+
+- name: Print pub key
+  ansible.builtin.debug:  # Print debug information
+    msg: "{{ ssh_key.stdout }}"  # Output the contents of the public key
+
+- name: Pause playbook execution and prompt for manual intervention
+  ansible.builtin.pause:  # Pause playbook execution and prompt for manual intervention
+    prompt: "Please enter the above ssh public key to GitHub and then press a key"  # Display a prompt message
+    echo: y # Allow user input to be echoed back
