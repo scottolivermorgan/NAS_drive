@@ -31,4 +31,4 @@
   ansible.builtin.git:
     repo: https://github.com/scottolivermorgan/NAS_drive.git
     dest: /home/{{ ansible_env.USER }}/NAS_drive
-    version: grafana #arr-stack #dockerise
+    version: main #grafana #arr-stack #dockerise
