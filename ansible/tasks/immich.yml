@@ -9,9 +9,14 @@
     - /media/HD_1/Media/Pictures/immich
 
 # Copy enviroment vars required by docker compose file to host
-- name: Copy .env file
-  ansible.builtin.copy:
-    src: immich_compose/.env
+#- name: Copy .env file
+#  ansible.builtin.copy:
+#    src: immich_compose/.env
+#    dest: /home/scott/NAS_drive/ansible/tasks/immich_compose/.env
+
+- name: Create the .env file from template
+  template:
+    src: /env_templates/immich.env.j2
     dest: /home/scott/NAS_drive/ansible/tasks/immich_compose/.env
 
 # Run Immich docker compose

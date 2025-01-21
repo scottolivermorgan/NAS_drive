@@ -1,0 +1,69 @@
+# ---------------------------------------------------------------------------
+# GRAFANA & INFLUXDB
+# This template contains only required options.
+# Visit the docs to find more https://docs.tandoor.dev/system/configuration/
+# ---------------------------------------------------------------------------
+INFLUXDB_USERNAME=admin
+INFLUXDB_PASSWORD=secure_influx_admin_password
+INFLUXDB_ORG=my_org
+INFLUXDB_BUCKET=my_bucket
+INFLUXDB_ADMIN_TOKEN=a_secure_admin_token
+GRAFANA_USERNAME=admin
+GRAFANA_PASSWORD=secure_influx_admin_password
+
+# ---------------------------------------------------------------------------
+# IMMICH & POSTGRES
+# This template contains only required options.
+# Visit the docs to find more https://docs.tandoor.dev/system/configuration/
+# You can find documentation for all the supported env variables at
+# https://immich.app/docs/install/environment-variables
+# ---------------------------------------------------------------------------
+# The location where your uploaded files are stored
+UPLOAD_LOCATION=/media/HD_1/Media/Pictures/immich
+
+# The location where your database files are stored
+DB_DATA_LOCATION=/media/HD_1/Media/Metadata/immich/postgres
+
+# To set a timezone, uncomment the next line and change Etc/UTC to a TZ 
+# identifier from this list: https://en.wikipedia.org/wiki/List_of_tz_database_time_zones#List
+# TZ=Etc/UTC
+
+# The Immich version to use. You can pin this to a specific version like "v1.71.0"
+IMMICH_VERSION=v1.118.2
+
+# Connection secret for postgres. You should change it to a random password
+# Please use only the characters `A-Za-z0-9`, without special characters or spaces
+DB_PASSWORD=postgres
+
+# The values below this line do not need to be changed
+DB_USERNAME=postgres
+DB_DATABASE_NAME=immich
+
+# ---------------------------------------------------------------------------
+# NEXTCLOUD & MARIADB
+# This template contains only required options.
+# Visit the docs to find more https://docs.tandoor.dev/system/configuration/
+# ---------------------------------------------------------------------------
+MYSQL_ROOT_PASSWORD=test
+MYSQL_PASSWORD=test
+MYSQL_DATABASE=test
+MYSQL_USER=test
+
+# ---------------------------------------------------------------------------
+# TANDOOR
+# This template contains only required options.
+# Visit the docs to find more https://docs.tandoor.dev/system/configuration/
+# ---------------------------------------------------------------------------
+# random secret key, use for example `base64 /dev/urandom | head -c50` to generate one
+SECRET_KEY=test
+
+# allowed hosts (see documentation), should be set to your hostname(s) but might be * (default) for some proxies/providers
+# ALLOWED_HOSTS=recipes.mydomain.com
+
+# add only a database password if you want to run with the default postgres, otherwise change settings accordingly
+DB_ENGINE=django.db.backends.postgresql
+POSTGRES_HOST=db_recipes
+POSTGRES_DB=djangodb
+POSTGRES_PORT=5432
+POSTGRES_USER=djangouser
+POSTGRES_PASSWORD=test

@@ -12,10 +12,16 @@
     - /media/HD_1/Media/Recipes/tandoor/mediafiles
 
 # Copy enviroment vars required by docker compose file to host
-- name: Copy .env file
-  ansible.builtin.copy:
-    src: tandoor_compose/.env
+#- name: Copy .env file
+#  ansible.builtin.copy:
+#    src: tandoor_compose/.env
+#    dest: /home/scott/NAS_drive/ansible/tasks/tandoor_compose/.env
+
+- name: Create the .env file from template
+  template:
+    src: /env_templates/tandoor.env.j2
     dest: /home/scott/NAS_drive/ansible/tasks/tandoor_compose/.env
+
 
 # Run Tandoor docker compose
 - name: Create and start Tandoor
