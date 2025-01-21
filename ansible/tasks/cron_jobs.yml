@@ -14,3 +14,12 @@
     minute: "0"
     hour: "17"
     job: "HOME=/home/{{ ansible_user }} USER={{ ansible_user }} python /home/{{ ansible_user }}/NAS_drive/functions/notify_new_media.py"
+
+
+- name: Daily Reboot
+  become: true
+  ansible.builtin.cron:
+    name: "Daily reboot"
+    minute: "0"
+    hour: "7"
+    job: "HOME=/home/{{ ansible_user }} USER={{ ansible_user }} sudo reboot"
