@@ -8,11 +8,11 @@
 - name: Create the .env file from template
   template:
     src: /env_templates/grafana.env.j2
-    dest: /home/scott/NAS_drive/ansible/tasks/grafana_compose/.env
+    dest: /home/{{ ansible_env.USER }}/NAS_drive/ansible/tasks/grafana_compose/.env
 
 # Run Grafana docker compose
 - name: Create and start Grafana
   become: true
   community.docker.docker_compose_v2:
-    project_src: /home/scott/NAS_drive/ansible/tasks/grafana_compose
+    project_src: /home/{{ ansible_env.USER }}/NAS_drive/ansible/tasks/grafana_compose
   register: output

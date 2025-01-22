@@ -17,11 +17,11 @@
 - name: Create the .env file from template
   template:
     src: /env_templates/immich.env.j2
-    dest: /home/scott/NAS_drive/ansible/tasks/immich_compose/.env
+    dest: /home/{{ ansible_env.USER }}/NAS_drive/ansible/tasks/immich_compose/.env
 
 # Run Immich docker compose
 - name: Create and start Immich
   become: true
   community.docker.docker_compose_v2:
-    project_src: /home/scott/NAS_drive/ansible/tasks/immich_compose
+    project_src: /home/{{ ansible_env.USER }}/NAS_drive/ansible/tasks/immich_compose
   register: output

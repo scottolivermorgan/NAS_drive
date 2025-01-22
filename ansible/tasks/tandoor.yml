@@ -20,12 +20,12 @@
 - name: Create the .env file from template
   template:
     src: /env_templates/tandoor.env.j2
-    dest: /home/scott/NAS_drive/ansible/tasks/tandoor_compose/.env
+    dest: /home/{{ ansible_env.USER }}/NAS_drive/ansible/tasks/tandoor_compose/.env
 
 
 # Run Tandoor docker compose
 - name: Create and start Tandoor
   become: true
   community.docker.docker_compose_v2:
-    project_src: /home/scott/NAS_drive/ansible/tasks/tandoor_compose
+    project_src: /home/{{ ansible_env.USER }}/NAS_drive/ansible/tasks/tandoor_compose
   register: output

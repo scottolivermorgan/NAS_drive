@@ -22,5 +22,5 @@
 - name: Create and start arr stack
   become: true
   community.docker.docker_compose_v2:
-    project_src: /home/scott/NAS_drive/ansible/tasks/arr_stack_compose
+    project_src: /home/{{ ansible_env.USER }}/NAS_drive/ansible/tasks/arr_stack_compose
   register: output
