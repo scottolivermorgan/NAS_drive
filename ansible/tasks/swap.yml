@@ -14,7 +14,7 @@
   ansible.builtin.lineinfile:
     path: /etc/dphys-swapfile
     regexp: '^CONF_SWAPSIZE'  # Regular expression to find the line to be modified
-    line: "CONF_SWAPSIZE={{ swap_size_mb }}"  # Set the swap size to the value provided by 'swap_size_mb' variable
+    line: "CONF_SWAPSIZE={{ docker_env.SWAP_SIZE_MB }}"  # Set the swap size to the value provided by 'swap_size_mb' variable
   become: true  # Execute with elevated privileges
 
 - name: Setup swap
