@@ -18,17 +18,17 @@
   community.general.git_config:
     name: user.email          # Git configuration key for user email
     scope: global            # Apply globally for all users
-    value: "{{ git_user_email }}"  # Value taken from a variable git_user_email, provided externally
+    value: "{{ docker_env.GIT_USER_EMAIL }}"  # Value taken from a variable git_user_email, provided externally
 
 # Task to configure the username associated with Git commits.
 - name: Setup name
   community.general.git_config:
     name: user.name          # Git configuration key for user name
     scope: global           # Apply globally for all users
-    value: "{{ git_user_name }}"  # Value taken from a variable git_user_name, provided externally
+    value: "{{ docker_env.GIT_USER_NAME }}"  # Value taken from a variable git_user_name, provided externally
 
 - name: Clone repository
   ansible.builtin.git:
     repo: https://github.com/scottolivermorgan/NAS_drive.git
     dest: /home/{{ ansible_env.USER }}/NAS_drive
-    version: main #grafana #arr-stack #dockerise
+    version: main
