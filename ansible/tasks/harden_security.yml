@@ -49,6 +49,12 @@
     rule: allow
     port: 13378
 
+- name: Nextcloud port
+  become: true
+  community.general.ufw:
+    rule: allow
+    port: 8000
+
 - name: Immich port
   become: true
   community.general.ufw:
