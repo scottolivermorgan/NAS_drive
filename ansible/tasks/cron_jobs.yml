@@ -1,3 +1,11 @@
+- name: Crontab - setup update and upgrade
+  become: true  # This task requires escalated privileges
+  ansible.builtin.cron:
+    name: "Update and upgrade"  # Specifies the name of the cron job
+    minute: "0"  # Specifies the minute when the cron job will run (0th minute)
+    hour: "4"  # Specifies the hour when the cron job will run (4th hour, i.e., 4:00 AM)
+    job: "apt update -q -y && apt dist-upgrade -q -y"
+
 - name: Add HD back up to cron tab
   become: true
   ansible.builtin.cron:
@@ -6,7 +14,6 @@
     hour: "5"
     job: "HOME=/home/{{ ansible_user }} USER={{ ansible_user }} python /home/{{ ansible_user }}/NAS_drive/functions/back-up.py >> /home/{{ ansible_user }}/NAS_drive/logs/back_up_cron.log 2>&1"
 
-
 - name: Scan and notify for new media
   become: true
   ansible.builtin.cron:
@@ -14,7 +21,6 @@
     minute: "0"
     hour: "17"
     job: "HOME=/home/{{ ansible_user }} USER={{ ansible_user }} python /home/{{ ansible_user }}/NAS_drive/functions/notify_new_media.py"
-
 
 - name: Daily Reboot
   become: true
