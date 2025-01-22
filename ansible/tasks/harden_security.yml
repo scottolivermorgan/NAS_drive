@@ -37,12 +37,6 @@
     rule: allow
     port: 22
 
-#- name: Open Glances port
-#  become: true
-#  community.general.ufw:
-#    rule: allow
-#    port: 61208
-
 - name: Audiobookshelf port
   become: true
   community.general.ufw:
