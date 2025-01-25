@@ -1,0 +1,14 @@
+version: "3.7"
+
+services:
+  komga:
+    image: gotson/komga:1.14.1
+    ports:
+      - 25600:25600
+    volumes:
+      - "/media/HD_1/Media/Metadata/komga/config:/config"
+{% for volume in volumes %}
+      - /media/{{ volume }}:/data/{{ volume }}
+{% endfor %}
+    restart: unless-stopped
+    timeout: 240

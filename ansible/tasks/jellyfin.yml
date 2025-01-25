@@ -36,21 +36,6 @@
 #      - "/media/HD_1/Media/Metadata/jellyfin/config:/config"
 #      - "/media/HD_1/Media/Metadata/jellyfin/cache:/cache"
 
-# Define volumes dynamically based on the config file
-- name: Generate volume mappings
-  set_fact:
-    volume_mappings: "{{ volumes | map('regex_replace', '^', '/media/') | map('regex_replace', '$', ':\\0') | list }}"
-
-# Ensure all values in volumes are valid, filter out empty values
-- name: Clean up volume mappings to remove empty values
-  set_fact:
-    volume_mappings: "{{ volume_mappings | selectattr('item', 'defined') | list }}"
-
-# Print the volume mappings for debugging purposes
-- name: Debug volume mappings
-  debug:
-    var: volume_mappings
-
 - name: Template the docker-compose file
   template:
     src: jellyfin_compose/docker-compose.yml.j2
