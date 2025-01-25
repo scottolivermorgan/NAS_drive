@@ -18,17 +18,59 @@
     source: pull
 
 # Run the Jellyfin Docker container
-- name: Run Jellyfin Docker container
+#- name: Run Jellyfin Docker container
+#  become: true
+#  community.docker.docker_container:
+#    name: jellyfin
+#    image: jellyfin/jellyfin:2024101405
+#    state: started
+#    restart_policy: always  # Restart the container if it stops
+#    published_ports:
+#      - "8096:8096"  # Port mapping (host_port:container_port)
+#    timeout: 120  # Timeout (seconds)
+#    volumes:
+#      {% for volume in volumes %}
+#      - "/media/{{ volume }}:/media/{{ volume }}"  # Mount external hard drive
+#      {% endfor %}
+#      #- "/media/HD_1:/media/HD_1"  # Mount external hard drive
+#      - "/media/HD_1/Media/Metadata/jellyfin/config:/config"
+#      - "/media/HD_1/Media/Metadata/jellyfin/cache:/cache"
+
+# Define volumes dynamically based on the config file
+- name: Generate volume mappings
+  set_fact:
+    volume_mappings: "{{ volumes | map('regex_replace', '^', '/media/') | map('regex_replace', '$', ':\\0') | list }}"
+
+# Ensure all values in volumes are valid, filter out empty values
+- name: Clean up volume mappings to remove empty values
+  set_fact:
+    volume_mappings: "{{ volume_mappings | selectattr('item', 'defined') | list }}"
+
+# Print the volume mappings for debugging purposes
+- name: Debug volume mappings
+  debug:
+    var: volume_mappings
+
+- name: Template the docker-compose file
+  template:
+    src: jellyfin_compose/docker-compose.yml.j2
+    dest: /home/{{ ansible_env.USER }}/NAS_drive/ansible/tasks/jellyfin_compose/docker-compose.yml
+
+- name: Create and start Jellyfin
   become: true
-  community.docker.docker_container:
-    name: jellyfin
-    image: jellyfin/jellyfin:2024101405
-    state: started
-    restart_policy: always  # Restart the container if it stops
-    published_ports:
-      - "8096:8096"  # Port mapping (host_port:container_port)
-    timeout: 120  # Timeout (seconds)
-    volumes:
-      - "/media/HD_1:/media/HD_1"  # Mount external hard drive
-      - "/media/HD_1/Media/Metadata/jellyfin/config:/config"
-      - "/media/HD_1/Media/Metadata/jellyfin/cache:/cache"
+  community.docker.docker_compose_v2:
+    project_src: /home/{{ ansible_env.USER }}/NAS_drive/ansible/tasks/jellyfin_compose
+  register: output
+
+# Run the Jellyfin Docker container
+#- name: Run Jellyfin Docker container
+#  become: true
+#  community.docker.docker_container:
+#    name: jellyfin
+#    image: jellyfin/jellyfin:2024101405
+#    state: started
+#    restart_policy: always  # Restart the container if it stops
+#    published_ports:
+#      - "8096:8096"  # Port mapping (host_port:container_port)
+#    timeout: 120  # Timeout (seconds)
+#    volumes: "{{ volume_mappings }}"
