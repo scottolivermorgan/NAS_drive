@@ -5,7 +5,6 @@ services:
     image: jellyfin/jellyfin:2024101405
     ports:
       - 8096:8096
-    restart: unless_stopped
     volumes:
       - "/media/HD_1/Media/Metadata/jellyfin/config:/config"
       - "/media/HD_1/Media/Metadata/jellyfin/cache:/cache"
