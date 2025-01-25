@@ -10,7 +10,7 @@
 
 - name: Create the .env file from template
   template:
-    src: /env_templates/immich.env.j2
+    src: env_templates/immich.env.j2
     dest: /home/{{ ansible_env.USER }}/NAS_drive/ansible/tasks/immich_compose/.env
 
 # Run Immich docker compose

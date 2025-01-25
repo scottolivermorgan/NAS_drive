@@ -1,7 +1,7 @@
 - name: Create the .env file from template
   template:
-    src: /env_templates/nextcloud.env.j2
-    dest: /home/{{ ansible_env.USER }}/NAS_drive/ansible/tasks/nexcloud_compose/.env
+    src: env_templates/nextcloud.env.j2
+    dest: /home/{{ ansible_env.USER }}/NAS_drive/ansible/tasks/nextcloud_compose/.env
 
 - name: Create and start Nextcloud and mariaDB
   become: true

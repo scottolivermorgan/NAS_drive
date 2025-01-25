@@ -13,7 +13,7 @@
 
 - name: Create the .env file from template
   template:
-    src: /env_templates/tandoor.env.j2
+    src: env_templates/tandoor.env.j2
     dest: /home/{{ ansible_env.USER }}/NAS_drive/ansible/tasks/tandoor_compose/.env
 
 # Run Tandoor docker compose
