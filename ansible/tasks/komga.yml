@@ -37,7 +37,7 @@
     src: komga_compose/docker-compose.yml.j2
     dest: /home/{{ ansible_env.USER }}/NAS_drive/ansible/tasks/komga_compose/docker-compose.yml
 
-- name: Create and start Jellyfin
+- name: Create and start Komga
   become: true
   community.docker.docker_compose_v2:
     project_src: /home/{{ ansible_env.USER }}/NAS_drive/ansible/tasks/komga_compose
