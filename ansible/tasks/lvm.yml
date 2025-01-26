@@ -47,10 +47,18 @@
   shell: "sudo vgcreate my_vg {{ device_paths | join(' ') }}"
   when: device_paths | length > 0
   register: vgcreate_output
-
 #sudo vgs
 #  VG    #PV #LV #SN Attr   VSize   VFree  
 #  my_vg   2   0   0 wz--n- 117.57g 117.57g
+
+
+- name: Create logical volume
+  shell: "sudo lvcreate -n my_lv -l 100%FREE my_vg"
+  register: logical_volume_output
+
+#sudo lvs
+#  LV    VG    Attr       LSize   Pool Origin Data%  Meta%  Move Log Cpy%Sync Convert
+#  my_lv my_vg -wi-a----- 117.57g   
 
 
 
