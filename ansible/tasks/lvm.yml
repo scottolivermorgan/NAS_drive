@@ -19,10 +19,13 @@
   loop: "{{ volumes['volumes'] }}"
   register: device_output
 
+- name: Inspect the device_output
+  debug:
+    var: device_output
+
 - name: Show the device output
   debug:
-    var: device_output.results
-
+    var: device_output.results[0]
 
 - name: Run pvcreate on each device
   shell: |
@@ -31,9 +34,23 @@
   when: item.stdout is defined
   register: pvcreate_output
 
-#- name: Show the pvcreate output
-#  debug:
-#    var: pvcreate_output.results
+#check with sudo pvs
+#  PV         VG Fmt  Attr PSize  PFree 
+#  /dev/sda1     lvm2 ---  58.98g 58.98g
+#  /dev/sdb1     lvm2 ---  58.59g 58.59g
+
+- name: Gather all device paths from pvcreate output
+  set_fact:
+    device_paths: "{{ pvcreate_output.results | map(attribute='stdout') | map('regex_search', '/dev/[a-zA-Z0-9]+') | list }}"
+
+- name: Create a volume group on the physical volumes
+  shell: "sudo vgcreate my_vg {{ device_paths | join(' ') }}"
+  when: device_paths | length > 0
+  register: vgcreate_output
+
+#sudo vgs
+#  VG    #PV #LV #SN Attr   VSize   VFree  
+#  my_vg   2   0   0 wz--n- 117.57g 117.57g
 
 
 
