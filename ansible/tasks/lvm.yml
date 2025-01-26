@@ -1,0 +1,53 @@
+- name: Install lvm2 package
+  become: true
+  package:
+    name: lvm2
+    state: present
+
+- name: Load volumes from config.yml
+  set_fact:
+    volumes: "{{ lookup('file', 'config.yml') | from_yaml }}"
+
+- name: Run find_device_by_label for each volume
+  shell: |
+    find_device_by_label() {
+      label=$1
+      device=$(lsblk -o NAME,LABEL | grep "$label" | awk '{print "/dev/" $1}' | sed 's/└─//g')
+      echo $device
+    }
+    find_device_by_label {{ item }}
+  loop: "{{ volumes['volumes'] }}"
+  register: device_output
+
+- name: Show the device output
+  debug:
+    var: device_output.results
+
+
+- name: Run pvcreate on each device
+  shell: |
+    echo "y" | sudo pvcreate {{ item.stdout }}
+  loop: "{{ device_output.results }}"
+  when: item.stdout is defined
+  register: pvcreate_output
+
+#- name: Show the pvcreate output
+#  debug:
+#    var: pvcreate_output.results
+
+
+
+
+
+
+#- name: Format each device as ext4
+#  shell: |
+#    sudo mkfs.ext4 {{ item.stdout }} ##&& sudo e2label /dev/sdX1 HD_1
+#  loop: "{{ device_output.results }}"
+#  when: item.stdout is defined
+#  register: format_output
+
+#- name: Reboot the machine 
+#  # Ansible task to reboot the machine to ensure Docker service starts
+#  become: true
+#  ansible.builtin.reboot:
