@@ -31,6 +31,10 @@
       ansible.builtin.include_tasks:
         file: tasks/python_venv.yml 
 
+    - name: LVM
+      ansible.builtin.include_tasks:
+        file: tasks/lvm.yml
+
     - name: External HD
       ansible.builtin.include_tasks:
         file: tasks/external_HD.yml
