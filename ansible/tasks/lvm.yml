@@ -1,13 +1,18 @@
+# Install the lvm2 package which is required for LVM operations
 - name: Install lvm2 package
   become: true
   package:
     name: lvm2
     state: present
 
+
+# Load volume configuration from a YAML file (config.yml)
 - name: Load volumes from config.yml
   set_fact:
     volumes: "{{ lookup('file', 'config.yml') | from_yaml }}"
 
+
+# For each volume in the configuration, find the corresponding device using a custom shell function
 - name: Run find_device_by_label for each volume
   shell: |
     find_device_by_label() {
@@ -19,60 +24,68 @@
   loop: "{{ volumes['volumes'] }}"
   register: device_output
 
-- name: Inspect the device_output
-  debug:
-    var: device_output
 
-- name: Show the device output
-  debug:
-    var: device_output.results[0]
+# Initialize an empty list to store volume-device pairs
+- name: Pair volumes with their corresponding devices
+  set_fact:
+    paired_volumes_devices: []
 
-- name: Run pvcreate on each device
+
+# Combine the volumes with their corresponding device paths into a list of dictionaries
+- name: Add volume-device pairs
+  set_fact:
+    paired_volumes_devices: "{{ paired_volumes_devices + [{'volume': item.0, 'device': item.1.stdout}] }}"
+  loop: "{{ volumes['volumes'] | zip(device_output.results) }}"
+  when: item.1.stdout is defined
+
+
+# Check for existing physical volumes on the system to determine if pvcreate is needed
+- name: Check existing physical volumes
+  shell: sudo pvs --noheadings
+  register: pvs_output
+  changed_when: false
+
+
+# Run `pvcreate` on each device if no physical volumes exist on the system
+- name: Run pvcreate on each device if no physical volumes exist
   shell: |
     echo "y" | sudo pvcreate {{ item.stdout }}
   loop: "{{ device_output.results }}"
-  when: item.stdout is defined
+  when: item.stdout is defined and pvs_output.stdout == ""
   register: pvcreate_output
 
-#check with sudo pvs
-#  PV         VG Fmt  Attr PSize  PFree 
-#  /dev/sda1     lvm2 ---  58.98g 58.98g
-#  /dev/sdb1     lvm2 ---  58.59g 58.59g
 
+# Gather the device paths from the pvcreate output
 - name: Gather all device paths from pvcreate output
   set_fact:
     device_paths: "{{ pvcreate_output.results | map(attribute='stdout') | map('regex_search', '/dev/[a-zA-Z0-9]+') | list }}"
+  when: pvcreate_output is not skipped and pvcreate_output.results | length > 0
 
+
+# Check for existing volume groups to determine if vgcreate is needed
+- name: Check existing volume groups
+  shell: sudo vgs --noheadings
+  register: vgs_output
+  changed_when: false
+
+
+# Create a volume group (VG) with the devices just created or found
 - name: Create a volume group on the physical volumes
   shell: "sudo vgcreate my_vg {{ device_paths | join(' ') }}"
-  when: device_paths | length > 0
+  when: device_paths is defined and device_paths | length > 0 and vgs_output.stdout == "" and pvcreate_output is not skipped
   register: vgcreate_output
-#sudo vgs
-#  VG    #PV #LV #SN Attr   VSize   VFree  
-#  my_vg   2   0   0 wz--n- 117.57g 117.57g
 
 
+# Create a logical volume (LV) using the entire space of the volume group
 - name: Create logical volume
   shell: "sudo lvcreate -n my_lv -l 100%FREE my_vg"
+  when: vgcreate_output is not skipped
   register: logical_volume_output
-
-#sudo lvs
-#  LV    VG    Attr       LSize   Pool Origin Data%  Meta%  Move Log Cpy%Sync Convert
-#  my_lv my_vg -wi-a----- 117.57g   
+  changed_when: logical_volume_output.rc == 0
 
 
-
-
-
-
-#- name: Format each device as ext4
-#  shell: |
-#    sudo mkfs.ext4 {{ item.stdout }} ##&& sudo e2label /dev/sdX1 HD_1
-#  loop: "{{ device_output.results }}"
-#  when: item.stdout is defined
-#  register: format_output
-
-#- name: Reboot the machine 
-#  # Ansible task to reboot the machine to ensure Docker service starts
-#  become: true
-#  ansible.builtin.reboot:
+# Format the newly created logical volume with the ext4 filesystem
+- name: Format logical volume as ext4
+  shell: "sudo mkfs.ext4 /dev/my_vg/my_lv"
+  register: logical_volume_format_output
+  when: logical_volume_output is not skipped and logical_volume_output.rc == 0
