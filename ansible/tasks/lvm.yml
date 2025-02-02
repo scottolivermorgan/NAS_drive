@@ -5,13 +5,16 @@
     name: lvm2
     state: present
 
+
 # Load volume configuration from a YAML file (config.yml)
 - name: Load volumes from config.yml
   set_fact:
     volumes: "{{ lookup('file', 'config.yml') | from_yaml }}"
+    backup_volumes: "{{ lookup('file', 'config.yml') | from_yaml }}"
+
 
 # For each volume in the configuration, find the corresponding device using a custom shell function
-- name: Run find_device_by_label for each volume
+- name: Run find_device_by_label for primary volumes
   shell: |
     find_device_by_label() {
       label=$1
@@ -22,10 +25,26 @@
   loop: "{{ volumes['volumes'] }}"
   register: device_output
 
+
+# For each volume in the configuration, find the corresponding device using a custom shell function
+- name: Run find_device_by_label for backup volumes
+  shell: |
+    find_device_by_label() {
+      label=$1
+      device=$(lsblk -o NAME,LABEL | grep "$label" | awk '{print "/dev/" $1}' | sed 's/└─//g')
+      echo $device
+    }
+    find_device_by_label {{ item }}
+  loop: "{{ backup_volumes['backup_volumes'] }}"
+  register: backup_device_output
+
+
 # Initialize an empty list to store volume-device pairs
 - name: Pair volumes with their corresponding devices
   set_fact:
     paired_volumes_devices: []
+    backup_paired_volumes_devices: []
+
 
 # Combine the volumes with their corresponding device paths into a list of dictionaries
 - name: Add volume-device pairs
@@ -34,30 +53,57 @@
   loop: "{{ volumes['volumes'] | zip(device_output.results) }}"
   when: item.1.stdout is defined
 
+
+# Combine the backup volumes with their corresponding device paths into a list of dictionaries
+- name: Add backup volume-device pairs
+  set_fact:
+    backup_paired_volumes_devices: "{{ backup_paired_volumes_devices + [{'volume': item.0, 'device': item.1.stdout}] }}"
+  loop: "{{ backup_volumes['backup_volumes'] | zip(backup_device_output.results) }}"
+  when: item.1.stdout is defined
+
+
 # Check for existing physical volumes on the system to determine if pvcreate is needed
 - name: Check existing physical volumes
   shell: sudo pvs --noheadings
   register: pvs_output
   changed_when: false
 
+
 # Count the number of physical volumes on the system
 - name: Count the physical volumes on the system
   set_fact:
     existing_pvs_count: "{{ pvs_output.stdout | regex_findall('/dev/') | length }}"
 
+
 # Run pvcreate on each device if needed
-- name: Run pvcreate on each device if needed
+- name: Run pvcreate on each primary device if needed
   shell: |
     echo "y" | sudo pvcreate {{ item.stdout }}
   loop: "{{ device_output.results }}"
   when: item.stdout is defined and existing_pvs_count | int < (volumes['volumes'] | length) | int
   register: pvcreate_output
 
+
+- name: Run pvcreate on each backup device if needed
+  shell: |
+    echo "y" | sudo pvcreate {{ item.stdout }}
+  loop: "{{ backup_device_output.results }}"
+  when: item.stdout is defined and existing_pvs_count | int < (volumes['volumes'] | length + backup_volumes['backup_volumes'] | length) | int
+  register: backup_pvcreate_output
+
+
 # Gather the device paths from the pvcreate output
 - name: Gather all device paths from pvcreate output
   set_fact:
     device_paths: "{{ pvcreate_output.results | map(attribute='stdout') | map('regex_search', '/dev/[a-zA-Z0-9]+') | list }}"
   when: pvcreate_output is not skipped and pvcreate_output.results | length > 0
+
+
+# Gather the device paths from the backup pvcreate output
+- name: Gather all device paths from backup pvcreate output
+  set_fact:
+    backup_device_paths: "{{ backup_pvcreate_output.results | map(attribute='stdout') | map('regex_search', '/dev/[a-zA-Z0-9]+') | list }}"
+  when: backup_pvcreate_output is not skipped and backup_pvcreate_output.results | length > 0
 
 
 # Check for existing volume groups to determine if vgcreate is needed
@@ -74,6 +120,21 @@
   register: vgcreate_output
 
 
+- name: Check if volume group 'backup_vg' exists
+  shell: "sudo vgs --noheadings -o vg_name"
+  register: backup_vgs_output
+  changed_when: false
+
+- name: Create a volume group on the physical volumes if it does not exist
+  shell: "sudo vgcreate {{ backup_volume_group }} {{ backup_device_paths | join(' ') }}"
+  when:
+    - backup_device_paths is defined
+    - backup_device_paths | length > 0
+    - backup_vgs_output.stdout.find(backup_volume_group) == -1
+    - backup_pvcreate_output is not skipped
+  register: backup_vgcreate_output
+
+
 # Create a logical volume (LV) using the entire space of the volume group
 - name: Create logical volume
   shell: "sudo lvcreate -n my_lv -l 100%FREE my_vg"
@@ -82,14 +143,37 @@
   changed_when: logical_volume_output.rc == 0
 
 
+# Create a logical volume (LV) using the entire space of the volume group
+- name: Create backup logical volume 
+  shell: "sudo lvcreate -n {{ backup_logical_volumes[0]['name'] }} -l {{ backup_logical_volumes[0]['size'] }} {{ backup_volume_group }}"
+  when: backup_vgcreate_output is not skipped
+  register: backup_logical_volume_output
+  changed_when: backup_logical_volume_output.rc == 0
+
+
 # Check if logical volume formatting would happen and ask for confirmation
 - name: Ask for confirmation to format logical volume
   pause:
-    prompt: "Are you sure you want to format /dev/my_vg/my_lv with ext4? (yes/no)"
+    prompt: "Are you sure you want to format /dev/{{ volume_group }}/{{ logical_volumes[0]['name'] }} with ext4? (yes/no)"
   register: user_confirmation
   when: logical_volume_output is not skipped and logical_volume_output.rc == 0
+
 
 - name: Format logical volume as ext4
   shell: "sudo mkfs.ext4 /dev/my_vg/my_lv"
   register: logical_volume_format_output
   when: logical_volume_output is not skipped and logical_volume_output.rc == 0 and user_confirmation.user_input == 'yes'
+
+
+# Check if logical volume formatting would happen and ask for confirmation
+- name: Ask for confirmation to format back up logical volume
+  pause:
+    prompt: "Are you sure you want to format /dev/{{ backup_volume_group }}/{{ backup_logical_volumes[0]['name'] }} with ext4? (y/n)"
+  register: user_confirmation
+  when: backup_logical_volume_output is not skipped and backup_logical_volume_output.rc == 0
+
+
+- name: Format back up logical volume as ext4
+  shell: "sudo mkfs.ext4 -F /dev/{{ backup_volume_group }}/{{ backup_logical_volumes[0]['name'] }}"
+  register: logical_volume_format_output
+  when: backup_logical_volume_output is not skipped and backup_logical_volume_output.rc == 0 and user_confirmation.user_input == 'y'
