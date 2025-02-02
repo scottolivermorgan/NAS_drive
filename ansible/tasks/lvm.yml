@@ -5,12 +5,10 @@
     name: lvm2
     state: present
 
-
 # Load volume configuration from a YAML file (config.yml)
 - name: Load volumes from config.yml
   set_fact:
     volumes: "{{ lookup('file', 'config.yml') | from_yaml }}"
-
 
 # For each volume in the configuration, find the corresponding device using a custom shell function
 - name: Run find_device_by_label for each volume
@@ -24,12 +22,10 @@
   loop: "{{ volumes['volumes'] }}"
   register: device_output
 
-
 # Initialize an empty list to store volume-device pairs
 - name: Pair volumes with their corresponding devices
   set_fact:
     paired_volumes_devices: []
-
 
 # Combine the volumes with their corresponding device paths into a list of dictionaries
 - name: Add volume-device pairs
@@ -38,22 +34,24 @@
   loop: "{{ volumes['volumes'] | zip(device_output.results) }}"
   when: item.1.stdout is defined
 
-
 # Check for existing physical volumes on the system to determine if pvcreate is needed
 - name: Check existing physical volumes
   shell: sudo pvs --noheadings
   register: pvs_output
   changed_when: false
 
+# Count the number of physical volumes on the system
+- name: Count the physical volumes on the system
+  set_fact:
+    existing_pvs_count: "{{ pvs_output.stdout | regex_findall('/dev/') | length }}"
 
-# Run `pvcreate` on each device if no physical volumes exist on the system
-- name: Run pvcreate on each device if no physical volumes exist
+# Run pvcreate on each device if needed
+- name: Run pvcreate on each device if needed
   shell: |
     echo "y" | sudo pvcreate {{ item.stdout }}
   loop: "{{ device_output.results }}"
-  when: item.stdout is defined and pvs_output.stdout == ""
+  when: item.stdout is defined and existing_pvs_count | int < (volumes['volumes'] | length) | int
   register: pvcreate_output
-
 
 # Gather the device paths from the pvcreate output
 - name: Gather all device paths from pvcreate output
@@ -84,8 +82,14 @@
   changed_when: logical_volume_output.rc == 0
 
 
-# Format the newly created logical volume with the ext4 filesystem
+# Check if logical volume formatting would happen and ask for confirmation
+- name: Ask for confirmation to format logical volume
+  pause:
+    prompt: "Are you sure you want to format /dev/my_vg/my_lv with ext4? (yes/no)"
+  register: user_confirmation
+  when: logical_volume_output is not skipped and logical_volume_output.rc == 0
+
 - name: Format logical volume as ext4
   shell: "sudo mkfs.ext4 /dev/my_vg/my_lv"
   register: logical_volume_format_output
-  when: logical_volume_output is not skipped and logical_volume_output.rc == 0
+  when: logical_volume_output is not skipped and logical_volume_output.rc == 0 and user_confirmation.user_input == 'yes'
