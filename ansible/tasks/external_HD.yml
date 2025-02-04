@@ -1,7 +1,12 @@
-#- name: Generate config.json using Jinja2 template
-#  template:
-#    src: ../config/config_template.j2
-#    dest: /home/{{ ansible_env.USER }}/NAS_drive/config/config.json
+- name: Add logical volume to fstab (main)
+  mount:
+    name: "/media/{{ mount_point }}"
+    src: "/dev/{{ volume_group }}/{{ logical_volumes[0]['name'] }}"
+    fstype: ext4  # Adjust based on your file system type
+    state: mounted
+    opts: defaults
+    dump: 0
+    passno: 2
 
 - name: Initialise external hard drives
   ansible.builtin.shell:
