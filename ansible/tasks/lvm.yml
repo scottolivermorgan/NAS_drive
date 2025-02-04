@@ -37,6 +37,7 @@
     find_device_by_label {{ item }}
   loop: "{{ backup_volumes['backup_volumes'] }}"
   register: backup_device_output
+  when: backup_volumes is defined and backup_volumes['backup_volumes'] is defined
 
 
 # Initialize an empty list to store volume-device pairs
@@ -154,7 +155,7 @@
 # Check if logical volume formatting would happen and ask for confirmation
 - name: Ask for confirmation to format logical volume
   pause:
-    prompt: "Are you sure you want to format /dev/{{ volume_group }}/{{ logical_volumes[0]['name'] }} with ext4? (yes/no)"
+    prompt: "Are you sure you want to format /dev/{{ volume_group }}/{{ logical_volumes[0]['name'] }} with ext4? (y/n)"
   register: user_confirmation
   when: logical_volume_output is not skipped and logical_volume_output.rc == 0
 
@@ -162,7 +163,7 @@
 - name: Format logical volume as ext4
   shell: "sudo mkfs.ext4 /dev/my_vg/my_lv"
   register: logical_volume_format_output
-  when: logical_volume_output is not skipped and logical_volume_output.rc == 0 and user_confirmation.user_input == 'yes'
+  when: logical_volume_output is not skipped and logical_volume_output.rc == 0 and user_confirmation.user_input == 'y'
 
 
 # Check if logical volume formatting would happen and ask for confirmation
