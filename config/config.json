@@ -1,0 +1,9 @@
+{
+  "HD_map": {
+      "HD_1": {
+          "name": "HD_1",
+          "back_up_name": "BU_1",
+          "GPIO_pin": 18
+      }
+  }
+}
