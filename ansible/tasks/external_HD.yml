@@ -1,19 +1,14 @@
 - name: Add logical volume to fstab (main)
+  become: true
   mount:
     name: "/media/{{ mount_point }}"
     src: "/dev/{{ volume_group }}/{{ logical_volumes[0]['name'] }}"
-    fstype: ext4  # Adjust based on your file system type
+    fstype: ext4
     state: mounted
     opts: defaults
     dump: 0
     passno: 2
 
-- name: Initialise external hard drives
-  ansible.builtin.shell:
-    cmd: |
-      venv/bin/python -m functions.HD_init
-    chdir: /home/{{ ansible_user }}/NAS_drive
-  become: true
 
 - name: Create directory structure
   become: true

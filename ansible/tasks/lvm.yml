@@ -116,7 +116,7 @@
 
 # Create a volume group (VG) with the devices just created or found
 - name: Create a volume group on the physical volumes
-  shell: "sudo vgcreate my_vg {{ device_paths | join(' ') }}"
+  shell: "sudo vgcreate {{ volume_group }} {{ device_paths | join(' ') }}"
   when: device_paths is defined and device_paths | length > 0 and vgs_output.stdout == "" and pvcreate_output is not skipped
   register: vgcreate_output
 
@@ -138,7 +138,7 @@
 
 # Create a logical volume (LV) using the entire space of the volume group
 - name: Create logical volume
-  shell: "sudo lvcreate -n my_lv -l 100%FREE my_vg"
+  shell: "sudo lvcreate -n {{ logical_volumes[0]['name'] }} -l {{ logical_volumes[0]['size'] }} {{ volume_group }}"
   when: vgcreate_output is not skipped
   register: logical_volume_output
   changed_when: logical_volume_output.rc == 0
@@ -161,7 +161,7 @@
 
 
 - name: Format logical volume as ext4
-  shell: "sudo mkfs.ext4 /dev/my_vg/my_lv"
+  shell: "sudo mkfs.ext4 -F /dev/{{ volume_group }}/{{ logical_volumes[0]['name'] }}"
   register: logical_volume_format_output
   when: logical_volume_output is not skipped and logical_volume_output.rc == 0 and user_confirmation.user_input == 'y'
 
