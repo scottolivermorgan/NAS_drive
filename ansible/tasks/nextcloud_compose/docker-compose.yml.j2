@@ -27,9 +27,7 @@ services:
     container_name: nextcloud
     volumes:
       - nextcloud:/var/www/html
-{% for volume in volumes %}
-      - /media/{{ volume }}:/media/{{ volume }}
-{% endfor %}
+      - /media/{{ mount_point }}:/media/{{ mount_point }}
     restart: always
     environment:
       - MYSQL_PASSWORD=DEF456
