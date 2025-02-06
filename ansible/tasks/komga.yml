@@ -8,7 +8,7 @@
     state: directory
     mode: '0755'
   loop:
-    - /media/HD_1/Media/Metadata/komga/config
+    - /media/{{ mount_point }}/Media/Metadata/komga/config
 
 # Pull the latest Komga Docker image
 - name: Pull Komga Docker image
