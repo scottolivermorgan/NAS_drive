@@ -1,3 +1,11 @@
+- name: Ensure logical volume is active
+  become: true
+  lvol:
+    vg: "{{ volume_group }}"
+    lv: "{{ logical_volumes[0]['name'] }}"
+    state: present
+
+
 - name: Add logical volume to fstab (main)
   become: true
   mount:

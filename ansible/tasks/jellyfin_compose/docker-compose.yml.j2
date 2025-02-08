@@ -6,9 +6,7 @@ services:
     ports:
       - 8096:8096
     volumes:
-      - "/media/HD_1/Media/Metadata/jellyfin/config:/config"
-      - "/media/HD_1/Media/Metadata/jellyfin/cache:/cache"
-{% for volume in volumes %}
-      - /media/{{ volume }}:/media/{{ volume }}
-{% endfor %}
+      - "/media/{{ mount_point }}/Media/Metadata/jellyfin/config:/config"
+      - "/media/{{ mount_point }}/Media/Metadata/jellyfin/cache:/cache"
+      - /media/{{ mount_point }}:/media/{{ mount_point }}
     restart: unless-stopped
