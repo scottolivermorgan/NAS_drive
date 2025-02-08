@@ -10,8 +10,8 @@ services:
       - WEBUI_PORT=9080
       - TORRENTING_PORT=6881
     volumes:
-      - /media/HD_1/Media/Metadata/qbittorrent/appdata:/config
-      - /media/HD_1/Media/Downloads/completed:/downloads #optional
+      - /media/{{ mount_point }}/Media/Metadata/qbittorrent/appdata:/config
+      - /media/{{ mount_point }}/Media/Downloads/completed:/downloads #optional
     ports:
       - 9080:9080
       - 6881:6881
@@ -33,9 +33,9 @@ services:
       - PUID=1000
       - TZ=Europe/Amsterdam
     volumes:
-      - /media/HD_1/Media/Metadata/radarr:/config
-      - /media/HD_1/Media/Movies:/movies
-      - /media/HD_1/Media/Downloads/completed:/downloads
+      - /media/{{ mount_point }}/Media/Metadata/radarr:/config
+      - /media/{{ mount_point }}/Media/Movies:/movies
+      - /media/{{ mount_point }}/Media/Downloads/completed:/downloads
     networks:
       - bridge_network
 
@@ -51,9 +51,9 @@ services:
       - PUID=1000
       - TZ=Europe/Amsterdam
     volumes:
-      - /media/HD_1/Media/Metadata/sonarr:/config
-      - /media/HD_1/Media/TV Shows:/tv
-      - /media/HD_1/Media/Downloads/completed:/downloads
+      - /media/{{ mount_point }}/Media/Metadata/sonarr:/config
+      - /media/{{ mount_point }}/Media/TV Shows:/tv
+      - /media/{{ mount_point }}/Media/Downloads/completed:/downloads
     networks:
       - bridge_network
 
@@ -71,8 +71,8 @@ services:
       - PUID=1000
       - TZ=Europe/Amsterdam
     volumes:
-      - /media/HD_1/Media/Metadata/prowlarr:/config
-      - /media/HD_1/Media/Downloads/watch:/downloads
+      - /media/{{ mount_point }}/Media/Metadata/prowlarr:/config
+      - /media/{{ mount_point }}/Media/Downloads/watch:/downloads
     networks:
       - bridge_network
 
@@ -84,9 +84,9 @@ services:
       - PGID=1000
       - TZ=Etc/UTC
     volumes:
-      - /media/HD_1/Media/Metadata/bazarr:/config
-      - /media/HD_1/Media/Movies:/movies
-      - /media/HD_1/Media/TV Shows:/tv
+      - /media/{{ mount_point }}/Media/Metadata/bazarr:/config
+      - /media/{{ mount_point }}/Media/Movies:/movies
+      - /media/{{ mount_point }}/Media/TV Shows:/tv
     ports:
       - 6767:6767
     restart: unless-stopped

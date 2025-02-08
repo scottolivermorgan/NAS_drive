@@ -17,7 +17,7 @@ services:
       - staticfiles:/opt/recipes/staticfiles
       # Do not make this a bind mount, see https://docs.tandoor.dev/install/docker/#volumes-vs-bind-mounts
       - nginx_config:/opt/recipes/nginx/conf.d
-      - /media/HD_1/Media/Recipes/tandoor/mediafiles:/opt/recipes/mediafiles
+      - /media/{{ mount_point }}/Media/Recipes/tandoor/mediafiles:/opt/recipes/mediafiles
     depends_on:
       - db_recipes
 
