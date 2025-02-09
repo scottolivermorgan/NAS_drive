@@ -6,6 +6,6 @@ services:
     ports:
       - 25600:25600
     volumes:
-      - "/media/HD_1/Media/Metadata/komga/config:/config"
+      - "/media/{{ mount_point }}/Media/Metadata/komga/config:/config"
       - /media/{{ mount_point }}:/data/{{ mount_point }}
     restart: unless-stopped

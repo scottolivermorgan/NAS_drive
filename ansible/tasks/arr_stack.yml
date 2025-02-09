@@ -18,6 +18,12 @@
     - /media/{{ mount_point }}/Media/Downloads/completed
     - /media/{{ mount_point }}/Media/Downloads/watch
 
+
+- name: Template the docker-compose file
+  template:
+    src: arr_stack_compose/docker-compose.yml.j2
+    dest: /home/{{ ansible_env.USER }}/NAS_drive/ansible/tasks/arr_stack_compose/docker-compose.yml
+
 # Run arr_stack docker compose
 - name: Create and start arr stack
   become: true
