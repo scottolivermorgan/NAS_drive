@@ -1,0 +1,6 @@
+# Run index_page docker compose
+- name: Create and start index page
+  become: true
+  community.docker.docker_compose_v2:
+    project_src: /home/{{ ansible_env.USER }}/NAS_drive/ansible/tasks/index_page_compose
+  register: output

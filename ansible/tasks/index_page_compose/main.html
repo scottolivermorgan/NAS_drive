@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Service Links</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f9;
+            margin: 0;
+            padding: 0;
+        }
+
+        header {
+            background-color: #333;
+            color: white;
+            padding: 20px;
+            text-align: center;
+            font-size: 24px;
+        }
+
+        .grid-container {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr); /* 3 columns */
+            gap: 20px;
+            padding: 20px;
+        }
+
+        .card {
+            background-color: #ffffff;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            padding: 20px;
+            transition: transform 0.3s;
+        }
+
+        .card:hover {
+            transform: translateY(-10px);
+        }
+
+        .card a {
+            text-decoration: none;
+            color: #333;
+            font-size: 18px;
+            font-weight: bold;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .card a img {
+            width: 40px;
+            height: 40px;
+            margin-bottom: 10px;
+        }
+
+        .card a:hover {
+            color: #007bff;
+        }
+    </style>
+</head>
+<body>
+
+<header>
+    Service Links
+</header>
+
+<div class="grid-container">
+    <div class="card">
+        <a href="http://192.168.1.9:13378" target="_blank">
+            <img src="icons/abs.png" alt="Audiobookshelf">
+            Audiobookshelf
+        </a>
+    </div>
+    <div class="card">
+        <a href="http://192.168.1.9:6767" target="_blank">
+            <img src="icons/bazarr.svg" alt="Bazarr">
+            Bazarr
+        </a>
+    </div>
+    <div class="card">
+        <a href="http://192.168.1.9:61208" target="_blank">
+            <img src="icons/glances.png" alt="Glances">
+            Glances
+        </a>
+    </div>
+    <div class="card">
+        <a href="http://192.168.1.9:3001" target="_blank">
+            <img src="icons/grafana.svg" alt="Grafana">
+            Grafana
+        </a>
+    </div>
+    <div class="card">
+        <a href="http://192.168.1.9:2283" target="_blank">
+            <img src="icons/immich.svg" alt="Immich">
+            Immich
+        </a>
+    </div>
+    <div class="card">
+        <a href="http://192.168.1.9:8086" target="_blank">
+            <img src="icons/influxdb.svg" alt="InfluxDB">
+            InfluxDB
+        </a>
+    </div>
+    <div class="card">
+        <a href="http://192.168.1.9:8096" target="_blank">
+            <img src="icons/jellyfin.svg" alt="Jellyfin">
+            Jellyfin
+        </a>
+    </div>
+    <div class="card">
+        <a href="http://192.168.1.9:25600" target="_blank">
+            <img src="icons/komga.svg" alt="Komga">
+            Komga
+        </a>
+    </div>
+    <div class="card">
+        <a href="http://192.168.1.9:8000" target="_blank">
+            <img src="icons/nextcloud.svg" alt="Nextcloud">
+            Nextcloud
+        </a>
+    </div>
+    <div class="card">
+        <a href="http://192.168.1.9:9696/" target="_blank">
+            <img src="icons/prowlarr.svg" alt="Prowlarr">
+            Prowlarr
+        </a>
+    </div>
+    <div class="card">
+        <a href="http://192.168.1.9:9080" target="_blank">
+            <img src="icons/qbittorrent.svg" alt="qbittorrent">
+            qbittorrent
+        </a>
+    </div>
+    <div class="card">
+        <a href="http://192.168.1.9:7878" target="_blank">
+            <img src="icons/radarr.svg" alt="Radarr">
+            Radarr
+        </a>
+    </div>
+    <div class="card">
+        <a href="http://192.168.1.9:8989" target="_blank">
+            <img src="icons/sonarr.svg" alt="Sonarr">
+            Sonarr
+        </a>
+    </div>
+    <div class="card">
+        <a href="http://192.168.1.9:8081" target="_blank">
+            <img src="icons/tandoor.svg" alt="Tandoor">
+            Tandoor
+        </a>
+    </div>
+</div>
+
+</body>
+</html>
