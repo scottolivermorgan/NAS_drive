@@ -1,7 +1,7 @@
 version: "3.7"
 services:
   qbittorrent:
-    image: lscr.io/linuxserver/qbittorrent:latest
+    image: lscr.io/linuxserver/qbittorrent:version-5.0.3-r0
     container_name: qbittorrent
     environment:
       - PUID=1000
@@ -23,7 +23,7 @@ services:
 
   # https://github.com/linuxserver/docker-radarr
   radarr:
-    image: linuxserver/radarr:latest
+    image: linuxserver/radarr:5.18.4.9674-ls259
     container_name: radarr
     restart: always
     ports:
@@ -41,7 +41,7 @@ services:
 
   # https://github.com/linuxserver/docker-sonarr
   sonarr:
-    image: linuxserver/sonarr:latest
+    image: linuxserver/sonarr:4.0.12.2823-ls270
     container_name: sonarr
     restart: always
     ports:
@@ -59,7 +59,8 @@ services:
 
   # https://github.com/linuxserver/docker-prowlarr
   prowlarr:
-    image: linuxserver/prowlarr:develop
+    image: linuxserver/prowlarr:develop-1.31.1.4959-ls216
+
     container_name: prowlarr
     restart: always
     ports:
@@ -77,7 +78,7 @@ services:
       - bridge_network
 
   bazarr:
-    image: lscr.io/linuxserver/bazarr:latest
+    image: lscr.io/linuxserver/bazarr:v1.5.1-ls290
     container_name: bazarr
     environment:
       - PUID=1000
