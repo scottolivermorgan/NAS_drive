@@ -43,6 +43,10 @@ https://www.youtube.com/watch?v=1eDUkmwDrWU
 ### Audiobookshelf
 - 2.15.0
 
+### qbittorrent
+ - version-5.0.3-r0
+
+
 
 
 # NTFY
