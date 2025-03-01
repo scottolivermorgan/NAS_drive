@@ -449,10 +449,13 @@ def backup_HD(config_data):
 
 
 def get_files_created_today(directory):
+    # List of media file extensions
+    media_extensions = ['.mp4', '.mp3', '.wav', '.avi', '.mov', '.mkv']
+
     # Get today's date
     today = datetime.date.today()
 
-    # List to hold the filenames of files created today
+    # List to hold the filenames of files created today that are media files
     files_created_today = []
 
     # Walk through the directory and its subdirectories
@@ -461,17 +464,19 @@ def get_files_created_today(directory):
             # Get the file path
             file_path = os.path.join(root, file)
             
-            # Get the creation time of the file (in seconds)
-            creation_time = os.path.getctime(file_path)
-            
-            # Convert creation time to a date object
-            file_creation_date = datetime.date.fromtimestamp(creation_time)
+            # Check if the file has a media extension
+            if any(file.lower().endswith(ext) for ext in media_extensions):
+                # Get the creation time of the file (in seconds)
+                creation_time = os.path.getctime(file_path)
+                
+                # Convert creation time to a date object
+                file_creation_date = datetime.date.fromtimestamp(creation_time)
 
-            # Compare the file creation date with today's date
-            if file_creation_date == today:
-                files_created_today.append(file_path)
+                # Compare the file creation date with today's date
+                if file_creation_date == today:
+                    files_created_today.append(file_path)
 
-    # If there are no files created today, return False
+    # If there are no media files created today, return False
     if not files_created_today:
         return False, files_created_today
 
