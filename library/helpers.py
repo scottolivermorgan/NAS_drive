@@ -6,6 +6,7 @@ import random
 import os
 from dotenv import load_dotenv
 import time
+import yaml
 
 
 def power_on(RELAY_CHANNEL, ON) -> None:
@@ -508,3 +509,40 @@ def mount_logical_volume(mount_point, volume_group, logical_volume):
         print(f"Logical volume {logical_volume} mounted at {mount_point}.")
     except subprocess.CalledProcessError as e:
         print(f"Error mounting logical volume {logical_volume}: {e}")
+
+
+def load_config_file(file_path):
+    """
+    Load a YAML config file and return the parsed data as a Python dictionary.
+    
+    :param file_path: The path to the YAML file to load.
+    :return: A dictionary representing the YAML file's contents.
+    """
+    try:
+        with open(file_path, 'r') as file:
+            config = yaml.safe_load(file)
+        return config
+    except FileNotFoundError:
+        print(f"Error: The file {file_path} was not found.")
+    except yaml.YAMLError as e:
+        print(f"Error parsing YAML file: {e}")
+    except Exception as e:
+        print(f"An unexpected error occurred: {e}")
+
+
+def execute_rsync():
+    """
+    Executes the rsync command to copy data from /media/HD_1/ to /media/BU_1/.
+    """
+    try:
+        # Command to execute rsync
+        command = ['sudo', 'rsync', '-av', '/media/HD_1/', '/media/BU_1/']
+        subprocess.run(command, check=True)
+        print("Rsync completed successfully.")
+        command = ['curl', '-d', 'Backup Succsesfull', 'http://192.168.1.9:8090/backup_status']
+        ntfy_call = subprocess.run(command, capture_output=True)
+
+    except subprocess.CalledProcessError as e:
+        print(f"Error executing rsync: {e}")
+        command = ['curl', '-d', 'Backup Succsesfull', 'http://192.168.1.9:8090/backup_status']
+        ntfy_call = subprocess.run(command, capture_output=True)

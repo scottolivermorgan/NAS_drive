@@ -6,9 +6,24 @@ sys.path.append(os.path.dirname(SCRIPT_DIR))
 
 from library.helpers import (
     activate_logical_volume, 
-    mount_logical_volume
+    mount_logical_volume,
+    load_config_file
     )
 
 if __name__ == "__main__":
-    activate_logical_volume('your_volume_group', 'backup_lv1')
-    mount_logical_volume('/mnt/backup', 'your_volume_group', 'backup_lv1')
+
+    # Load config
+    config = load_config_file("../config/config.yml")
+
+    # Activate logical volume
+    activate_logical_volume(
+        config["backup_volume_group"],
+        config["backup_logical_volumes"]["name"]
+        )
+    
+    # Mount the logival volume
+    mount_logical_volume(
+        '/media/BU_1',
+        config["backup_volume_group"],
+        config["backup_logical_volumes"]["name"]
+        )
