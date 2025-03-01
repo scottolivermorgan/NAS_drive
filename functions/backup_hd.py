@@ -7,7 +7,8 @@ sys.path.append(os.path.dirname(SCRIPT_DIR))
 from library.helpers import (
     activate_logical_volume, 
     mount_logical_volume,
-    load_config_file
+    load_config_file,
+    execute_rsync
     )
 
 if __name__ == "__main__":
@@ -27,3 +28,5 @@ if __name__ == "__main__":
         config["backup_volume_group"],
         config["backup_logical_volumes"]["name"]
         )
+    
+    execute_rsync()

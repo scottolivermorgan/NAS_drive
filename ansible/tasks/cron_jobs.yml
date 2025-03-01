@@ -13,7 +13,7 @@
     name: "External HD backup script"
     minute: "0"
     hour: "5"
-    job: "/bin/sh /home/{{ ansible_user }}/NAS_drive/functions/backup.sh"
+    job: "python /home/{{ ansible_user }}/NAS_drive/functions/back-up.py"
     environment:
       HOME: "/home/{{ ansible_user }}"
       USER: "{{ ansible_user }}"
