@@ -1,4 +1,3 @@
-ansible/main.yml
 ansible/inventory.yml
 ansible/config.yml
 venv
