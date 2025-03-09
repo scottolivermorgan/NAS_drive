@@ -6,6 +6,13 @@
     hour: "4"
     job: "apt update -q -y && apt dist-upgrade -q -y"
 
+- name: Clear APT Cache
+  become: true 
+  ansible.builtin.cron:
+    name: "Update and upgrade"
+    minute: "15"
+    hour: "4"
+    job: "apt-get clean"
 
 - name: Add HD backup to cron tab
   become: true
