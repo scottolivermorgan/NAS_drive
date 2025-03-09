@@ -9,7 +9,7 @@
 #
 #
 ##!/usr/bin/env python3
-#
+
 from gpiozero import Button
 import RPi.GPIO as GPIO
 import os
@@ -17,7 +17,6 @@ import time
 
 # Initialize button on GPIO pin 22 and LED on GPIO pin 23
 button = Button(22)
-#led = LED(23)
 
 RELAY_CHANNEL = 23
 
