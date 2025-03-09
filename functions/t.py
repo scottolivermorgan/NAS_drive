@@ -10,7 +10,7 @@ GPIO.setup(RELAY_CHANNEL, GPIO.OUT)
 
 
 # Flash the LED 10 times
-for _ in range(10):
+for _ in range(20):
     GPIO.output(RELAY_CHANNEL, GPIO.HIGH)
     time.sleep(0.25)
     GPIO.output(RELAY_CHANNEL, GPIO.LOW)
