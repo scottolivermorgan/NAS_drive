@@ -14,6 +14,20 @@
     hour: "4"
     job: "apt-get clean"
 
+###############################################################
+- name: Vacuum journal logs older than 1 week
+  become: yes
+  cron:
+    name: "Vacuum journal logs"
+    minute: "0"
+    hour: "0"
+    day: "*"
+    week: "*"
+    month: "*"
+    job: "/usr/bin/journalctl --vacuum-time=1w"
+    state: present
+#############################################################
+
 - name: Add HD backup to cron tab
   become: true
   ansible.builtin.cron:
