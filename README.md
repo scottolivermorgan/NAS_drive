@@ -167,6 +167,8 @@ If everything works, run the full suite:
 
 - Tandoor - http://192.168.1.9:8081
 
+- NTFY - http://192.168.1.9:8090
+
 
 # Pre steps
 - Rename main external hard drive to HD_1 and back up to BU_1, follow ths convention
