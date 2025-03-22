@@ -42,6 +42,7 @@
             box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
             text-align: center;
             padding: 20px;
+            position: relative; /* Position relative to place the badge */
             transition: transform 0.3s;
         }
 
@@ -68,6 +69,25 @@
 
         .card a:hover {
             color: #007bff;
+        }
+
+        /* Notification Badge */
+        .notification-badge {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            width: 20px;
+            height: 20px;
+            background-color: red;
+            color: white;
+            border-radius: 50%;
+            font-size: 12px;
+            display: none; /* Initially hidden */
+            align-items: center;
+            justify-content: center;
+            display: flex;
+            text-align: center;
+            padding: 2px;
         }
     </style>
 </head>
@@ -163,13 +183,43 @@
             Tandoor
         </a>
     </div>
-    <div class="card">
+    <div class="card" id="ntfy-card">
         <a href="http://192.168.1.9:8090" target="_blank">
             <img src="icons/ntfy.svg" alt="NTFY">
             NTFY
+            <span class="notification-badge" id="ntfy-badge">0</span>
         </a>
     </div>
 </div>
+
+<script>
+    const socket = new WebSocket('ws://192.168.1.9:8090/ws/test');
+    let notificationCount = 0;
+
+    // Function to update the notification badge
+    function updateNotificationBadge(count) {
+        const badge = document.getElementById('ntfy-badge');
+        if (count > 0) {
+            badge.style.display = 'flex'; // Show the badge
+            badge.innerText = count; // Set the notification count
+        } else {
+            badge.style.display = 'none'; // Hide the badge if no notifications
+        }
+    }
+
+    // WebSocket onmessage event handler to listen for notifications
+    socket.onmessage = (event) => {
+        // You can modify this to display the actual notification content if needed
+        notificationCount++;
+        updateNotificationBadge(notificationCount);
+    };
+
+    // Optional: If you want to clear the count after clicking the card, add this event listener
+    document.getElementById('ntfy-card').addEventListener('click', () => {
+        notificationCount = 0;
+        updateNotificationBadge(notificationCount);
+    });
+</script>
 
 </body>
 </html>
