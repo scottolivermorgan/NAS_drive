@@ -13,6 +13,15 @@ def get_file_sizes(root_dir="/"):
 
         for filename in filenames:
             file_path = os.path.join(dirpath, filename)
+            
+            # Check if the file is a symbolic link
+            if os.path.islink(file_path):
+                # Get the real path and check if it's the same as the original path
+                real_path = os.path.realpath(file_path)
+                # Avoid circular links by checking if the real path is still within the original directory
+                if real_path == file_path:
+                    continue  # Skip if it points back to itself
+
             try:
                 # Get the file size in bytes
                 file_size = os.path.getsize(file_path)
@@ -23,6 +32,10 @@ def get_file_sizes(root_dir="/"):
             except PermissionError:
                 # In case the program does not have permission to access a file
                 print(f"Permission denied: {file_path}")
+                continue
+            except OSError as e:
+                # Handle other possible OS errors, like the one you encountered
+                print(f"OSError while accessing {file_path}: {e}")
                 continue
 
     return file_sizes
