@@ -9,7 +9,7 @@ services:
     #user: UID:GID # optional: replace with your own user/group or uid/gid
     volumes:
       - /var/cache/ntfy:/var/cache/ntfy
-      - /home/{{ ansible_env.USER }}/NAS_drive/ansible/tasks/ntfy_compose/server.yml:/etc/ntfy
+      - /home/{{ ansible_env.USER }}/NAS_drive/ansible/tasks/ntfy_compose/server.yml:/etc/ntfy/server.yml
     ports:
       - 8090:80
     healthcheck: # optional: remember to adapt the host:port to your environment
