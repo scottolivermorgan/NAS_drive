@@ -7,6 +7,10 @@ def get_file_sizes(root_dir="/"):
 
     # Walk through the directory structure starting from root_dir
     for dirpath, dirnames, filenames in os.walk(root_dir):
+        # Skip the /media directory
+        if "/media" in dirpath:
+            continue
+
         for filename in filenames:
             file_path = os.path.join(dirpath, filename)
             try:
