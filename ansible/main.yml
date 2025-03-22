@@ -3,30 +3,30 @@
   vars_files:
     - config.yml
   tasks:
-    #- name: Initial setup
-    #  ansible.builtin.include_tasks:
-    #    file: tasks/initial_setup.yml
-    #
-    #- name: SWAP
-    #  ansible.builtin.include_tasks:
-    #    file: tasks/swap.yml
-#
-    #- name: GIT
-    #  ansible.builtin.include_tasks:
-    #    file: tasks/git.yml
-#
-    #- name: SSH
-    #  ansible.builtin.include_tasks:
-    #    file: tasks/ssh.yml
-#
-    #- name: Docker
-    #  ansible.builtin.include_tasks:
-    #    file: tasks/docker.yml
-#
-    - name: Shutdown & Reboot switchs
+    - name: Initial setup
       ansible.builtin.include_tasks:
-        file: tasks/shutdown_reboot_switches.yml
+        file: tasks/initial_setup.yml
+    
+    - name: SWAP
+      ansible.builtin.include_tasks:
+        file: tasks/swap.yml
 
+    - name: GIT
+      ansible.builtin.include_tasks:
+        file: tasks/git.yml
+
+    - name: SSH
+      ansible.builtin.include_tasks:
+        file: tasks/ssh.yml
+
+    - name: Docker
+      ansible.builtin.include_tasks:
+        file: tasks/docker.yml
+#
+    #- name: Shutdown & Reboot switchs
+    #  ansible.builtin.include_tasks:
+    #    file: tasks/shutdown_reboot_switches.yml
+#
     #- name: Python venv
     #  ansible.builtin.include_tasks:
     #    file: tasks/python_venv.yml 
@@ -67,9 +67,9 @@
     #  ansible.builtin.include_tasks:
     #    file: tasks/tandoor.yml
 #
-    #- name: NTFY
-    #  ansible.builtin.include_tasks:
-    #    file: tasks/ntfy.yml
+    - name: NTFY
+      ansible.builtin.include_tasks:
+        file: tasks/ntfy.yml
 #
     #- name: ARR stack
     #  ansible.builtin.include_tasks:
@@ -79,9 +79,9 @@
     #  ansible.builtin.include_tasks:
     #    file: tasks/grafana_compose.yml
 #
-    #- name: Index Page
-    #  ansible.builtin.include_tasks:
-    #    file: tasks/index_page.yml        
+    - name: Index Page
+      ansible.builtin.include_tasks:
+        file: tasks/index_page.yml        
 #
     #- name: Harden security
     #  ansible.builtin.include_tasks:
