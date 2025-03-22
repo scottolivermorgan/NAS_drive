@@ -7,8 +7,8 @@ def get_file_sizes(root_dir="/"):
 
     # Walk through the directory structure starting from root_dir
     for dirpath, dirnames, filenames in os.walk(root_dir):
-        # Skip the /media directory
-        if "/media" in dirpath:
+        # Skip the /media and /proc directories
+        if "/media" in dirpath or "/proc" in dirpath:
             continue
 
         for filename in filenames:
