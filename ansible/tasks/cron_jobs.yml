@@ -59,9 +59,10 @@
     minute: "0"
     hour: "5"
     job: "python /home/{{ ansible_user }}/NAS_drive/functions/back-up.py"
-    environment:
+    env:
       HOME: "/home/{{ ansible_user }}"
       USER: "{{ ansible_user }}"
+
 
 
 - name: Scan and notify for new media
