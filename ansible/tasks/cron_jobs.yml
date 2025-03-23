@@ -14,6 +14,16 @@
     hour: "4"
     job: "apt-get clean"
 
+
+- name: docker prune
+  become: true
+  ansible.builtin.cron:
+    name: "Clean up & prune docker"
+    minute: "25"
+    hour: "4"
+    job: "HOME=/home/{{ ansible_user }} USER={{ ansible_user }} sh /home/{{ ansible_user }}/NAS_drive/functions/docker_cleanup.sh"
+
+
 ###############################################################
 - name: Vacuum journal logs older than 1 week
   become: yes
