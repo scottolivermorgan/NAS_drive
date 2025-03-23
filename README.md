@@ -53,6 +53,7 @@ https://www.youtube.com/watch?v=1eDUkmwDrWU
 subscriptions:
 - backup_status
 - media_updated
+- routine_maintenence
 
 
 ## Log Locations Reference

@@ -43,9 +43,9 @@
     #  ansible.builtin.include_tasks:
     #    file: tasks/cron_jobs.yml
 
-    #- name: Nextcloud
-    #  ansible.builtin.include_tasks:
-    #    file: tasks/nextcloud.yml
+    - name: Nextcloud
+      ansible.builtin.include_tasks:
+        file: tasks/nextcloud.yml
 #
     #- name: Jellyfin
     #  ansible.builtin.include_tasks:
