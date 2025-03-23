@@ -34,7 +34,7 @@
     day: "*"
     week: "*"
     month: "*"
-    job: "/usr/bin/journalctl --vacuum-time=1w"
+    job: "/usr/bin/journalctl --vacuum-time=3d"
     state: present
 #############################################################
 

@@ -13,10 +13,12 @@ services:
       - db:/var/lib/mysql
     container_name: mariadb
     environment:
-      - MYSQL_ROOT_PASSWORD=ABC123
-      - MYSQL_PASSWORD=DEF456
-      - MYSQL_DATABASE=nextcloud
-      - MYSQL_USER=nextcloud
+      - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}
+      - MYSQL_PASSWORD=${MYSQL_PASSWORD}
+      - MYSQL_DATABASE=${MYSQL_DATABASE}
+      - MYSQL_USER=${MYSQL_USER}
+      - NEXTCLOUD_ADMIN_USER=${NEXTCLOUD_ADMIN_USER}
+      - NEXTCLOUD_ADMIN_PASSWORD=${NEXTCLOUD_ADMIN_PASSWORD}
     networks:
       - nextcloud_network
 
