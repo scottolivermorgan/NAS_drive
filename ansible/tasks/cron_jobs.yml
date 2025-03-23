@@ -52,16 +52,17 @@
     job: "HOME=/home/{{ ansible_user }} USER={{ ansible_user }} sudo reboot"
 
 
-- name: Add HD backup to cron tab
-  become: true
-  ansible.builtin.cron:
-    name: "External HD backup script"
-    minute: "0"
-    hour: "5"
-    job: "python /home/{{ ansible_user }}/NAS_drive/functions/back-up.py"
-    env:
-      HOME: "/home/{{ ansible_user }}"
-      USER: "{{ ansible_user }}"
+#- name: Add HD backup to cron tab
+#  become: true
+#  ansible.builtin.cron:
+#    name: "External HD backup script"
+#    minute: "0"
+#    hour: "5"
+#    job: "python /home/{{ ansible_user }}/NAS_drive/functions/back-up.py"
+#    environment:
+#      HOME: "/home/{{ ansible_user }}"
+#      USER: "{{ ansible_user }}"
+
 
 
 
@@ -71,7 +72,7 @@
     name: "Scan and notify for new media"
     minute: "0"
     hour: "17"
-    job: "HOME=/home/{{ ansible_user }} USER={{ ansible_user }} python /home/{{ ansible_user }}/NAS_drive/functions/notify_new_media.py"
+    job: "HOME=/home/scott USER=scott PYTHONPATH=/home/scott/NAS_drive python /home/scott/NAS_drive/functions/notify_new_media.py >> /home/scott/notify_new_media.log 2>&1"
 
 
 
