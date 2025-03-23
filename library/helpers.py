@@ -479,6 +479,7 @@ def get_files_created_today(directory):
 
     # If there are no media files created today, return False
     if not files_created_today:
+        print("No new files created")
         return False, files_created_today
     else:
         return True, files_created_today
