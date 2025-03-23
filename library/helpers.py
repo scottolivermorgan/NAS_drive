@@ -454,7 +454,7 @@ def get_files_created_today(directory):
     media_extensions = ['.mp4', '.mp3', '.wav', '.avi', '.mov', '.mkv']
 
     # Get today's date
-    today = datetime.date.today()
+    today = datetime.today().date()
 
     # List to hold the filenames of files created today that are media files
     files_created_today = []
@@ -470,8 +470,8 @@ def get_files_created_today(directory):
                 # Get the creation time of the file (in seconds)
                 creation_time = os.path.getctime(file_path)
                 
-                # Convert creation time to a date object
-                file_creation_date = datetime.date.fromtimestamp(creation_time)
+                # Convert creation time to a datetime object
+                file_creation_date = datetime.fromtimestamp(creation_time).date()
 
                 # Compare the file creation date with today's date
                 if file_creation_date == today:
@@ -480,7 +480,6 @@ def get_files_created_today(directory):
     # If there are no media files created today, return False
     if not files_created_today:
         return False, files_created_today
-
     else:
         return True, files_created_today
     
