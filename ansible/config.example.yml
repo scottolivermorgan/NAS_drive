@@ -26,6 +26,8 @@ backup_logical_volumes:
   - name: "backup_lv1"
     size: "100%FREE"
 
+backup_mount_point: "BU_1"
+
 docker_env:
   # ---------------------------------------------------------------------------
   # Git account

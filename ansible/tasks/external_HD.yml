@@ -43,3 +43,4 @@
   loop:
     - /media/{{ mount_point }}/Media
     - /media/{{ mount_point }}/Media/Metadata
+    - /media/{{ backup_mount_point }}
