@@ -8,13 +8,13 @@ from library.helpers import (
     activate_logical_volume, 
     mount_logical_volume,
     load_config_file,
-    execute_rsync
+    #execute_rsync
     )
 
 if __name__ == "__main__":
 
     # Load config
-    config = load_config_file("../config/config.yml")
+    config = load_config_file("../ansible/config.yml")
 
     # Activate logical volume
     activate_logical_volume(
@@ -29,4 +29,4 @@ if __name__ == "__main__":
         config["backup_logical_volumes"]["name"]
         )
     
-    execute_rsync()
+    #execute_rsync()
