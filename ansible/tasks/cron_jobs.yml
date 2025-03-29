@@ -2,45 +2,46 @@
   become: true
   ansible.builtin.cron:
     name: "Update and upgrade"
-    minute: "0"
-    hour: "4"
-    job: |
-      (apt update -q -y && apt dist-upgrade -q -y) && \
-      curl -d "output=$(apt update -q -y && apt dist-upgrade -q -y)" 'http://192.168.1.9:8090/routine_maintenence'
-
-
-- name: Clear APT Cache
-  become: true
-  ansible.builtin.cron:
-    name: "Clear APT Cache"
     minute: "15"
-    hour: "4"
+    hour: "12"
     job: |
-      (apt-get clean) && \
-      curl -d "output=APT Cache cleared successfully" 'http://192.168.1.9:8090/routine_maintenence'
+      /bin/bash -c 'export PATH="/usr/bin:/usr/sbin:/bin:/sbin"; echo "Running cron job at $(date)" >> /home/scott/cron_debug.log; /usr/bin/apt update -y >> /home/scott/cron_debug.log 2>&1; /usr/bin/apt dist-upgrade -y >> /home/scott/cron_debug.log 2>&1; /usr/bin/curl -d "output=$(cat /home/scott/cron_debug.log)" "http://192.168.1.9:8090/routine_maintenence" >> /home/scott/cron_debug.log 2>&1'
 
 
-- name: Clean up & prune docker
-  become: true
-  ansible.builtin.cron:
-    name: "Clean up & prune docker"
-    minute: "25"
-    hour: "4"
-    job: |
-      HOME=/home/{{ ansible_user }} USER={{ ansible_user }} sh /home/{{ ansible_user }}/NAS_drive/functions/docker_cleanup.sh && \
-      curl -d "output=Docker prune completed successfully" 'http://192.168.1.9:8090/routine_maintenence'
 
 
-- name: Vacuum journal logs older than 1 week
-  become: yes
-  ansible.builtin.cron:
-    name: "Vacuum journal logs"
-    minute: "30"
-    hour: "4"
-    job: |
-      /usr/bin/journalctl --vacuum-time=3d && \
-      curl -d "output=Journal logs vacuumed successfully" 'http://192.168.1.9:8090/routine_maintenence'
-    state: present
+#- name: Clear APT Cache
+#  become: true
+#  ansible.builtin.cron:
+#    name: "Clear APT Cache"
+#    minute: "15"
+#    hour: "4"
+#    job: |
+#      (apt-get clean) && \
+#      curl -d "output=APT Cache cleared successfully" 'http://192.168.1.9:8090/routine_maintenence'
+#
+#
+#- name: Clean up & prune docker
+#  become: true
+#  ansible.builtin.cron:
+#    name: "Clean up & prune docker"
+#    minute: "25"
+#    hour: "4"
+#    job: |
+#      HOME=/home/{{ ansible_user }} USER={{ ansible_user }} sh /home/{{ ansible_user }}/NAS_drive/functions/docker_cleanup.sh && \
+#      curl -d "output=Docker prune completed successfully" 'http://192.168.1.9:8090/routine_maintenence'
+#
+#
+#- name: Vacuum journal logs older than 1 week
+#  become: yes
+#  ansible.builtin.cron:
+#    name: "Vacuum journal logs"
+#    minute: "30"
+#    hour: "4"
+#    job: |
+#      /usr/bin/journalctl --vacuum-time=3d && \
+#      curl -d "output=Journal logs vacuumed successfully" 'http://192.168.1.9:8090/routine_maintenence'
+#    state: present
 
 
 - name: Daily Reboot
