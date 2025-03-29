@@ -19,14 +19,14 @@ if __name__ == "__main__":
     # Activate logical volume
     activate_logical_volume(
         config["backup_volume_group"],
-        config["backup_logical_volumes"]["name"]
+        config["backup_logical_volumes"][0]["name"]
         )
     
     # Mount the logival volume
     mount_logical_volume(
         '/media/BU_1',
         config["backup_volume_group"],
-        config["backup_logical_volumes"]["name"]
+        config["backup_logical_volumes"][0]["name"]
         )
     
     #execute_rsync()
