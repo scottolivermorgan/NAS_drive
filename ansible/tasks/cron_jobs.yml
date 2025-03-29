@@ -12,35 +12,22 @@
 #  become: true
 #  ansible.builtin.cron:
 #    name: "Clear APT Cache"
-#    minute: "37"
-#    hour: "12"
+#    minute: "10"
+#    hour: "04"
 #    job: |
 #      /bin/bash -c 'export PATH="/usr/bin:/usr/sbin:/bin:/sbin"; echo "Running cron job at $(date)" >> /home/scott/cron_clean_apt_cache.log; output=$(apt-get clean 2>&1); echo "$output" >> /home/scott/cron_clean_apt_cache.log; /usr/bin/curl -d "output=$output" "http://192.168.1.9:8090/routine_maintenence" >> /home/scott/cron_clean_apt_cache.log 2>&1'
-
-
-
-- name: Clean up & prune docker
-  become: true
-  ansible.builtin.cron:
-    name: "Clean up & prune docker"
-    minute: "30"
-    hour: "13"
-    job: |
-      HOME=/home/scott USER=scott sh /home/scott/NAS_drive/functions/docker_cleanup.sh > /home/scott/docker_cleanup.log 2>&1; output=$(cat /home/scott/docker_cleanup.log); curl -d "output=$output" 'http://192.168.1.9:8090/routine_maintenence'
-
 
 
 #- name: Clean up & prune docker
 #  become: true
 #  ansible.builtin.cron:
 #    name: "Clean up & prune docker"
-#    minute: "25"
-#    hour: "4"
+#    minute: "15"
+#    hour: "04"
 #    job: |
-#      HOME=/home/{{ ansible_user }} USER={{ ansible_user }} sh /home/{{ ansible_user }}/NAS_drive/functions/docker_cleanup.sh && \
-#      curl -d "output=Docker prune completed successfully" 'http://192.168.1.9:8090/routine_maintenence'
-#
-#
+#      HOME=/home/scott USER=scott sh /home/scott/NAS_drive/functions/docker_cleanup.sh > /home/scott/docker_cleanup.log 2>&1; output=$(cat /home/scott/docker_cleanup.log); curl -d "output=$output" 'http://192.168.1.9:8090/routine_maintenence'
+
+
 #- name: Vacuum journal logs older than 1 week
 #  become: yes
 #  ansible.builtin.cron:
@@ -51,6 +38,24 @@
 #      /usr/bin/journalctl --vacuum-time=3d && \
 #      curl -d "output=Journal logs vacuumed successfully" 'http://192.168.1.9:8090/routine_maintenence'
 #    state: present
+
+
+- name: Vacuum journal logs older than 3 days
+  become: yes
+  ansible.builtin.cron:
+    name: "Vacuum journal logs"
+    minute: "53"
+    hour: "14"
+    job: "/usr/bin/journalctl --vacuum-time=3d 2>&1 | tee /home/{{ ansible_user }}/journal_vacuum.log; curl -d \"output=$(cat /home/{{ ansible_user }}/journal_vacuum.log)\" 'http://192.168.1.9:8090/routine_maintenence'"
+    state: present
+
+
+
+
+
+
+
+
 
 
 #- name: Daily Reboot
