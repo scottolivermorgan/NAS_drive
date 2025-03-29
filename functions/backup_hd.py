@@ -14,7 +14,7 @@ from library.helpers import (
 if __name__ == "__main__":
 
     # Load config
-    config = load_config_file("../ansible/config.yml")
+    config = load_config_file("../config/config.yml")
 
     # Activate logical volume
     activate_logical_volume(
