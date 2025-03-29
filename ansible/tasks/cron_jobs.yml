@@ -1,26 +1,35 @@
-- name: Crontab - setup update and upgrade
-  become: true
-  ansible.builtin.cron:
-    name: "Update and upgrade"
-    minute: "15"
-    hour: "12"
-    job: |
-      /bin/bash -c 'export PATH="/usr/bin:/usr/sbin:/bin:/sbin"; echo "Running cron job at $(date)" >> /home/scott/cron_debug.log; /usr/bin/apt update -y >> /home/scott/cron_debug.log 2>&1; /usr/bin/apt dist-upgrade -y >> /home/scott/cron_debug.log 2>&1; /usr/bin/curl -d "output=$(cat /home/scott/cron_debug.log)" "http://192.168.1.9:8090/routine_maintenence" >> /home/scott/cron_debug.log 2>&1'
-
-
+#- name: Crontab - setup update and upgrade
+#  become: true
+#  ansible.builtin.cron:
+#    name: "Update and upgrade"
+#    minute: "00"
+#    hour: "04"
+#    job: |
+#      /bin/bash -c 'export PATH="/usr/bin:/usr/sbin:/bin:/sbin"; echo "Running cron job at $(date)" >> /home/scott/cron_update.log; /usr/bin/apt update -y >> /home/scott/cron_update.log 2>&1; /usr/bin/apt dist-upgrade -y >> /home/scott/cron_update.log 2>&1; /usr/bin/curl -d "output=$(cat /home/scott/cron_update.log)" "http://192.168.1.9:8090/routine_maintenence" >> /home/scott/cron_update.log 2>&1'
 
 
 #- name: Clear APT Cache
 #  become: true
 #  ansible.builtin.cron:
 #    name: "Clear APT Cache"
-#    minute: "15"
-#    hour: "4"
+#    minute: "37"
+#    hour: "12"
 #    job: |
-#      (apt-get clean) && \
-#      curl -d "output=APT Cache cleared successfully" 'http://192.168.1.9:8090/routine_maintenence'
-#
-#
+#      /bin/bash -c 'export PATH="/usr/bin:/usr/sbin:/bin:/sbin"; echo "Running cron job at $(date)" >> /home/scott/cron_clean_apt_cache.log; output=$(apt-get clean 2>&1); echo "$output" >> /home/scott/cron_clean_apt_cache.log; /usr/bin/curl -d "output=$output" "http://192.168.1.9:8090/routine_maintenence" >> /home/scott/cron_clean_apt_cache.log 2>&1'
+
+
+
+- name: Clean up & prune docker
+  become: true
+  ansible.builtin.cron:
+    name: "Clean up & prune docker"
+    minute: "30"
+    hour: "13"
+    job: |
+      HOME=/home/scott USER=scott sh /home/scott/NAS_drive/functions/docker_cleanup.sh > /home/scott/docker_cleanup.log 2>&1; output=$(cat /home/scott/docker_cleanup.log); curl -d "output=$output" 'http://192.168.1.9:8090/routine_maintenence'
+
+
+
 #- name: Clean up & prune docker
 #  become: true
 #  ansible.builtin.cron:
@@ -44,13 +53,13 @@
 #    state: present
 
 
-- name: Daily Reboot
-  become: true
-  ansible.builtin.cron:
-    name: "Daily reboot"
-    minute: "0"
-    hour: "7"
-    job: "HOME=/home/{{ ansible_user }} USER={{ ansible_user }} sudo reboot"
+#- name: Daily Reboot
+#  become: true
+#  ansible.builtin.cron:
+#    name: "Daily reboot"
+#    minute: "0"
+#    hour: "7"
+#    job: "HOME=/home/{{ ansible_user }} USER={{ ansible_user }} sudo reboot"
 
 
 #- name: Add HD backup to cron tab
@@ -67,13 +76,13 @@
 
 
 
-- name: Scan and notify for new media
-  become: true
-  ansible.builtin.cron:
-    name: "Scan and notify for new media"
-    minute: "0"
-    hour: "17"
-    job: "HOME=/home/scott USER=scott PYTHONPATH=/home/scott/NAS_drive python /home/scott/NAS_drive/functions/notify_new_media.py >> /home/scott/notify_new_media.log 2>&1"
+#- name: Scan and notify for new media
+#  become: true
+#  ansible.builtin.cron:
+#    name: "Scan and notify for new media"
+#    minute: "0"
+#    hour: "17"
+#    job: "HOME=/home/scott USER=scott PYTHONPATH=/home/scott/NAS_drive python /home/scott/NAS_drive/functions/notify_new_media.py >> /home/scott/notify_new_media.log 2>&1"
 
 
 
