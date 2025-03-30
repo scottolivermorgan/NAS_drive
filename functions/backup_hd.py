@@ -7,6 +7,7 @@ sys.path.append(os.path.dirname(SCRIPT_DIR))
 from library.helpers import (
     activate_logical_volume, 
     mount_logical_volume,
+    unmount_logical_volume,
     load_config_file,
     execute_rsync
     )
@@ -30,3 +31,9 @@ if __name__ == "__main__":
         )
     
     execute_rsync()
+
+    unmount_logical_volume(
+        '/media/BU_1',
+        config["backup_volume_group"],
+        config["backup_logical_volumes"][0]["name"]
+    )
