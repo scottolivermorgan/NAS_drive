@@ -530,6 +530,23 @@ def load_config_file(file_path):
         print(f"An unexpected error occurred: {e}")
 
 
+#def execute_rsync():
+#    """
+#    Executes the rsync command to copy data from /media/HD_1/ to /media/BU_1/.
+#    """
+#    try:
+#        # Command to execute rsync
+#        command = ['sudo', 'rsync', '-av', '/media/HD_1/', '/media/BU_1/']
+#        subprocess.run(command, check=True)
+#        print("Rsync completed successfully.")
+#        command = ['curl', '-d', 'Backup Succsesfull', 'http://192.168.1.9:8090/backup_status']
+#        ntfy_call = subprocess.run(command, capture_output=True)
+#
+#    except subprocess.CalledProcessError as e:
+#        print(f"Error executing rsync: {e}")
+#        command = ['curl', '-d', 'Backup Succsesfull', 'http://192.168.1.9:8090/backup_status']
+#        ntfy_call = subprocess.run(command, capture_output=True)
+
 def execute_rsync():
     """
     Executes the rsync command to copy data from /media/HD_1/ to /media/BU_1/.
@@ -537,12 +554,23 @@ def execute_rsync():
     try:
         # Command to execute rsync
         command = ['sudo', 'rsync', '-av', '/media/HD_1/', '/media/BU_1/']
-        subprocess.run(command, check=True)
+        
+        # Capture the verbose output of the rsync command
+        result = subprocess.run(command, check=True, capture_output=True, text=True)
+        
+        # Get the verbose output from the rsync command
+        rsync_output = result.stdout
+        
         print("Rsync completed successfully.")
-        command = ['curl', '-d', 'Backup Succsesfull', 'http://192.168.1.9:8090/backup_status']
-        ntfy_call = subprocess.run(command, capture_output=True)
+        
+        # Send rsync output as part of the curl request
+        curl_command = ['curl', '-d', f'Backup Successful: {rsync_output}', 'http://192.168.1.9:8090/backup_status']
+        subprocess.run(curl_command, capture_output=True)
 
     except subprocess.CalledProcessError as e:
         print(f"Error executing rsync: {e}")
-        command = ['curl', '-d', 'Backup Succsesfull', 'http://192.168.1.9:8090/backup_status']
-        ntfy_call = subprocess.run(command, capture_output=True)
+        
+        # If rsync fails, capture the error message and send it via curl
+        error_message = f"Backup Unsuccessful: {e.stderr if e.stderr else 'No error details'}"
+        curl_command = ['curl', '-d', error_message, 'http://192.168.1.9:8090/backup_status']
+        subprocess.run(curl_command, capture_output=True)

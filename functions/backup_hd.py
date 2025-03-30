@@ -8,7 +8,7 @@ from library.helpers import (
     activate_logical_volume, 
     mount_logical_volume,
     load_config_file,
-    #execute_rsync
+    execute_rsync
     )
 
 if __name__ == "__main__":
@@ -29,4 +29,4 @@ if __name__ == "__main__":
         config["backup_logical_volumes"][0]["name"]
         )
     
-    #execute_rsync()
+    execute_rsync()
