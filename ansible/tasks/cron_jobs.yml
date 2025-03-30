@@ -1,4 +1,4 @@
-- name: Create directory for config
+- name: Create directory for logs
   become: true
   ansible.builtin.file:
     path: "{{ item }}"
@@ -32,7 +32,7 @@
   become: true
   ansible.builtin.cron:
     name: "Clean up & prune docker"
-    minute: "15"
+    minute: "13"
     hour: "04"
     job: |
       HOME=/home/{{ ansible_user }} USER={{ ansible_user }} sh /home/{{ ansible_user }}/NAS_drive/functions/docker_cleanup.sh > /home/{{ ansible_user }}/NAS_drive/logs/docker_cleanup.log 2>&1; output=$(cat /home/{{ ansible_user }}/NAS_drive/logs/docker_cleanup.log); curl -d "output=$output" 'http://192.168.1.9:8090/routine_maintenence'
@@ -42,7 +42,7 @@
   become: yes
   ansible.builtin.cron:
     name: "Vacuum journal logs"
-    minute: "20"
+    minute: "15"
     hour: "04"
     job: "/usr/bin/journalctl --vacuum-time=3d 2>&1 | tee /home/{{ ansible_user }}/NAS_drive/logs/journal_vacuum.log; curl -d \"output=$(cat /home/{{ ansible_user }}/NAS_drive/logs/journal_vacuum.log)\" 'http://192.168.1.9:8090/routine_maintenence'"
     state: present
@@ -52,7 +52,7 @@
   become: true
   ansible.builtin.cron:
     name: "External HD backup script"
-    minute: "25"
+    minute: "20"
     hour: "04"
     job: "cd /home/{{ ansible_user }}/NAS_drive/functions && HOME=/home/{{ ansible_user }} USER={{ ansible_user }} PYTHONPATH=/home/{{ ansible_user }}/NAS_drive python backup_hd.py"
 
