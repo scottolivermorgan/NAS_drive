@@ -1,3 +1,13 @@
+- name: Create directory for config
+  become: true
+  ansible.builtin.file:
+    path: "{{ item }}"
+    state: directory
+    mode: '0777'
+  loop:
+    - /home/{{ ansible_env.USER }}/NAS_drive/logs
+
+
 - name: Crontab - setup update and upgrade
   become: true
   ansible.builtin.cron:
@@ -5,7 +15,7 @@
     minute: "00"
     hour: "04"
     job: |
-      /bin/bash -c 'export PATH="/usr/bin:/usr/sbin:/bin:/sbin"; echo "Running cron job at $(date)" >> /home/scott/cron_update.log; /usr/bin/apt update -y >> /home/scott/cron_update.log 2>&1; /usr/bin/apt dist-upgrade -y >> /home/scott/cron_update.log 2>&1; /usr/bin/curl -d "output=$(cat /home/scott/cron_update.log)" "http://192.168.1.9:8090/routine_maintenence" >> /home/scott/cron_update.log 2>&1'
+      /bin/bash -c 'export PATH="/usr/bin:/usr/sbin:/bin:/sbin"; echo "Running cron job at $(date)" >> /home/{{ ansible_user }}/NAS_drive/logs/cron_update.log; /usr/bin/apt update -y >> /home/{{ ansible_user }}/NAS_drive/logs/cron_update.log 2>&1; /usr/bin/apt dist-upgrade -y >> /home/{{ ansible_user }}/NAS_drive/logs/cron_update.log 2>&1; /usr/bin/curl -d "output=$(cat /home/{{ ansible_user }}/NAS_drive/logs/cron_update.log)" "http://192.168.1.9:8090/routine_maintenence" >> /home/{{ ansible_user }}/NAS_drive/logs/cron_update.log 2>&1'
 
 
 - name: Clear APT Cache
@@ -15,7 +25,7 @@
     minute: "10"
     hour: "04"
     job: |
-      /bin/bash -c 'export PATH="/usr/bin:/usr/sbin:/bin:/sbin"; echo "Running cron job at $(date)" >> /home/scott/cron_clean_apt_cache.log; output=$(apt-get clean 2>&1); echo "$output" >> /home/scott/cron_clean_apt_cache.log; /usr/bin/curl -d "output=$output" "http://192.168.1.9:8090/routine_maintenence" >> /home/scott/cron_clean_apt_cache.log 2>&1'
+      /bin/bash -c 'export PATH="/usr/bin:/usr/sbin:/bin:/sbin"; echo "Running cron job at $(date)" >> /home/{{ ansible_user }}/NAS_drive/logs/cron_clean_apt_cache.log; output=$(apt-get clean 2>&1); echo "$output" >> /home/{{ ansible_user }}/NAS_drive/logs/cron_clean_apt_cache.log; /usr/bin/curl -d "output=$output" "http://192.168.1.9:8090/routine_maintenence" >> /home/{{ ansible_user }}/NAS_drive/logs/cron_clean_apt_cache.log 2>&1'
 
 
 - name: Clean up & prune docker
@@ -25,7 +35,7 @@
     minute: "15"
     hour: "04"
     job: |
-      HOME=/home/scott USER=scott sh /home/scott/NAS_drive/functions/docker_cleanup.sh > /home/scott/docker_cleanup.log 2>&1; output=$(cat /home/scott/docker_cleanup.log); curl -d "output=$output" 'http://192.168.1.9:8090/routine_maintenence'
+      HOME=/home/{{ ansible_user }} USER={{ ansible_user }} sh /home/{{ ansible_user }}/NAS_drive/functions/docker_cleanup.sh > /home/{{ ansible_user }}/NAS_drive/logs/docker_cleanup.log 2>&1; output=$(cat /home/{{ ansible_user }}/NAS_drive/logs/docker_cleanup.log); curl -d "output=$output" 'http://192.168.1.9:8090/routine_maintenence'
 
 
 - name: Vacuum journal logs older than 3 days
@@ -34,7 +44,7 @@
     name: "Vacuum journal logs"
     minute: "20"
     hour: "04"
-    job: "/usr/bin/journalctl --vacuum-time=3d 2>&1 | tee /home/{{ ansible_user }}/journal_vacuum.log; curl -d \"output=$(cat /home/{{ ansible_user }}/journal_vacuum.log)\" 'http://192.168.1.9:8090/routine_maintenence'"
+    job: "/usr/bin/journalctl --vacuum-time=3d 2>&1 | tee /home/{{ ansible_user }}/NAS_drive/logs/journal_vacuum.log; curl -d \"output=$(cat /home/{{ ansible_user }}/NAS_drive/logs/journal_vacuum.log)\" 'http://192.168.1.9:8090/routine_maintenence'"
     state: present
 
 
@@ -44,9 +54,7 @@
     name: "External HD backup script"
     minute: "25"
     hour: "04"
-    job: "cd /home/scott/NAS_drive/functions && HOME=/home/scott USER=scott PYTHONPATH=/home/scott/NAS_drive python backup_hd.py"
-
-
+    job: "cd /home/{{ ansible_user }}/NAS_drive/functions && HOME=/home/{{ ansible_user }} USER={{ ansible_user }} PYTHONPATH=/home/{{ ansible_user }}/NAS_drive python backup_hd.py"
 
 
 - name: Daily Reboot
@@ -64,5 +72,5 @@
     name: "Scan and notify for new media"
     minute: "0"
     hour: "17"
-    job: "HOME=/home/scott USER=scott PYTHONPATH=/home/scott/NAS_drive python /home/scott/NAS_drive/functions/notify_new_media.py >> /home/scott/notify_new_media.log 2>&1"
+    job: "HOME=/home/{{ ansible_user }} USER={{ ansible_user }} PYTHONPATH=/home/{{ ansible_user }}/NAS_drive python /home/{{ ansible_user }}/NAS_drive/functions/notify_new_media.py >> /home/{{ ansible_user }}/NAS_drive/logs/notify_new_media.log 2>&1"
 
