@@ -11,7 +11,7 @@ volume_group: "{{ volume_group }}"
 logical_volumes:
   {% for lv in logical_volumes %}
   - name: "{{ lv.name }}"
-    size: "{{ lv.size }}"
+      size: "{{ lv.size }}"
   {% endfor %}
 
 mount_point: "{{ mount_point }}"
@@ -29,5 +29,5 @@ backup_volume_group: "{{ backup_volume_group }}"
 backup_logical_volumes:
   {% for backup_lv in backup_logical_volumes %}
   - name: "{{ backup_lv.name }}"
-    size: "{{ backup_lv.size }}"
+      size: "{{ backup_lv.size }}"
   {% endfor %}
