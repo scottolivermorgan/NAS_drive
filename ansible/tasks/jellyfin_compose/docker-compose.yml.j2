@@ -2,7 +2,7 @@ version: "3.7"
 
 services:
   jellyfin:
-    image: jellyfin/jellyfin:2024101405
+    image: jellyfin/jellyfin:{{ docker_env.JELLYFIN_VERSION }}
     ports:
       - 8096:8096
     volumes:

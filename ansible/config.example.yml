@@ -30,10 +30,14 @@ backup_mount_point: "BU_1"
 
 docker_env:
   # ---------------------------------------------------------------------------
+  # Jellyfin
+  # ---------------------------------------------------------------------------
+  JELLYFIN_VERSION: 2025032405
+  # ---------------------------------------------------------------------------
   # Git account
   # ---------------------------------------------------------------------------
-  GIT_USER_EMAIL: scottolivermorgan@yahoo.com
-  GIT_USER_NAME: Scott Morgan
+  GIT_USER_EMAIL: test
+  GIT_USER_NAME: test
 
   # ---------------------------------------------------------------------------
   # Swap size
@@ -61,10 +65,10 @@ docker_env:
   # https://immich.app/docs/install/environment-variables
   # ---------------------------------------------------------------------------
   # The location where your uploaded files are stored
-  UPLOAD_LOCATION: /media/HD_1/Media/Pictures/immich
+  #UPLOAD_LOCATION: /media/HD_1/Media/Pictures/immich
   
   # The location where your database files are stored
-  DB_DATA_LOCATION: /media/HD_1/Media/Metadata/immich/postgres
+  #DB_DATA_LOCATION: /media/HD_1/Media/Metadata/immich/postgres
   
   # To set a timezone, uncomment the next line and change Etc/UTC to a TZ 
   # identifier from this list: https://en.wikipedia.org/wiki/List_of_tz_database_time_zones#List
@@ -90,6 +94,8 @@ docker_env:
   MYSQL_PASSWORD: test
   MYSQL_DATABASE: test
   MYSQL_USER: test
+  NEXTCLOUD_ADMIN_USER: test
+  NEXTCLOUD_ADMIN_PASSWORD: test
   
   # ---------------------------------------------------------------------------
   # TANDOOR
