@@ -60,10 +60,8 @@
   become: true
   ansible.builtin.cron:
     name: "External HD backup script"
-    minute: "0"
-    hour: "5"
-    job: "python /home/{{ ansible_user }}/NAS_drive/functions/backup_hd.py"
-    environment:
-      HOME: "/home/{{ ansible_user }}"
-      USER: "{{ ansible_user }}"
+    minute: "21"
+    hour: "13"
+    job: "HOME=/home/scott USER=scott PYTHONPATH=/home/scott/NAS_drive python /home/{{ ansible_user }}/NAS_drive/functions/backup_hd.py"
+
 

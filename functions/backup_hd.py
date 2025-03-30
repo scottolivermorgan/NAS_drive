@@ -32,8 +32,3 @@ if __name__ == "__main__":
     
     execute_rsync()
 
-    unmount_logical_volume(
-        '/media/BU_1',
-        config["backup_volume_group"],
-        config["backup_logical_volumes"][0]["name"]
-    )

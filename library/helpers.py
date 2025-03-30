@@ -528,23 +528,6 @@ def mount_logical_volume(mount_point, volume_group, logical_volume):
         print(f"Error mounting logical volume {logical_volume}: {e}")
 
 
-def unmount_logical_volume(mount_point, volume_group, logical_volume):
-    """
-    Unmounts the logical volume from the specified mount point if it is mounted.
-    """
-    try:
-        # Check if the logical volume is mounted
-        result = subprocess.run(['mount'], capture_output=True, text=True)
-        if f'/dev/{volume_group}/{logical_volume}' in result.stdout:
-            # Command to unmount the logical volume
-            command = ['sudo', 'umount', mount_point]
-            subprocess.run(command, check=True)
-            print(f"Logical volume {logical_volume} unmounted from {mount_point}.")
-        else:
-            print(f"Logical volume {logical_volume} is not mounted at {mount_point}.")
-    except subprocess.CalledProcessError as e:
-        print(f"Error unmounting logical volume {logical_volume}: {e}")
-
 
 def load_config_file(file_path):
     """

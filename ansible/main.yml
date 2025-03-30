@@ -35,13 +35,13 @@
     #  ansible.builtin.include_tasks:
     #    file: tasks/lvm.yml
 
-    - name: External HD
-      ansible.builtin.include_tasks:
-        file: tasks/external_HD.yml
-
-    #- name: Cron jobs
+    #- name: External HD
     #  ansible.builtin.include_tasks:
-    #    file: tasks/cron_jobs.yml
+    #    file: tasks/external_HD.yml
+
+    - name: Cron jobs
+      ansible.builtin.include_tasks:
+        file: tasks/cron_jobs.yml
 
     #- name: Nextcloud
     #  ansible.builtin.include_tasks:
@@ -67,9 +67,9 @@
     #  ansible.builtin.include_tasks:
     #    file: tasks/tandoor.yml
 #
-    - name: NTFY
-      ansible.builtin.include_tasks:
-        file: tasks/ntfy.yml
+    #- name: NTFY
+    #  ansible.builtin.include_tasks:
+    #    file: tasks/ntfy.yml
 #
     #- name: ARR stack
     #  ansible.builtin.include_tasks:
