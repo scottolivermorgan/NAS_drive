@@ -440,7 +440,7 @@
             "type": "influxdb",
             "uid": "P951FEA4DE68E13C5"
           },
-          "query": "from(bucket: \"my_bucket\")\r\n  |> range(start: -30s)\r\n  |> filter(fn: (r) => r[\"_measurement\"] == \"containers\")\r\n  |> count()\r\n",
+          "query": "from(bucket: \"my_bucket\")\r\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\r\n  |> filter(fn: (r) => r[\"_measurement\"] == \"containers\")\r\n  |> filter(fn: (r) => r[\"_field\"] == \"status\")\r\n  |> sort(columns: [\"_time\"], desc: true)  // Sort by time in descending order\r\n  |> group(columns: [\"name\"])  // Group by \"name\"\r\n  |> limit(n: 1)  // Keep only the most recent row for each group\r\n  |> group()  // Remove the grouping by \"name\" to get a single table\r\n  |> count()  // Count the number of groups (tables)",
           "refId": "A"
         }
       ],
@@ -1821,8 +1821,8 @@
   },
   "timepicker": {},
   "timezone": "browser",
-  "title": "media-stack2",
-  "uid": "ee9eom2gobw8wp",
-  "version": 1,
+  "title": "media-stack",
+  "uid": "ee9eom2gobw8wu",
+  "version": 2,
   "weekStart": ""
 }
