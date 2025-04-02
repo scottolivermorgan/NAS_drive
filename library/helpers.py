@@ -496,8 +496,12 @@ def get_files_created_today(directory):
             tmp = i.split('/')[5]
             # Extract the show name and remove the year inside parentheses
             show_name = remove_dates(tmp)
-            episode = re.sub(pattern, "", i)
-            parsed_fn.append(f"{show_name} {episode}")
+            episode_match = re.search(pattern, i)
+            if episode_match:
+                episode = episode_match.group(0)  # Extract the "SxxExx" part
+            else:
+                episode = "" 
+            parsed_fn.append(f"{show_name} {episode_match}")
 
         return True, parsed_fn
     
