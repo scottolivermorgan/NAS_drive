@@ -501,7 +501,7 @@ def get_files_created_today(directory):
                 episode = episode_match.group(0)  # Extract the "SxxExx" part
             else:
                 episode = "" 
-            parsed_fn.append(f"{show_name} {episode_match}")
+            parsed_fn.append(f"{show_name} {episode}")
 
         return True, parsed_fn
     
