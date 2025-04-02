@@ -1,3 +1,4 @@
+import re
 import hashlib
 import subprocess
 import RPi.GPIO as GPIO
@@ -482,7 +483,16 @@ def get_files_created_today(directory):
         print("No new files created")
         return False, files_created_today
     else:
-        return True, files_created_today
+        parsed_fn =[]
+        # Regular expression to extract the show name and remove the year
+        for i in files_created_today:
+            # Extract the show name and remove the year inside parentheses
+            match = re.search(r"\/TV Shows\/([^\/]+) \(\d{4}\)", i)
+            if match:
+                show_name = match.group(1)
+                parsed_fn.append(show_name)
+
+        return True, parsed_fn
     
 
 def activate_logical_volume(volume_group, logical_volume):
