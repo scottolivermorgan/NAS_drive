@@ -451,6 +451,11 @@ def backup_HD(config_data):
 
 
 def get_files_created_today(directory):
+
+    def remove_dates(text):
+        # Regular expression to remove any date inside parentheses
+        return re.sub(r'\s\(\d{4}\)', '', text)
+    
     # List of media file extensions
     media_extensions = ['.mp4', '.mp3', '.wav', '.avi', '.mov', '.mkv']
 
@@ -486,11 +491,10 @@ def get_files_created_today(directory):
         parsed_fn =[]
         # Regular expression to extract the show name and remove the year
         for i in files_created_today:
+            tmp = i.split('/')[4]
             # Extract the show name and remove the year inside parentheses
-            match = re.search(r"\/TV Shows\/([^\/]+) \(\d{4}\)", i)
-            if match:
-                show_name = match.group(1)
-                parsed_fn.append(show_name)
+            show_name = remove_dates(tmp)
+            parsed_fn.append(show_name)
 
         return True, parsed_fn
     
