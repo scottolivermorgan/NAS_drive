@@ -488,13 +488,16 @@ def get_files_created_today(directory):
         print("No new files created")
         return False, files_created_today
     else:
+        # Define the pattern for matching "S01E01", where the numbers can vary
+        pattern = r"S\d{2}E\d{2}"
         parsed_fn =[]
         # Regular expression to extract the show name and remove the year
         for i in files_created_today:
-            tmp = i.split('/')[4]
+            tmp = i.split('/')[5]
             # Extract the show name and remove the year inside parentheses
             show_name = remove_dates(tmp)
-            parsed_fn.append(show_name)
+            episode = re.sub(pattern, "", i)
+            parsed_fn.append(f"{show_name} {episode}")
 
         return True, parsed_fn
     
