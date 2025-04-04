@@ -604,7 +604,7 @@ def execute_rsync():
         
         # If there are any lines in the output, take the first and last lines
         if rsync_output:
-            rsync_output = f"{rsync_output[0]}\n{rsync_output[-1]}"
+            rsync_output = f"{rsync_output[0]}\n{rsync_output[1]}\n ... \n{rsync_output[-2]}\n{rsync_output[-1]}"
         else:
             rsync_output = "No output from rsync"
         
