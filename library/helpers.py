@@ -586,6 +586,8 @@ def load_config_file(file_path):
 #        command = ['curl', '-d', 'Backup Succsesfull', 'http://192.168.1.9:8090/backup_status']
 #        ntfy_call = subprocess.run(command, capture_output=True)
 
+import subprocess
+
 def execute_rsync():
     """
     Executes the rsync command to copy data from /media/HD_1/ to /media/BU_1/.
@@ -598,7 +600,13 @@ def execute_rsync():
         result = subprocess.run(command, check=True, capture_output=True, text=True)
         
         # Get the verbose output from the rsync command
-        rsync_output = result.stdout
+        rsync_output = result.stdout.splitlines()
+        
+        # If there are any lines in the output, take the first and last lines
+        if rsync_output:
+            rsync_output = f"{rsync_output[0]}\n{rsync_output[-1]}"
+        else:
+            rsync_output = "No output from rsync"
         
         print("Rsync completed successfully.")
         
