@@ -517,19 +517,7 @@ def activate_logical_volume(volume_group, logical_volume):
         print(f"Logical volume {logical_volume} activated successfully.")
     except subprocess.CalledProcessError as e:
         print(f"Error activating logical volume {logical_volume}: {e}")
-        
 
-#def mount_logical_volume(mount_point, volume_group, logical_volume):
-#    """
-#    Mounts the logical volume to the specified mount point.
-#    """
-#    try:
-#        # Command to mount the logical volume
-#        command = ['sudo', 'mount', f'/dev/{volume_group}/{logical_volume}', mount_point]
-#        subprocess.run(command, check=True)
-#        print(f"Logical volume {logical_volume} mounted at {mount_point}.")
-#    except subprocess.CalledProcessError as e:
-#        print(f"Error mounting logical volume {logical_volume}: {e}")
 
 def mount_logical_volume(mount_point, volume_group, logical_volume):
     """
@@ -567,26 +555,6 @@ def load_config_file(file_path):
         print(f"Error parsing YAML file: {e}")
     except Exception as e:
         print(f"An unexpected error occurred: {e}")
-
-
-#def execute_rsync():
-#    """
-#    Executes the rsync command to copy data from /media/HD_1/ to /media/BU_1/.
-#    """
-#    try:
-#        # Command to execute rsync
-#        command = ['sudo', 'rsync', '-av', '/media/HD_1/', '/media/BU_1/']
-#        subprocess.run(command, check=True)
-#        print("Rsync completed successfully.")
-#        command = ['curl', '-d', 'Backup Succsesfull', 'http://192.168.1.9:8090/backup_status']
-#        ntfy_call = subprocess.run(command, capture_output=True)
-#
-#    except subprocess.CalledProcessError as e:
-#        print(f"Error executing rsync: {e}")
-#        command = ['curl', '-d', 'Backup Succsesfull', 'http://192.168.1.9:8090/backup_status']
-#        ntfy_call = subprocess.run(command, capture_output=True)
-
-import subprocess
 
 
 def execute_rsync():
