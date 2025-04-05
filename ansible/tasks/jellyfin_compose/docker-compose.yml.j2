@@ -9,4 +9,4 @@ services:
       - "/media/{{ mount_point }}/Media/Metadata/jellyfin/config:/config"
       - "/media/{{ mount_point }}/Media/Metadata/jellyfin/cache:/cache"
       - /media/{{ mount_point }}:/media/{{ mount_point }}
-    restart: unless-stopped
+    restart: always

@@ -8,7 +8,7 @@ services:
   db:
     image: mariadb:11.4.2
     command: --transaction-isolation=READ-COMMITTED --binlog-format=ROW
-    restart: unless-stopped
+    restart: always
     volumes:
       - db:/var/lib/mysql
     container_name: mariadb
@@ -30,7 +30,7 @@ services:
     volumes:
       - nextcloud:/var/www/html
       - /media/{{ mount_point }}:/media/{{ mount_point }}
-    restart: unless-stopped
+    restart: always
     environment:
       - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}
       - MYSQL_PASSWORD=${MYSQL_PASSWORD}

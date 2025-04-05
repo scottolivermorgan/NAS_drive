@@ -8,7 +8,7 @@ services:
       - ./.env
 
   web_recipes:
-    restart: unless-stopped
+    restart: always
     image: vabene1111/recipes:1.5.24
 
     env_file:
@@ -23,7 +23,7 @@ services:
 
   nginx_recipes:
     image: nginx:mainline-alpine
-    restart: unless-stopped
+    restart: always
     ports:
       - 8081:80
     env_file:

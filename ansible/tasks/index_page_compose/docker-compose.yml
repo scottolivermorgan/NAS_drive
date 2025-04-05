@@ -3,6 +3,6 @@ services:
     build:
       context: .
     container_name: Homepage
-    restart: unless-stopped
+    restart: always
     ports:
       - "1111:80"  # Map port 80 in the container to port 1111 on the host

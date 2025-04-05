@@ -9,7 +9,6 @@ from library.helpers import (
     activate_logical_volume, 
     mount_logical_volume,
     load_config_file,
-    stop_all_docker_containers,
     execute_rsync
     )
 
@@ -45,7 +44,7 @@ if __name__ == "__main__":
         config["backup_logical_volumes"][0]["name"]
         )
     
-    script_path = './stop_docker_containers.sh'  # Path to your bash script
+    script_path = './docker_compose_stop.sh'  # Path to your bash script
     docker_stop = run_bash_script(script_path)
     
     if docker_stop == 0:

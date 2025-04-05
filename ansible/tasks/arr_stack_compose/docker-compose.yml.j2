@@ -16,7 +16,7 @@ services:
       - 9080:9080
       - 6881:6881
       - 6881:6881/udp
-    restart: unless-stopped
+    restart: always
     networks:
       - bridge_network
 
@@ -90,7 +90,7 @@ services:
       - /media/{{ mount_point }}/Media/TV Shows:/tv
     ports:
       - 6767:6767
-    restart: unless-stopped
+    restart: always
     networks:
       - bridge_network
 
