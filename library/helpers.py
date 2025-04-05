@@ -588,6 +588,37 @@ def load_config_file(file_path):
 
 import subprocess
 
+def stop_all_docker_containers():
+    try:
+        # Get a list of all running container IDs
+        result = subprocess.run(['docker', 'ps', '-q'], stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
+        
+        if result.returncode != 0:
+            print("Error getting list of running containers:", result.stderr)
+            return 1
+        
+        # If there are any running containers
+        container_ids = result.stdout.strip().split('\n')
+        
+        if not container_ids:
+            print("No running containers to stop.")
+            return 1
+        
+        # Stop all the containers
+        stop_result = subprocess.run(['docker', 'stop'] + container_ids, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
+        
+        if stop_result.returncode != 0:
+            print("Error stopping containers:", stop_result.stderr)
+            return 1
+        else:
+            print("Successfully stopped all running containers.")
+            return 0
+    
+    except Exception as e:
+        print(f"An error occurred: {e}")
+        return 1
+
+
 def execute_rsync():
     """
     Executes the rsync command to copy data from /media/HD_1/ to /media/BU_1/.

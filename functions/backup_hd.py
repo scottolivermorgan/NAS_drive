@@ -8,6 +8,7 @@ from library.helpers import (
     activate_logical_volume, 
     mount_logical_volume,
     load_config_file,
+    stop_all_docker_containers,
     execute_rsync
     )
 
@@ -28,6 +29,10 @@ if __name__ == "__main__":
         config["backup_volume_group"],
         config["backup_logical_volumes"][0]["name"]
         )
+    docker_stop = stop_all_docker_containers()
     
-    execute_rsync()
+    if docker_stop == 1:
+        execute_rsync()
+    else:
+        print("Error stopping docker containers")
 

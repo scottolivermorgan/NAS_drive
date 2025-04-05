@@ -1,6 +1,6 @@
 services:
   db_recipes:
-    restart: always
+    restart: unless-stopped
     image: postgres:16-alpine
     volumes:
       - /media/{{ mount_point }}/Media/Recipes/tandoor/postgres:/var/lib/postgresql/data
@@ -8,7 +8,7 @@ services:
       - ./.env
 
   web_recipes:
-    restart: always
+    restart: unless-stopped
     image: vabene1111/recipes:1.5.24
 
     env_file:
@@ -23,7 +23,7 @@ services:
 
   nginx_recipes:
     image: nginx:mainline-alpine
-    restart: always
+    restart: unless-stopped
     ports:
       - 8081:80
     env_file:
