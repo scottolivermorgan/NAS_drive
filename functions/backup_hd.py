@@ -31,7 +31,7 @@ if __name__ == "__main__":
         )
     docker_stop = stop_all_docker_containers()
     
-    if docker_stop == 1:
+    if docker_stop == 0:
         execute_rsync()
     else:
         print("Error stopping docker containers")
