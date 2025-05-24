@@ -8,9 +8,7 @@ prune_docker_resources() {
 }
 
 # Prune volumes, system, containers, images, and builders
-prune_docker_resources "volume"
 prune_docker_resources "system"
-prune_docker_resources "container"
 prune_docker_resources "image"
 prune_docker_resources "builder"
 

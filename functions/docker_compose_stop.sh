@@ -16,5 +16,5 @@ directories=(
 # Loop over each directory and bring down the services
 for dir in "${directories[@]}"; do
   cd "$dir" || { echo "Failed to cd into $dir"; exit 1; }
-  docker-compose down -v
+  docker-compose stop
 done
