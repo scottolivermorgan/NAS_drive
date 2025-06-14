@@ -234,35 +234,35 @@ komga:
 ### qbittorrent
  - version-5.0.3-r0
 # Serices
-- Audiobookshelf - http://192.168.1.9:13378
+- Audiobookshelf - http://192.168.2.179:13378
 
-- Bazarr - http://192.168.1.9:6767
+- Bazarr - http://192.168.2.179:6767
 
-- Glances - http://192.168.1.9:61208
+- Glances - http://192.168.2.179:61208
 
-- Grafana - http://192.168.1.9:3001
+- Grafana - http://192.168.2.179:3001
 
-- Immich - http://192.168.1.9:2283
+- Immich - http://192.168.2.179:2283
 
-- InfluxDB - http://192.168.1.9:8086
+- InfluxDB - http://192.168.2.179:8086
 
-- Jellyfin - http://192.168.1.9:8096
+- Jellyfin - http://192.168.2.179:8096
 
-- Komga - http://192.168.1.9:25600
+- Komga - http://192.168.2.179:25600
 
-- Nextcloud - http://192.168.1.9:8000
+- Nextcloud - http://192.168.2.179:8000
 
-- Prowlarr - http://192.168.1.9:9696/
+- Prowlarr - http://192.168.2.179:9696/
 
-- qbittorrent - http://192.168.1.9:9080
+- qbittorrent - http://192.168.2.179:9080
 
-- Radarr - http://192.168.1.9:7878
+- Radarr - http://192.168.2.179:7878
 
-- Sonarr - http://192.168.1.9:8989
+- Sonarr - http://192.168.2.179:8989
 
-- Tandoor - http://192.168.1.9:8081
+- Tandoor - http://192.168.2.179:8081
 
-- NTFY - http://192.168.1.9:8090
+- NTFY - http://192.168.2.179:8090
 
 
 

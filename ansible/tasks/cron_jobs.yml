@@ -15,7 +15,7 @@
     minute: "00"
     hour: "04"
     job: |
-      /bin/bash -c 'export PATH="/usr/bin:/usr/sbin:/bin:/sbin"; echo "Running cron job at $(date)" >> /home/{{ ansible_user }}/NAS_drive/logs/cron_update.log; /usr/bin/apt update -y >> /home/{{ ansible_user }}/NAS_drive/logs/cron_update.log 2>&1; /usr/bin/apt dist-upgrade -y >> /home/{{ ansible_user }}/NAS_drive/logs/cron_update.log 2>&1; /usr/bin/curl -d "output=$(cat /home/{{ ansible_user }}/NAS_drive/logs/cron_update.log)" "http://192.168.1.9:8090/routine_maintenence" >> /home/{{ ansible_user }}/NAS_drive/logs/cron_update.log 2>&1'
+      /bin/bash -c 'export PATH="/usr/bin:/usr/sbin:/bin:/sbin"; echo "Running cron job at $(date)" >> /home/{{ ansible_user }}/NAS_drive/logs/cron_update.log; /usr/bin/apt update -y >> /home/{{ ansible_user }}/NAS_drive/logs/cron_update.log 2>&1; /usr/bin/apt dist-upgrade -y >> /home/{{ ansible_user }}/NAS_drive/logs/cron_update.log 2>&1; /usr/bin/curl -d "output=$(cat /home/{{ ansible_user }}/NAS_drive/logs/cron_update.log)" "http://192.168.2.179:8090/routine_maintenence" >> /home/{{ ansible_user }}/NAS_drive/logs/cron_update.log 2>&1'
 
 
 - name: Clear APT Cache
@@ -25,7 +25,7 @@
     minute: "10"
     hour: "04"
     job: |
-      /bin/bash -c 'export PATH="/usr/bin:/usr/sbin:/bin:/sbin"; echo "Running cron job at $(date)" >> /home/{{ ansible_user }}/NAS_drive/logs/cron_clean_apt_cache.log; output=$(apt-get clean 2>&1); echo "$output" >> /home/{{ ansible_user }}/NAS_drive/logs/cron_clean_apt_cache.log; /usr/bin/curl -d "output=$output" "http://192.168.1.9:8090/routine_maintenence" >> /home/{{ ansible_user }}/NAS_drive/logs/cron_clean_apt_cache.log 2>&1'
+      /bin/bash -c 'export PATH="/usr/bin:/usr/sbin:/bin:/sbin"; echo "Running cron job at $(date)" >> /home/{{ ansible_user }}/NAS_drive/logs/cron_clean_apt_cache.log; output=$(apt-get clean 2>&1); echo "$output" >> /home/{{ ansible_user }}/NAS_drive/logs/cron_clean_apt_cache.log; /usr/bin/curl -d "output=$output" "http://192.168.2.179:8090/routine_maintenence" >> /home/{{ ansible_user }}/NAS_drive/logs/cron_clean_apt_cache.log 2>&1'
 
 
 - name: Clean up & prune docker
@@ -35,7 +35,7 @@
     minute: "13"
     hour: "04"
     job: |
-      HOME=/home/{{ ansible_user }} USER={{ ansible_user }} sh /home/{{ ansible_user }}/NAS_drive/functions/docker_cleanup.sh > /home/{{ ansible_user }}/NAS_drive/logs/docker_cleanup.log 2>&1; output=$(cat /home/{{ ansible_user }}/NAS_drive/logs/docker_cleanup.log); curl -d "output=$output" 'http://192.168.1.9:8090/routine_maintenence'
+      HOME=/home/{{ ansible_user }} USER={{ ansible_user }} sh /home/{{ ansible_user }}/NAS_drive/functions/docker_cleanup.sh > /home/{{ ansible_user }}/NAS_drive/logs/docker_cleanup.log 2>&1; output=$(cat /home/{{ ansible_user }}/NAS_drive/logs/docker_cleanup.log); curl -d "output=$output" 'http://192.168.2.179:8090/routine_maintenence'
 
 
 - name: Vacuum journal logs older than 3 days
@@ -44,7 +44,7 @@
     name: "Vacuum journal logs"
     minute: "15"
     hour: "04"
-    job: "/usr/bin/journalctl --vacuum-time=3d 2>&1 | tee /home/{{ ansible_user }}/NAS_drive/logs/journal_vacuum.log; curl -d \"output=$(cat /home/{{ ansible_user }}/NAS_drive/logs/journal_vacuum.log)\" 'http://192.168.1.9:8090/routine_maintenence'"
+    job: "/usr/bin/journalctl --vacuum-time=3d 2>&1 | tee /home/{{ ansible_user }}/NAS_drive/logs/journal_vacuum.log; curl -d \"output=$(cat /home/{{ ansible_user }}/NAS_drive/logs/journal_vacuum.log)\" 'http://192.168.2.179:8090/routine_maintenence'"
     state: present
 
 

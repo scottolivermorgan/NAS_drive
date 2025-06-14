@@ -12,7 +12,7 @@ if __name__ == "__main__":
             new_files_message = 'New Media available: ' + ', '.join(new_files)
 
             # Prepare the command with the updated message
-            command = ['curl', '-d', new_files_message, 'http://192.168.1.9:8090/media_updated']
+            command = ['curl', '-d', new_files_message, 'http://192.168.2.179:8090/media_updated']
             
             # Make the API call
             ntfy_call = subprocess.run(command, capture_output=True)

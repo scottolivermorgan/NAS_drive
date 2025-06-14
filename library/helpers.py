@@ -387,7 +387,7 @@ def backup_HD(config_data):
 
     if False in checks:
         print("Verification failed")
-        command = ['curl', '-d', 'Hashchecks failed, backup failed', 'http://192.168.1.9:8090/backup_status']
+        command = ['curl', '-d', 'Hashchecks failed, backup failed', 'http://192.168.2.179:8090/backup_status']
         ntfy_call = subprocess.run(command, capture_output=True)
         return 1
     else:
@@ -429,10 +429,10 @@ def backup_HD(config_data):
                     text=True,
                 )
                 if sync.returncode != 0:
-                    command = ['curl', '-d', 'rsync backup failed', 'http://192.168.1.9:8090/backup_status']
+                    command = ['curl', '-d', 'rsync backup failed', 'http://192.168.2.179:8090/backup_status']
                     ntfy_call = subprocess.run(command, capture_output=True)
                 else:
-                    command = ['curl', '-d', 'Backup Succsesfull', 'http://192.168.1.9:8090/backup_status']
+                    command = ['curl', '-d', 'Backup Succsesfull', 'http://192.168.2.179:8090/backup_status']
                     ntfy_call = subprocess.run(command, capture_output=True)
                 # Write stdout and stderr to both console and log file
                 print(sync.stdout)
@@ -580,7 +580,7 @@ def execute_rsync():
         print("Rsync completed successfully.")
         
         # Send rsync output as part of the curl request
-        curl_command = ['curl', '-d', f'Backup Successful: {rsync_output}', 'http://192.168.1.9:8090/backup_status']
+        curl_command = ['curl', '-d', f'Backup Successful: {rsync_output}', 'http://192.168.2.179:8090/backup_status']
         subprocess.run(curl_command, capture_output=True)
 
     except subprocess.CalledProcessError as e:
@@ -588,5 +588,5 @@ def execute_rsync():
         
         # If rsync fails, capture the error message and send it via curl
         error_message = f"Backup Unsuccessful: {e.stderr if e.stderr else 'No error details'}"
-        curl_command = ['curl', '-d', error_message, 'http://192.168.1.9:8090/backup_status']
+        curl_command = ['curl', '-d', error_message, 'http://192.168.2.179:8090/backup_status']
         subprocess.run(curl_command, capture_output=True)
