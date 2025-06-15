@@ -6,6 +6,11 @@ services:
       - /media/{{ mount_point }}/Media/Recipes/tandoor/postgres:/var/lib/postgresql/data
     env_file:
       - ./.env
+    healthcheck:
+      test: ["CMD", "pg_isready", "-U", "postgres"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
 
   web_recipes:
     restart: always
