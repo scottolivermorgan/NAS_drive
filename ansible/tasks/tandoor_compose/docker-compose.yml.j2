@@ -1,6 +1,6 @@
 services:
   db_recipes:
-    restart: unless-stopped
+    restart: always
     image: postgres:16-alpine
     volumes:
       - /media/{{ mount_point }}/Media/Recipes/tandoor/postgres:/var/lib/postgresql/data
