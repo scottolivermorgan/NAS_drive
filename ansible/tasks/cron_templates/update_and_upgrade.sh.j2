@@ -1,0 +1,28 @@
+/bin/bash -c '
+export PATH="/usr/bin:/usr/sbin:/bin:/sbin";
+LOG="/home/{{ ansible_user }}/NAS_drive/logs/cron_update.log";
+SUMMARY="/tmp/cron_update_summary.txt";
+
+{
+  echo "Running cron job at $(date)";
+  apt_output=$(apt update -y 2>&1);
+  echo "$apt_output";
+
+  upgrade_output=$(apt dist-upgrade -y 2>&1);
+  echo "$upgrade_output";
+
+  # Get number of packages upgraded
+  upgraded_count=$(echo "$upgrade_output" | grep -Po "^\d+(?= upgraded)");
+
+  echo "Packages upgraded: ${upgraded_count:-0}";
+} >> "$LOG"
+
+# Prepare summary for notification
+{
+  echo "Cron job ran at $(date)";
+  echo "Packages upgraded: ${upgraded_count:-0}";
+} > "$SUMMARY"
+
+# Send summary to notification server
+/usr/bin/curl -d "output=$(cat $SUMMARY)" "http://192.168.2.179:8090/routine_maintenence" >> "$LOG" 2>&1
+'
