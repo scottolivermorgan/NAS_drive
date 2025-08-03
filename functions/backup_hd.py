@@ -29,15 +29,18 @@ def run_bash_script(script_path):
 if __name__ == "__main__":
 
     # Load config
+    print("loading config")
     config = load_config_file("../config/config.yml")
 
     # Activate logical volume
+    print("activating logical volumes")
     activate_logical_volume(
         config["backup_volume_group"],
         config["backup_logical_volumes"][0]["name"]
         )
     
     # Mount the logival volume
+    print("mounting logical volumnes")
     mount_logical_volume(
         '/media/BU_1',
         config["backup_volume_group"],
@@ -48,6 +51,7 @@ if __name__ == "__main__":
     docker_stop = run_bash_script(script_path)
     
     if docker_stop == 0:
+        print("containers stopped sucsessfully - executing rsync")
         execute_rsync()
     else:
         print("Error stopping docker containers")
