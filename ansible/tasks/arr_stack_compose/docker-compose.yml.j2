@@ -10,7 +10,7 @@ services:
       - WEBUI_PORT=9080
       - TORRENTING_PORT=6881
     volumes:
-      - /media/{{ mount_point }}/Media/Metadata/qbittorrent/appdata:/config
+      - /media/{{ mount_point }}/Media/metadata/qbittorrent/appdata:/config
       - /media/{{ mount_point }}/Media/Downloads/completed:/downloads #optional
     ports:
       - 9080:9080
@@ -33,7 +33,7 @@ services:
       - PUID=1000
       - TZ=Europe/Amsterdam
     volumes:
-      - /media/{{ mount_point }}/Media/Metadata/radarr:/config
+      - /media/{{ mount_point }}/Media/metadata/radarr:/config
       - /media/{{ mount_point }}/Media/Movies:/movies
       - /media/{{ mount_point }}/Media/Downloads/completed:/downloads
     networks:
@@ -51,7 +51,7 @@ services:
       - PUID=1000
       - TZ=Europe/Amsterdam
     volumes:
-      - /media/{{ mount_point }}/Media/Metadata/sonarr:/config
+      - /media/{{ mount_point }}/Media/metadata/sonarr:/config
       - /media/{{ mount_point }}/Media/TV Shows:/tv
       - /media/{{ mount_point }}/Media/Downloads/completed:/downloads
     networks:
@@ -72,7 +72,7 @@ services:
       - PUID=1000
       - TZ=Europe/Amsterdam
     volumes:
-      - /media/{{ mount_point }}/Media/Metadata/prowlarr:/config
+      - /media/{{ mount_point }}/Media/metadata/prowlarr:/config
       - /media/{{ mount_point }}/Media/Downloads/watch:/downloads
     networks:
       - bridge_network
@@ -85,7 +85,7 @@ services:
       - PGID=1000
       - TZ=Etc/UTC
     volumes:
-      - /media/{{ mount_point }}/Media/Metadata/bazarr:/config
+      - /media/{{ mount_point }}/Media/metadata/bazarr:/config
       - /media/{{ mount_point }}/Media/Movies:/movies
       - /media/{{ mount_point }}/Media/TV Shows:/tv
     ports:
