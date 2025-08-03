@@ -515,8 +515,10 @@ def activate_logical_volume(volume_group, logical_volume):
         command = ['sudo', 'lvchange', '-ay', f'{volume_group}/{logical_volume}']
         subprocess.run(command, check=True)
         print(f"Logical volume {logical_volume} activated successfully.")
+        return True
     except subprocess.CalledProcessError as e:
         print(f"Error activating logical volume {logical_volume}: {e}")
+        return False
 
 
 def mount_logical_volume(mount_point, volume_group, logical_volume):
@@ -528,13 +530,16 @@ def mount_logical_volume(mount_point, volume_group, logical_volume):
         result = subprocess.run(['mount'], capture_output=True, text=True)
         if f'/dev/{volume_group}/{logical_volume}' in result.stdout:
             print(f"Logical volume {logical_volume} is already mounted at {mount_point}.")
+            return True
         else:
             # Command to mount the logical volume
             command = ['sudo', 'mount', f'/dev/{volume_group}/{logical_volume}', mount_point]
             subprocess.run(command, check=True)
             print(f"Logical volume {logical_volume} mounted at {mount_point}.")
+            return True
     except subprocess.CalledProcessError as e:
         print(f"Error mounting logical volume {logical_volume}: {e}")
+        return False
 
 
 

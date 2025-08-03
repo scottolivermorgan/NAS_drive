@@ -34,25 +34,27 @@ if __name__ == "__main__":
 
     # Activate logical volume
     print("activating logical volumes")
-    activate_logical_volume(
+    activate_lvm = activate_logical_volume(
         config["backup_volume_group"],
         config["backup_logical_volumes"][0]["name"]
         )
     
-    # Mount the logival volume
-    print("mounting logical volumnes")
-    mount_logical_volume(
-        '/media/BU_1',
-        config["backup_volume_group"],
-        config["backup_logical_volumes"][0]["name"]
-        )
+    if activate_lvm:
+        # Mount the logival volume
+        print("mounting logical volumnes")
+        mount_lvm = mount_logical_volume(
+            '/media/BU_1',
+            config["backup_volume_group"],
+            config["backup_logical_volumes"][0]["name"]
+            )
+
+        if mount_lvm:
+            script_path = './docker_compose_stop.sh'  # Path to your bash script
+            docker_stop = run_bash_script(script_path)
     
-    script_path = './docker_compose_stop.sh'  # Path to your bash script
-    docker_stop = run_bash_script(script_path)
-    
-    if docker_stop == 0:
-        print("containers stopped sucsessfully - executing rsync")
-        execute_rsync()
-    else:
-        print("Error stopping docker containers")
+            if docker_stop == 0:
+                print("containers stopped sucsessfully - executing rsync")
+                execute_rsync()
+            else:
+                print("Error stopping docker containers")
 
