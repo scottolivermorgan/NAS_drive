@@ -1,30 +1,3 @@
-#- name: Create directory for logs
-#  become: true
-#  ansible.builtin.file:
-#    path: "{{ item }}"
-#    state: directory
-#    mode: '0777'
-#  loop:
-#    - /home/{{ ansible_env.USER }}/NAS_drive/logs
-#    - /home/{{ ansible_env.USER }}/NAS_drive/functions/cron_jobs
-#
-#
-#- name: Template the update and upgrade file
-#  template:
-#    src: cron_templates/update_and_upgrade.sh.j2
-#    dest: /home/{{ ansible_env.USER }}/NAS_drive/ansible/functions/cron_jobs/update_and_upgrade.sh
-#    mode: '0755'
-#
-#
-#- name: Crontab - setup update and upgrade
-#  become: true
-#  ansible.builtin.cron:
-#    name: "Update and upgrade"
-#    minute: "00"
-#    hour: "04"
-#    job: |
-#      /bin/bash sh /home/{{ ansible_env.USER }}/NAS_drive/ansible/functions/cron_jobs/update_and_upgrade.sh
-
 - name: Create directory for logs and cron scripts
   become: true
   ansible.builtin.file:
@@ -35,11 +8,13 @@
     - "/home/{{ ansible_env.USER }}/NAS_drive/logs"
     - "/home/{{ ansible_env.USER }}/NAS_drive/functions/cron_jobs"
 
+
 - name: Template the update and upgrade script
   ansible.builtin.template:
     src: "cron_templates/update_and_upgrade.sh.j2"
     dest: "/home/{{ ansible_env.USER }}/NAS_drive/functions/cron_jobs/update_and_upgrade.sh"
     mode: '0777'
+
 
 - name: Crontab - setup update and upgrade
   become: true
