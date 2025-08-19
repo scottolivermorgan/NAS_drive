@@ -50,12 +50,12 @@ docker_env:
   # Visit the docs to find more https://docs.tandoor.dev/system/configuration/
   # ---------------------------------------------------------------------------
   INFLUXDB_USERNAME: admin
-  INFLUXDB_PASSWORD: test
+  INFLUXDB_PASSWORD: test_test
   INFLUXDB_ORG: my_org
   INFLUXDB_BUCKET: my_bucket
   INFLUXDB_ADMIN_TOKEN: a_secure_admin_token
   GRAFANA_USERNAME: admin
-  GRAFANA_PASSWORD: test
+  GRAFANA_PASSWORD: test_test
   
   # ---------------------------------------------------------------------------
   # IMMICH & POSTGRES

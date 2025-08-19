@@ -38,10 +38,10 @@
     #- name: External HD
     #  ansible.builtin.include_tasks:
     #    file: tasks/external_HD.yml
-
-    - name: Cron jobs
-      ansible.builtin.include_tasks:
-        file: tasks/cron_jobs.yml
+#
+    #- name: Cron jobs
+    #  ansible.builtin.include_tasks:
+    #    file: tasks/cron_jobs.yml
 
     #- name: Nextcloud
     #  ansible.builtin.include_tasks:
@@ -58,7 +58,7 @@
     #- name: Audiobookshelf
     #  ansible.builtin.include_tasks:
     #    file: tasks/audiobookshelf.yml
-#
+
     #- name: Immich
     #  ansible.builtin.include_tasks:
     #    file: tasks/immich.yml
@@ -66,7 +66,7 @@
     #- name: Tandoor
     #  ansible.builtin.include_tasks:
     #    file: tasks/tandoor.yml
-#
+
     #- name: NTFY
     #  ansible.builtin.include_tasks:
     #    file: tasks/ntfy.yml
@@ -74,11 +74,11 @@
     #- name: ARR stack
     #  ansible.builtin.include_tasks:
     #    file: tasks/arr_stack.yml
-#
-    #- name: Grafana
-    #  ansible.builtin.include_tasks:
-    #    file: tasks/grafana_compose.yml
-#
+
+    - name: Grafana
+      ansible.builtin.include_tasks:
+        file: tasks/grafana_compose.yml
+
     #- name: Index Page
     #  ansible.builtin.include_tasks:
     #    file: tasks/index_page.yml        
