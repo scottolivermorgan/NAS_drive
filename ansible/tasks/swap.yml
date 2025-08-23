@@ -2,31 +2,29 @@
 # It disables swap, modifies the swap size in the configuration file,
 # sets up swap, and finally enables swap.
 
+# Disables current swap usage to allow changes to swap configuration
 - name: Disable swap
-  # Disable swap using the 'dphys-swapfile' command
   ansible.builtin.command: dphys-swapfile swapoff
-  become: true  # Execute the command with elevated privileges
-  #register: disble_swap
-  #changed_when: "'swapoff' in ansible_command_result.stdout"  # Consider the task changed if swap was successfully disabled
+  become: true
 
+# Updates the swap size value in the dphys-swapfile configuration
 - name: Edit swap
-  # Modify the configuration file '/etc/dphys-swapfile' to set the swap size
   ansible.builtin.lineinfile:
     path: /etc/dphys-swapfile
-    regexp: '^CONF_SWAPSIZE'  # Regular expression to find the line to be modified
-    line: "CONF_SWAPSIZE={{ docker_env.SWAP_SIZE_MB }}"  # Set the swap size to the value provided by 'swap_size_mb' variable
-  become: true  # Execute with elevated privileges
+    regexp: '^CONF_SWAPSIZE'
+    line: "CONF_SWAPSIZE={{ docker_env.SWAP_SIZE_MB }}"
+  become: true
 
+# Reinitializes the swapfile with the new configuration
 - name: Setup swap
-  # Setup swap using the 'dphys-swapfile' command
   ansible.builtin.command: dphys-swapfile setup
-  become: true  # Execute with elevated privileges
+  become: true
   register: setup_swap
   changed_when: setup_swap.rc != 0
 
+# Re-enables swap with the new settings
 - name: Enable swap
-  # Enable swap using the 'dphys-swapfile' command
   ansible.builtin.command: dphys-swapfile swapon
-  become: true  # Execute with elevated privileges
+  become: true
   register: enable_swap
   changed_when: enable_swap.rc != 0
