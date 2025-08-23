@@ -13,4 +13,4 @@
 - name: Install Python requirements
   ansible.builtin.pip:
     virtualenv: /home/{{ ansible_user }}/NAS_drive/venv
-    requirements: /home/{{ ansible_user }}/NAS_drive/requirements.txt
+    requirements: /home/{{ ansible_user }}/NAS_drive/requirements_target.txt

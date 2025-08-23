@@ -23,13 +23,13 @@
       ansible.builtin.include_tasks:
         file: tasks/docker.yml
 
+    - name: Python venv
+      ansible.builtin.include_tasks:
+        file: tasks/python_venv.yml
+
     #- name: Shutdown & Reboot switches
     #  ansible.builtin.include_tasks:
     #    file: tasks/shutdown_reboot_switches.yml
-#
-    #- name: Python venv
-    #  ansible.builtin.include_tasks:
-    #    file: tasks/python_venv.yml 
 #
     #- name: LVM
     #  ansible.builtin.include_tasks:
