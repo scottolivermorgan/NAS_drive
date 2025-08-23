@@ -58,7 +58,8 @@
     name: "Update and upgrade"
     minute: "20"
     hour: "14"
-    job: "/bin/bash /home/{{ ansible_env.USER }}/NAS_drive/functions/cron_jobs/update_and_upgrade.sh"
+    user: root
+    job: "HOME=/home/{{ ansible_env.USER }} USER={{ ansible_env.USER }} PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin /bin/bash /home/{{ ansible_env.USER }}/NAS_drive/functions/cron_jobs/update_and_upgrade.sh"
 
 #- name: Crontab - setup clear APT cache
 #  become: true
