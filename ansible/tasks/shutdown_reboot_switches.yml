@@ -1,19 +1,50 @@
-- name: Shutdown switch
+- name: Create shutdown systemd service
   become: true
-  ansible.builtin.shell:
-    cmd: |
-      insert='python /home/{{ ansible_env.USER }}/NAS_drive/functions/shutdown.py &'
-      file='/etc/rc.local'
-      sed -i "19 i $insert" $file
-  register: shutdown_switch
-  changed_when: true
+  ansible.builtin.copy:
+    dest: /etc/systemd/system/shutdown_switch.service
+    content: |
+      [Unit]
+      Description=Run shutdown script at boot
+      After=network.target
 
-- name: Reboot switch
+      [Service]
+      ExecStart=/usr/bin/python3 /home/{{ ansible_env.USER }}/NAS_drive/functions/shutdown.py
+      Type=simple
+      Restart=no
+
+      [Install]
+      WantedBy=multi-user.target
+    mode: '0644'
+
+- name: Enable and start shutdown service
   become: true
-  ansible.builtin.shell:
-    cmd: |
-      insert='python /home/{{ ansible_env.USER }}/NAS_drive/functions/reboot.py &'
-      file='/etc/rc.local'
-      sed -i "19 i $insert" $file
-  register: shutdown_switch
-  changed_when: true
+  ansible.builtin.systemd:
+    name: shutdown_switch.service
+    enabled: true
+    state: started
+
+
+- name: Create reboot systemd service
+  become: true
+  ansible.builtin.copy:
+    dest: /etc/systemd/system/reboot_switch.service
+    content: |
+      [Unit]
+      Description=Run reboot script at boot
+      After=network.target
+
+      [Service]
+      ExecStart=/usr/bin/python3 /home/{{ ansible_env.USER }}/NAS_drive/functions/reboot.py
+      Type=simple
+      Restart=no
+
+      [Install]
+      WantedBy=multi-user.target
+    mode: '0644'
+
+- name: Enable and start reboot service
+  become: true
+  ansible.builtin.systemd:
+    name: reboot_switch.service
+    enabled: true
+    state: started
