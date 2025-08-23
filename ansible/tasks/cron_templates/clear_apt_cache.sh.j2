@@ -24,4 +24,4 @@ SUMMARY="/tmp/cron_clean_apt_cache_summary.txt"
 } > "$SUMMARY"
 
 # Send summary to notification server
-/usr/bin/curl -d "output=$(cat $SUMMARY)" "http://192.168.2.179:8090/routine_maintenence" >> "$LOG" 2>&1
+/usr/bin/curl -d "output=$(cat $SUMMARY)" "http://{{ server_ip }}:{{ ports.ntfy }}/routine_maintenence" >> "$LOG" 2>&1

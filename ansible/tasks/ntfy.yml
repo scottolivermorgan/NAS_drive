@@ -6,6 +6,14 @@
   vars:
     ansible_user: "{{ ansible_env.USER }}"
 
+- name: Template the server.yml file
+  become: true
+  template:
+    src: /home/{{ ansible_env.USER }}/NAS_drive/ansible/tasks/ntfy_compose/server.yml.j2
+    dest: /home/{{ ansible_env.USER }}/NAS_drive/ansible/tasks/ntfy_compose/server.yml
+  vars:
+    ansible_user: "{{ ansible_env.USER }}"
+
 
 # Run ntfy docker compose
 - name: Create and start ntfy

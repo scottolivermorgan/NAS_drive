@@ -17,7 +17,7 @@ export USER="{{ ansible_user }}"
   echo "System will reboot in 30 seconds..."
   
   # Send notification before reboot
-  curl -d "output=Daily reboot initiated at $(date)" 'http://192.168.2.179:8090/routine_maintenence'
+  curl -d "output=Daily reboot initiated at $(date)" 'http://{{ server_ip }}:{{ ports.ntfy }}/routine_maintenence'
   
   # Wait 30 seconds then reboot
   sleep 30

@@ -22,4 +22,4 @@ SUMMARY="/tmp/journal_vacuum_summary.txt"
 } > "$SUMMARY"
 
 # Send summary to notification server
-curl -d "output=$(cat $SUMMARY)" 'http://192.168.2.179:8090/routine_maintenence'
+curl -d "output=$(cat $SUMMARY)" 'http://{{ server_ip }}:{{ ports.ntfy }}/routine_maintenence'

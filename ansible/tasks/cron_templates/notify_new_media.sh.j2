@@ -27,4 +27,4 @@ export PYTHONPATH="/home/{{ ansible_user }}/NAS_drive"
 } > "$SUMMARY"
 
 # Send summary to notification server
-curl -d "output=$(cat $SUMMARY)" 'http://192.168.2.179:8090/routine_maintenence'
+curl -d "output=$(cat $SUMMARY)" 'http://{{ server_ip }}:{{ ports.ntfy }}/routine_maintenence'
