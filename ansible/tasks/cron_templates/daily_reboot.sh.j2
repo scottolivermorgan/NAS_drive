@@ -1,0 +1,29 @@
+#!/bin/bash
+
+# Daily Reboot Script
+# This script performs a daily reboot of the system
+
+LOG="/home/{{ ansible_user }}/NAS_drive/logs/daily_reboot.log"
+SUMMARY="/tmp/daily_reboot_summary.txt"
+
+# Set environment variables
+export HOME="/home/{{ ansible_user }}"
+export USER="{{ ansible_user }}"
+
+{
+  echo "Running daily reboot at $(date)"
+  
+  # Log the reboot action
+  echo "System will reboot in 30 seconds..."
+  
+  # Send notification before reboot
+  curl -d "output=Daily reboot initiated at $(date)" 'http://192.168.2.179:8090/routine_maintenence'
+  
+  # Wait 30 seconds then reboot
+  sleep 30
+  sudo reboot
+  
+} >> "$LOG" 2>&1
+
+# Note: This script will be terminated when the system reboots
+# The reboot command will execute after the sleep

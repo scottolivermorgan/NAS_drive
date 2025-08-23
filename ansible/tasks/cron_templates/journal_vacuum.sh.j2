@@ -1,0 +1,25 @@
+#!/bin/bash
+
+# Journal Log Vacuum Script
+# This script vacuums journal logs older than 3 days
+
+LOG="/home/{{ ansible_user }}/NAS_drive/logs/journal_vacuum.log"
+SUMMARY="/tmp/journal_vacuum_summary.txt"
+
+{
+  echo "Running journal log vacuum at $(date)"
+  
+  # Vacuum journal logs older than 3 days
+  /usr/bin/journalctl --vacuum-time=3d 2>&1
+  
+  echo "Journal log vacuum completed at $(date)"
+} >> "$LOG" 2>&1
+
+# Prepare summary for notification
+{
+  echo "Journal Log Vacuum completed at $(date)"
+  echo "Check logs at: $LOG"
+} > "$SUMMARY"
+
+# Send summary to notification server
+curl -d "output=$(cat $SUMMARY)" 'http://192.168.2.179:8090/routine_maintenence'

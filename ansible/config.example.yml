@@ -28,6 +28,24 @@ backup_logical_volumes:
 
 backup_mount_point: "BU_1"
 
+# ---------------------------------------------------------------------------
+# Logrotate Configuration
+# ---------------------------------------------------------------------------
+logrotate:
+  # Number of days to keep log files
+  log_retention_days: 7
+  # Maximum size of log files before rotation (e.g., "100M", "1G")
+  max_size: "100M"
+  # Whether to compress old log files
+  compress: true
+  # Whether to create new log files after rotation
+  create: true
+  # User and group for new log files
+  user: "{{ ansible_user }}"
+  group: "{{ ansible_user }}"
+  # Permissions for new log files
+  mode: "0644"
+
 docker_env:
   # ---------------------------------------------------------------------------
   # Jellyfin

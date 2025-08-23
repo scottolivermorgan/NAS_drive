@@ -1,0 +1,29 @@
+#!/bin/bash
+
+# Docker Cleanup Script
+# This script cleans up Docker containers, images, and volumes
+
+LOG="/home/{{ ansible_user }}/NAS_drive/logs/docker_cleanup.log"
+SUMMARY="/tmp/docker_cleanup_summary.txt"
+
+# Set environment variables
+export HOME="/home/{{ ansible_user }}"
+export USER="{{ ansible_user }}"
+
+{
+  echo "Running Docker cleanup at $(date)"
+  
+  # Run the existing docker cleanup script
+  sh /home/{{ ansible_user }}/NAS_drive/functions/docker_cleanup.sh
+  
+  echo "Docker cleanup completed at $(date)"
+} >> "$LOG" 2>&1
+
+# Prepare summary for notification
+{
+  echo "Docker Cleanup completed at $(date)"
+  echo "Check logs at: $LOG"
+} > "$SUMMARY"
+
+# Send summary to notification server
+curl -d "output=$(cat $SUMMARY)" 'http://192.168.2.179:8090/routine_maintenence'

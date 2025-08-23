@@ -42,6 +42,11 @@
     - name: Cron jobs
       ansible.builtin.include_tasks:
         file: tasks/cron_jobs.yml
+        
+    - name: Logrotate setup
+      ansible.builtin.include_tasks:
+        file: tasks/logrotate.yml
+        
     - name: Nextcloud
       ansible.builtin.include_tasks:
         file: tasks/nextcloud.yml

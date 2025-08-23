@@ -1,0 +1,30 @@
+#!/bin/bash
+
+# Scan and Notify New Media Script
+# This script scans for new media and sends notifications
+
+LOG="/home/{{ ansible_user }}/NAS_drive/logs/notify_new_media.log"
+SUMMARY="/tmp/notify_new_media_summary.txt"
+
+# Set environment variables
+export HOME="/home/{{ ansible_user }}"
+export USER="{{ ansible_user }}"
+export PYTHONPATH="/home/{{ ansible_user }}/NAS_drive"
+
+{
+  echo "Running new media scan at $(date)"
+  
+  # Run the Python script to scan and notify about new media
+  python /home/{{ ansible_user }}/NAS_drive/functions/notify_new_media.py
+  
+  echo "New media scan completed at $(date)"
+} >> "$LOG" 2>&1
+
+# Prepare summary for notification
+{
+  echo "New Media Scan completed at $(date)"
+  echo "Check logs at: $LOG"
+} > "$SUMMARY"
+
+# Send summary to notification server
+curl -d "output=$(cat $SUMMARY)" 'http://192.168.2.179:8090/routine_maintenence'
