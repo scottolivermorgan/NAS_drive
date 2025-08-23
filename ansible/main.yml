@@ -31,9 +31,9 @@
     #  ansible.builtin.include_tasks:
     #    file: tasks/python_venv.yml
 
-    - name: Shutdown & Reboot switches
-      ansible.builtin.include_tasks:
-        file: tasks/shutdown_reboot_switches.yml
+    #- name: Shutdown & Reboot switches
+    #  ansible.builtin.include_tasks:
+    #    file: tasks/shutdown_reboot_switches.yml
 
     #- name: LVM
     #  ansible.builtin.include_tasks:
@@ -43,13 +43,13 @@
     #  ansible.builtin.include_tasks:
     #    file: tasks/external_HD.yml
 #
-    #- name: Cron jobs
-    #  ansible.builtin.include_tasks:
-    #    file: tasks/cron_jobs.yml
-    #    
-    #- name: Logrotate setup
-    #  ansible.builtin.include_tasks:
-    #    file: tasks/logrotate.yml
+    - name: Cron jobs
+      ansible.builtin.include_tasks:
+        file: tasks/cron_jobs.yml
+        
+    - name: Logrotate setup
+      ansible.builtin.include_tasks:
+        file: tasks/logrotate.yml
     #    
     #- name: Nextcloud
     #  ansible.builtin.include_tasks:
@@ -73,9 +73,10 @@
     #- name: Tandoor
     #  ansible.builtin.include_tasks:
     #    file: tasks/tandoor.yml
-    #- name: NTFY
-    #  ansible.builtin.include_tasks:
-    #    file: tasks/ntfy.yml
+
+    - name: NTFY
+      ansible.builtin.include_tasks:
+        file: tasks/ntfy.yml
 #
     #- name: ARR stack
     #  ansible.builtin.include_tasks:

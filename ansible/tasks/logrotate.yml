@@ -61,9 +61,9 @@
     owner: root
     group: root
 
-- name: Set up logrotate service
-  become: true
-  ansible.builtin.systemd:
-    name: logrotate
-    enabled: true
-    state: started
+#- name: Set up logrotate service
+#  become: true
+#  ansible.builtin.systemd:
+#    name: logrotate
+#    enabled: true
+#    state: started
