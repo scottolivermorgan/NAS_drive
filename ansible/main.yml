@@ -3,6 +3,10 @@
   vars_files:
     - config.yml
   tasks:
+    - name: Set server_ip from inventory
+      set_fact:
+        server_ip: "{{ hostvars['scott']['ansible_host'] }}"
+
     - name: Initial setup
       ansible.builtin.include_tasks:
         file: tasks/initial_setup.yml

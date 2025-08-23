@@ -2,7 +2,7 @@
 # Network Configuration
 # ---------------------------------------------------------------------------
 # Server IP addresses - centralized configuration
-server_ip: "192.168.2.179"
+#server_ip: "192.168.2.19"
 
 # Service Ports - centralized configuration
 ports:
