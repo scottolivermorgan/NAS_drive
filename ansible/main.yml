@@ -15,9 +15,9 @@
     #  ansible.builtin.include_tasks:
     #    file: tasks/swap.yml
 #
-    #- name: GIT
-    #  ansible.builtin.include_tasks:
-    #    file: tasks/git.yml
+    - name: GIT
+      ansible.builtin.include_tasks:
+        file: tasks/git.yml
 #
     #- name: SSH
     #  ansible.builtin.include_tasks:
@@ -30,7 +30,7 @@
     #- name: Python venv
     #  ansible.builtin.include_tasks:
     #    file: tasks/python_venv.yml
-
+#
     #- name: Shutdown & Reboot switches
     #  ansible.builtin.include_tasks:
     #    file: tasks/shutdown_reboot_switches.yml
@@ -47,9 +47,9 @@
       ansible.builtin.include_tasks:
         file: tasks/cron_jobs.yml
         
-    - name: Logrotate setup
-      ansible.builtin.include_tasks:
-        file: tasks/logrotate.yml
+    #- name: Logrotate setup
+    #  ansible.builtin.include_tasks:
+    #    file: tasks/logrotate.yml
     #    
     #- name: Nextcloud
     #  ansible.builtin.include_tasks:
@@ -74,9 +74,9 @@
     #  ansible.builtin.include_tasks:
     #    file: tasks/tandoor.yml
 
-    - name: NTFY
-      ansible.builtin.include_tasks:
-        file: tasks/ntfy.yml
+    #- name: NTFY
+    #  ansible.builtin.include_tasks:
+    #    file: tasks/ntfy.yml
 #
     #- name: ARR stack
     #  ansible.builtin.include_tasks:
