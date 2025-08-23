@@ -19,7 +19,7 @@ services:
   influxdb:
     image: influxdb:latest
     ports:
-      - '8086:8086'
+      - '{{ ports.influxdb }}:8086'
     volumes:
       - influxdb-storage:/var/lib/influxdb
     environment:
@@ -34,7 +34,7 @@ services:
   grafana:
     image: grafana/grafana:latest
     ports:
-      - '3001:3000'
+      - '{{ ports.grafana }}:3000'
     volumes:
       - grafana-storage:/var/lib/grafana
       - ./grafana-provisioning/:/etc/grafana/provisioning/

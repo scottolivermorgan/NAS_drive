@@ -11,109 +11,109 @@
   become: true
   community.general.ufw:
     rule: allow
-    port: 80
+    port: "{{ ports.http }}"
 
 - name: Open HTTPS port
   become: true
   community.general.ufw:
     rule: allow
-    port: 443
+    port: "{{ ports.https }}"
 
 - name: Open Jellyfin port
   become: true
   community.general.ufw:
     rule: allow
-    port: 8096
+    port: "{{ ports.jellyfin }}"
 
 - name: Open Komga port
   become: true
   community.general.ufw:
     rule: allow
-    port: 25600
+    port: "{{ ports.komga }}"
 
 - name: Open SSH port
   become: true
   community.general.ufw:
     rule: allow
-    port: 22
+    port: "{{ ports.ssh }}"
 
 - name: Audiobookshelf port
   become: true
   community.general.ufw:
     rule: allow
-    port: 13378
+    port: "{{ ports.audiobookshelf }}"
 
 - name: Nextcloud port
   become: true
   community.general.ufw:
     rule: allow
-    port: 8000
+    port: "{{ ports.nextcloud }}"
 
 - name: Immich port
   become: true
   community.general.ufw:
     rule: allow
-    port: 2283
+    port: "{{ ports.immich }}"
 
 - name: Tandoor port
   become: true
   community.general.ufw:
     rule: allow
-    port: 8081
+    port: "{{ ports.tandoor | default(8081) }}"
 
 - name: Ntfy port
   become: true
   community.general.ufw:
     rule: allow
-    port: 8090
+    port: "{{ ports.ntfy }}"
 
 - name: qbittorrent webUI port
   become: true
   community.general.ufw:
     rule: allow
-    port: 9080
+    port: "{{ ports.qbittorrent_web | default(9080) }}"
 
 - name: qbittirrent torrenting port
   become: true
   community.general.ufw:
     rule: allow
-    port: 6881
+    port: "{{ ports.qbittorrent_torrent }}"
 
 - name: Radarr port
   become: true
   community.general.ufw:
     rule: allow
-    port: 7878
+    port: "{{ ports.radarr }}"
 
 - name: Sonarr port
   become: true
   community.general.ufw:
     rule: allow
-    port: 8989
+    port: "{{ ports.sonarr }}"
 
 - name: Prowlarr port
   become: true
   community.general.ufw:
     rule: allow
-    port: 9696
+    port: "{{ ports.prowlarr }}"
 
 - name: Bazarr port
   become: true
   community.general.ufw:
     rule: allow
-    port: 6767
+    port: "{{ ports.bazarr }}"
 
 - name: Influxdb port
   become: true
   community.general.ufw:
     rule: allow
-    port: 8086
+    port: "{{ ports.influxdb }}"
 
 - name: Grafana port
   become: true
   community.general.ufw:
     rule: allow
-    port: 3001
+    port: "{{ ports.grafana }}"
 
 - name: Enable UFW
   become: true

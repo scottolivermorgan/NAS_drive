@@ -1,4 +1,46 @@
 # ---------------------------------------------------------------------------
+# Network Configuration
+# ---------------------------------------------------------------------------
+# Server IP addresses - centralized configuration
+server_ip: "192.168.2.179"
+
+# Service Ports - centralized configuration
+ports:
+  # Core services
+  ntfy: 8090
+  influxdb: 8086
+  grafana: 3001
+  
+  # Media services
+  jellyfin: 8096
+  immich: 2283
+  nextcloud: 8000
+  audiobookshelf: 13378
+  komga: 25600
+  
+  # System services
+  homepage: 1111
+  postgres: 5432
+  
+  # Additional services
+  tandoor: 8081
+  qbittorrent_web: 9080
+  qbittorrent_torrent: 6881
+  radarr: 7878
+  sonarr: 8989
+  prowlarr: 9696
+  bazarr: 6767
+  
+  # Standard ports
+  http: 80
+  https: 443
+  ssh: 22
+
+# Legacy port variables (for backward compatibility)
+#ntfy_port: 8090
+#influxdb_port: 8086
+
+# ---------------------------------------------------------------------------
 # External drive names
 # ---------------------------------------------------------------------------
 volumes:
@@ -130,6 +172,6 @@ docker_env:
   DB_ENGINE: django.db.backends.postgresql
   POSTGRES_HOST: db_recipes
   POSTGRES_DB: djangodb
-  POSTGRES_PORT: 5432
+  POSTGRES_PORT: "{{ ports.postgres }}"
   POSTGRES_USER: djangouser
   POSTGRES_PASSWORD: test

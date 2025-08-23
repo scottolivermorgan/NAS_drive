@@ -100,85 +100,85 @@
 
 <div class="grid-container">
     <div class="card">
-        <a href="http://192.168.2.179:13378" target="_blank">
+        <a href="http://{{ server_ip }}:{{ ports.audiobookshelf }}" target="_blank">
             <img src="icons/abs.png" alt="Audiobookshelf">
             Audiobookshelf
         </a>
     </div>
     <div class="card">
-        <a href="http://192.168.2.179:6767" target="_blank">
+        <a href="http://{{ server_ip }}:{{ ports.bazarr }}" target="_blank">
             <img src="icons/bazarr.svg" alt="Bazarr">
             Bazarr
         </a>
     </div>
     <div class="card">
-        <a href="http://192.168.2.179:3001" target="_blank">
+        <a href="http://{{ server_ip }}:{{ ports.grafana }}" target="_blank">
             <img src="icons/grafana.svg" alt="Grafana">
             Grafana
         </a>
     </div>
     <div class="card">
-        <a href="http://192.168.2.179:2283" target="_blank">
+        <a href="http://{{ server_ip }}:{{ ports.immich }}" target="_blank">
             <img src="icons/immich.svg" alt="Immich">
             Immich
         </a>
     </div>
     <div class="card">
-        <a href="http://192.168.2.179:8086" target="_blank">
+        <a href="http://{{ server_ip }}:{{ ports.influxdb }}" target="_blank">
             <img src="icons/influxdb.svg" alt="InfluxDB">
             InfluxDB
         </a>
     </div>
     <div class="card">
-        <a href="http://192.168.2.179:8096" target="_blank">
+        <a href="http://{{ server_ip }}:{{ ports.jellyfin }}" target="_blank">
             <img src="icons/jellyfin.svg" alt="Jellyfin">
             Jellyfin
         </a>
     </div>
     <div class="card">
-        <a href="http://192.168.2.179:25600" target="_blank">
+        <a href="http://{{ server_ip }}:{{ ports.komga }}" target="_blank">
             <img src="icons/komga.svg" alt="Komga">
             Komga
         </a>
     </div>
     <div class="card">
-        <a href="http://192.168.2.179:8000" target="_blank">
+        <a href="http://{{ server_ip }}:{{ ports.nextcloud }}" target="_blank">
             <img src="icons/nextcloud.svg" alt="Nextcloud">
             Nextcloud
         </a>
     </div>
     <div class="card">
-        <a href="http://192.168.2.179:9696/" target="_blank">
+        <a href="http://{{ server_ip }}:{{ ports.prowlarr }}/" target="_blank">
             <img src="icons/prowlarr.svg" alt="Prowlarr">
             Prowlarr
         </a>
     </div>
     <div class="card">
-        <a href="http://192.168.2.179:9080" target="_blank">
+        <a href="http://{{ server_ip }}:{{ ports.qbittorrent_web }}" target="_blank">
             <img src="icons/qbittorrent.svg" alt="qbittorrent">
             qbittorrent
         </a>
     </div>
     <div class="card">
-        <a href="http://192.168.2.179:7878" target="_blank">
+        <a href="http://{{ server_ip }}:{{ ports.radarr }}" target="_blank">
             <img src="icons/radarr.svg" alt="Radarr">
             Radarr
         </a>
     </div>
     <div class="card">
-        <a href="http://192.168.2.179:8989" target="_blank">
+        <a href="http://{{ server_ip }}:{{ ports.sonarr }}" target="_blank">
             <img src="icons/sonarr.svg" alt="Sonarr">
             Sonarr
         </a>
     </div>
     <div class="card">
-        <a href="http://192.168.2.179:8081" target="_blank">
+        <a href="http://{{ server_ip }}:{{ ports.tandoor }}" target="_blank">
             <img src="icons/tandoor.svg" alt="Tandoor">
             Tandoor
         </a>
     </div>
     <div class="card" id="ntfy-card">
-        <a href="http://192.168.2.179:8090" target="_blank">
+        <a href="http://{{ server_ip }}:{{ ports.ntfy }}" target="_blank">
             <img src="icons/ntfy.svg" alt="NTFY">
             NTFY
             <span class="notification-badge" id="ntfy-badge">0</span>
@@ -187,7 +187,7 @@
 </div>
 
 <script>
-    const socket = new WebSocket('ws://192.168.2.179:8090/ws/test');
+    const socket = new WebSocket('ws://{{ server_ip }}:{{ ports.ntfy }}/ws/test');
     let notificationCount = 0;
 
     // Function to update the notification badge
