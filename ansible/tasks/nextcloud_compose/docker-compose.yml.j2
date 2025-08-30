@@ -6,7 +6,7 @@ volumes:
 
 services:
   db:
-    image: mariadb:11.4.2
+    image: mariadb:{$MARIADB_VERSION}
     command: --transaction-isolation=READ-COMMITTED --binlog-format=ROW
     restart: always
     volumes:
@@ -23,7 +23,7 @@ services:
       - nextcloud_network
 
   app:
-    image: nextcloud:29.0.2
+    image: nextcloud:${NEXTCLOUD_VERSION}
     ports:
       - 8000:80
     container_name: nextcloud
