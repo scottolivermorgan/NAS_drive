@@ -3,11 +3,11 @@ version: "3.7"
 
 services:
   audiobookshelf:
-    image: ghcr.io/advplyr/audiobookshelf:2.15.0
+    image: ghcr.io/advplyr/audiobookshelf:{{ docker_env.ABS_VERSION }}
     # ABS runs on port 13378 by default. If you want to change
     # the port, only change the external port, not the internal port
     ports:
-      - 13378:80
+      - {{ ports.audiobookshelf }}:80
     volumes:
       # These volumes are needed to keep your library persistent
       # and allow media to be accessed by the ABS server.

@@ -50,9 +50,9 @@
     #  ansible.builtin.include_tasks:
     #    file: tasks/logrotate.yml
         
-    - name: Nextcloud
-      ansible.builtin.include_tasks:
-        file: tasks/nextcloud.yml
+    #- name: Nextcloud
+    #  ansible.builtin.include_tasks:
+    #    file: tasks/nextcloud.yml
 
     #- name: Jellyfin
     #  ansible.builtin.include_tasks:
@@ -62,9 +62,10 @@
     #  ansible.builtin.include_tasks:
     #    file: tasks/komga.yml
 #
-    #- name: Audiobookshelf
-    #  ansible.builtin.include_tasks:
-    #    file: tasks/audiobookshelf.yml
+    - name: Audiobookshelf
+      ansible.builtin.include_tasks:
+        file: tasks/audiobookshelf.yml
+
     #- name: Immich
     #  ansible.builtin.include_tasks:
     #    file: tasks/immich.yml
