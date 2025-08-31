@@ -11,11 +11,11 @@
     - /media/{{ mount_point }}/Media/Metadata/jellyfin/cache
 
 # Pull the latest Jellyfin Docker image
-- name: Pull Jellyfin Docker image
-  become: true
-  community.docker.docker_image:
-    name: jellyfin/jellyfin:2024101405
-    source: pull
+#- name: Pull Jellyfin Docker image
+#  become: true
+#  community.docker.docker_image:
+#    name: jellyfin/jellyfin:2024101405
+#    source: pull
 
 # Run the Jellyfin Docker container
 #- name: Run Jellyfin Docker container

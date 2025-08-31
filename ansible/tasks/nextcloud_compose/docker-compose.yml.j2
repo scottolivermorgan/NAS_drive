@@ -25,7 +25,7 @@ services:
   app:
     image: nextcloud:{{ docker_env.NEXTCLOUD_VERSION }}
     ports:
-      - 8000:80
+      - {{ ports.nextcloud }}:80
     container_name: nextcloud
     volumes:
       - nextcloud:/var/www/html

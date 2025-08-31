@@ -2,9 +2,9 @@ version: "3.7"
 
 services:
   komga:
-    image: gotson/komga:1.14.1
+    image: gotson/komga:{{ docker_env.KOMGA_VERSION }}
     ports:
-      - 25600:25600
+      - {{ ports.komga }}:25600
     volumes:
       - "/media/{{ mount_point }}/Media/Metadata/komga/config:/config"
       - /media/{{ mount_point }}:/data/{{ mount_point }}

@@ -11,11 +11,11 @@
     - /media/{{ mount_point }}/Media/Metadata/komga/config
 
 # Pull the latest Komga Docker image
-- name: Pull Komga Docker image
-  become: true
-  community.docker.docker_image:
-    name: gotson/komga:1.14.1
-    source: pull
+#- name: Pull Komga Docker image
+#  become: true
+#  community.docker.docker_image:
+#    name: gotson/komga:1.14.1
+#    source: pull
 
 
 - name: Template the docker-compose file
