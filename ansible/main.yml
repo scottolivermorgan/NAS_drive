@@ -58,9 +58,9 @@
     #  ansible.builtin.include_tasks:
     #    file: tasks/jellyfin.yml
 #
-    - name: Komga
-      ansible.builtin.include_tasks:
-        file: tasks/komga.yml
+    #- name: Komga
+    #  ansible.builtin.include_tasks:
+    #    file: tasks/komga.yml
 #
     #- name: Audiobookshelf
     #  ansible.builtin.include_tasks:
@@ -74,9 +74,9 @@
     #  ansible.builtin.include_tasks:
     #    file: tasks/tandoor.yml
 
-    #- name: NTFY
-    #  ansible.builtin.include_tasks:
-    #    file: tasks/ntfy.yml
+    - name: NTFY
+      ansible.builtin.include_tasks:
+        file: tasks/ntfy.yml
 #
     #- name: ARR stack
     #  ansible.builtin.include_tasks:
