@@ -1,21 +1,21 @@
 version: "3.7"
 services:
   qbittorrent:
-    image: lscr.io/linuxserver/qbittorrent:version-5.0.3-r0
+    image: lscr.io/linuxserver/qbittorrent:{{ docker_env.QBITTORRENT_VERSION }}
     container_name: qbittorrent
     environment:
       - PUID=1000
       - PGID=1000
       - TZ=Etc/UTC
-      - WEBUI_PORT=9080
-      - TORRENTING_PORT=6881
+      - WEBUI_PORT={{ ports.qbittorrent_web }}
+      - TORRENTING_PORT={{ ports.qbittorrent_torrent }}
     volumes:
       - /media/{{ mount_point }}/Media/metadata/qbittorrent/appdata:/config
       - /media/{{ mount_point }}/Media/Downloads/completed:/downloads #optional
     ports:
-      - 9080:9080
-      - 6881:6881
-      - 6881:6881/udp
+      - {{ ports.qbittorrent_web }}:9080
+      - {{ ports.qbittorrent_torrent }}:6881
+      - {{ ports.qbittorrent_torrent }}:6881/udp
     restart: always
     networks:
       - bridge_network
@@ -23,11 +23,11 @@ services:
 
   # https://github.com/linuxserver/docker-radarr
   radarr:
-    image: linuxserver/radarr:5.18.4.9674-ls259
+    image: linuxserver/radarr:{{ docker_env.RADARR_VERSION }}
     container_name: radarr
     restart: always
     ports:
-      - "7878:7878"
+      - "{{ ports.radarr }}:7878"
     environment:
       - PGID=1000
       - PUID=1000
@@ -41,11 +41,11 @@ services:
 
   # https://github.com/linuxserver/docker-sonarr
   sonarr:
-    image: linuxserver/sonarr:4.0.12.2823-ls270
+    image: linuxserver/sonarr:{{ docker_env.SONARR_VERSION }}
     container_name: sonarr
     restart: always
     ports:
-      - "8989:8989"
+      - "{{ ports.sonarr }}:8989"
     environment:
       - PGID=1000
       - PUID=1000
@@ -59,12 +59,12 @@ services:
 
   # https://github.com/linuxserver/docker-prowlarr
   prowlarr:
-    image: linuxserver/prowlarr:develop-1.31.1.4959-ls216
+    image: linuxserver/prowlarr:{{ docker_env.PROWLARR_VERSION }}
 
     container_name: prowlarr
     restart: always
     ports:
-      - "9696:9696"
+      - "{{ ports.prowlarr }}:9696"
     cap_add:
       - NET_ADMIN
     environment:
@@ -78,7 +78,7 @@ services:
       - bridge_network
 
   bazarr:
-    image: lscr.io/linuxserver/bazarr:v1.5.1-ls290
+    image: lscr.io/linuxserver/bazarr:{{ docker_env.BAZARR_VERSION }}
     container_name: bazarr
     environment:
       - PUID=1000
@@ -89,7 +89,7 @@ services:
       - /media/{{ mount_point }}/Media/Movies:/movies
       - /media/{{ mount_point }}/Media/TV Shows:/tv
     ports:
-      - 6767:6767
+      - {{ ports.bazarr }}:6767
     restart: always
     networks:
       - bridge_network

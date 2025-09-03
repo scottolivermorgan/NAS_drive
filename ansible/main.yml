@@ -74,13 +74,13 @@
     #  ansible.builtin.include_tasks:
     #    file: tasks/tandoor.yml
 
-    - name: NTFY
-      ansible.builtin.include_tasks:
-        file: tasks/ntfy.yml
-#
-    #- name: ARR stack
+    #- name: NTFY
     #  ansible.builtin.include_tasks:
-    #    file: tasks/arr_stack.yml
+    #    file: tasks/ntfy.yml
+#
+    - name: ARR stack
+      ansible.builtin.include_tasks:
+        file: tasks/arr_stack.yml
 #
     #- name: Grafana
     #  ansible.builtin.include_tasks:
