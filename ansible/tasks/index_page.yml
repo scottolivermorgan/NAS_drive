@@ -2,8 +2,8 @@
 - name: Template main.html with configuration
   become: true
   ansible.builtin.template:
-    src: /home/{{ ansible_env.USER }}/NAS_drive/ansible/tasks/index_page_compose/main.html
-    dest: /home/{{ ansible_env.USER }}/NAS_drive/ansible/tasks/index_page_compose/main_templated.html
+    src: /home/{{ ansible_env.USER }}/NAS_drive/ansible/tasks/index_page_compose/main.html.j2
+    dest: /home/{{ ansible_env.USER }}/NAS_drive/ansible/tasks/index_page_compose/main.html
     owner: "{{ ansible_env.USER }}"
     group: "{{ ansible_env.USER }}"
     mode: '0644'

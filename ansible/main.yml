@@ -78,17 +78,17 @@
     #  ansible.builtin.include_tasks:
     #    file: tasks/ntfy.yml
 #
-    - name: ARR stack
-      ansible.builtin.include_tasks:
-        file: tasks/arr_stack.yml
+    #- name: ARR stack
+    #  ansible.builtin.include_tasks:
+    #    file: tasks/arr_stack.yml
 #
     #- name: Grafana
     #  ansible.builtin.include_tasks:
     #    file: tasks/grafana_compose.yml
 #
-    #- name: Index Page
-    #  ansible.builtin.include_tasks:
-    #    file: tasks/index_page.yml        
+    - name: Index Page
+      ansible.builtin.include_tasks:
+        file: tasks/index_page.yml        
 #
     #- name: Harden security
     #  ansible.builtin.include_tasks:
