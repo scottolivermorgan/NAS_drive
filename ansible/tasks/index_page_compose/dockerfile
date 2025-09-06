@@ -2,7 +2,7 @@
 FROM nginx:alpine
 
 # Copy the templated HTML file into the appropriate location for Nginx
-COPY main_templated.html /usr/share/nginx/html/index.html
+COPY main.html /usr/share/nginx/html/index.html
 
 # Copy the icons directory into the appropriate location for Nginx
 COPY icons /usr/share/nginx/html/icons
