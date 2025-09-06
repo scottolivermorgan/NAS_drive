@@ -8,6 +8,16 @@
     group: "{{ ansible_env.USER }}"
     mode: '0644'
 
+# Template the docker-compose.yml file with configuration variables
+- name: Template docker-compose.yml with configuration
+  become: true
+  ansible.builtin.template:
+    src: /home/{{ ansible_env.USER }}/NAS_drive/ansible/tasks/index_page_compose/docker-compose.yml.j2
+    dest: /home/{{ ansible_env.USER }}/NAS_drive/ansible/tasks/index_page_compose/docker-compose.yml
+    owner: "{{ ansible_env.USER }}"
+    group: "{{ ansible_env.USER }}"
+    mode: '0644'
+
 # Run index_page docker compose
 - name: Create and start index page
   become: true
