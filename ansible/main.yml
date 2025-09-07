@@ -15,9 +15,9 @@
     #  ansible.builtin.include_tasks:
     #    file: tasks/swap.yml
 #
-    #- name: GIT
-    #  ansible.builtin.include_tasks:
-    #    file: tasks/git.yml
+    - name: GIT
+      ansible.builtin.include_tasks:
+        file: tasks/git.yml
 #
     #- name: SSH
     #  ansible.builtin.include_tasks:
