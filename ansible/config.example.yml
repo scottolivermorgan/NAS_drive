@@ -30,7 +30,8 @@ ports:
   sonarr: 8989
   prowlarr: 9696
   bazarr: 6767
-  
+  vaultwarden: 8080
+
   # Standard ports
   http: 80
   https: 443
@@ -203,3 +204,8 @@ docker_env:
   SONARR_VERSION: 4.0.15 #4.0.12.2823-ls270
   PROWLARR_VERSION: 2.1.0-nightly #develop-1.31.1.4959-ls216
   BAZARR_VERSION: 1.5.2 #v1.5.1-ls290
+
+  # ---------------------------------------------------------------------------
+  # Vaultwarden
+  # ---------------------------------------------------------------------------
+  VAULTWARDEN_VERSION: latest

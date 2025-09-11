@@ -7,17 +7,17 @@
       set_fact:
         server_ip: "{{ hostvars['scott']['ansible_host'] }}"
 
-    - name: Initial setup
-      ansible.builtin.include_tasks:
-        file: tasks/initial_setup.yml
+    #- name: Initial setup
+    #  ansible.builtin.include_tasks:
+    #    file: tasks/initial_setup.yml
     #
     #- name: SWAP
     #  ansible.builtin.include_tasks:
     #    file: tasks/swap.yml
 #
-    - name: GIT
-      ansible.builtin.include_tasks:
-        file: tasks/git.yml
+    #- name: GIT
+    #  ansible.builtin.include_tasks:
+    #    file: tasks/git.yml
 #
     #- name: SSH
     #  ansible.builtin.include_tasks:
@@ -49,11 +49,10 @@
     #- name: Logrotate setup
     #  ansible.builtin.include_tasks:
     #    file: tasks/logrotate.yml
-        
+    #   
     #- name: Nextcloud
     #  ansible.builtin.include_tasks:
     #    file: tasks/nextcloud.yml
-
     #- name: Jellyfin
     #  ansible.builtin.include_tasks:
     #    file: tasks/jellyfin.yml
@@ -69,31 +68,31 @@
     #- name: Immich
     #  ansible.builtin.include_tasks:
     #    file: tasks/immich.yml
-#
-    #- name: Tandoor
-    #  ansible.builtin.include_tasks:
-    #    file: tasks/tandoor.yml
 
-    #- name: NTFY
-    #  ansible.builtin.include_tasks:
-    #    file: tasks/ntfy.yml
-#
+    # name: Tandoor
+    # ansible.builtin.include_tasks:
+    #   file: tasks/tandoor.yml
+
+    # name: NTFY
+    # ansible.builtin.include_tasks:
+    #   file: tasks/ntfy.yml
+
     #- name: ARR stack
     #  ansible.builtin.include_tasks:
     #    file: tasks/arr_stack.yml
-#
+
     #- name: Grafana
     #  ansible.builtin.include_tasks:
     #    file: tasks/grafana_compose.yml
 
-    - name: VaultWarden
+    #- name: VaultWarden
+    #  ansible.builtin.include_tasks:
+    #    file: tasks/vaultwarden.yml
+
+    - name: Index Page
       ansible.builtin.include_tasks:
-        file: tasks/vaultwarden.yml
-#
-    #- name: Index Page
-    #  ansible.builtin.include_tasks:
-    #    file: tasks/index_page.yml        
-#
-    #- name: Harden security
-    #  ansible.builtin.include_tasks:
-    #    file: tasks/harden_security.yml
+        file: tasks/index_page.yml        
+
+    - name: Harden security
+      ansible.builtin.include_tasks:
+        file: tasks/harden_security.yml
