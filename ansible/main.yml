@@ -89,10 +89,14 @@
     #  ansible.builtin.include_tasks:
     #    file: tasks/vaultwarden.yml
 
-    - name: Index Page
-      ansible.builtin.include_tasks:
-        file: tasks/index_page.yml        
+    # name: Index Page
+    # ansible.builtin.include_tasks:
+    #   file: tasks/index_page.yml
 
-    - name: Harden security
+    - name: Romm
       ansible.builtin.include_tasks:
-        file: tasks/harden_security.yml
+        file: tasks/romm.yml         
+
+    #- name: Harden security
+    #  ansible.builtin.include_tasks:
+    #    file: tasks/harden_security.yml
