@@ -1,3 +1,7 @@
+#TODO uv instructions to readme + migrate
+
+
+
 # What
 - sets up rasberry pi as a media server in one command.
 - scalable storage, automatically comibines external hard drives into logical volumes, one as main one as backup and syncs them every day.
