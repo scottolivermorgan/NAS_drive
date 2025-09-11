@@ -16,7 +16,7 @@
 - name: Template the config file
   ansible.builtin.template:
     src: "romm_compose/config.yml.j2"
-    dest: "/media/{{ mount_point }}/Media/metadata/romm/config.yml"
+    dest: "/media/{{ mount_point }}/Media/metadata/romm/config/config.yml"
     mode: '0777'
 
 - name: Template the docker-compose file
