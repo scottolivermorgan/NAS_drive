@@ -209,3 +209,16 @@ docker_env:
   # Vaultwarden
   # ---------------------------------------------------------------------------
   VAULTWARDEN_VERSION: latest
+
+  # ---------------------------------------------------------------------------
+  # Romm
+  # ---------------------------------------------------------------------------
+  ROMM_VERSION: latest
+  ROMM_MARIADB_VERSION: latest
+  DB_PASSWD: test
+  ROMM_KEY: test
+  SCREENSCRAPER_USER: test
+  SCREENSCRAPER_PASSWORD: test
+  RETROACHIEVEMENTS_API_KEY: test
+  STEAMGRIDDB_API_KEY: test
+  HASHEOUS_API_ENABLED: true

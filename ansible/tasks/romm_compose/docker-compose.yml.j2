@@ -32,7 +32,7 @@ services:
     depends_on:
       romm-db:
         condition: service_healthy
-        restart: true
+
 
   romm-db:
     image: mariadb:{{ docker_env.ROMM_MARIADB_VERSION }}
