@@ -81,9 +81,9 @@
     #  ansible.builtin.include_tasks:
     #    file: tasks/arr_stack.yml
 
-    #- name: Grafana
-    #  ansible.builtin.include_tasks:
-    #    file: tasks/grafana_compose.yml
+    - name: Grafana
+      ansible.builtin.include_tasks:
+        file: tasks/grafana_compose.yml
 
     #- name: VaultWarden
     #  ansible.builtin.include_tasks:
@@ -93,9 +93,9 @@
     # ansible.builtin.include_tasks:
     #   file: tasks/index_page.yml
 
-    - name: Romm
-      ansible.builtin.include_tasks:
-        file: tasks/romm.yml         
+    #- name: Romm
+    #  ansible.builtin.include_tasks:
+    #    file: tasks/romm.yml         
 
     #- name: Harden security
     #  ansible.builtin.include_tasks:

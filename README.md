@@ -1,4 +1,5 @@
 #TODO uv instructions to readme + migrate
+https://docs.romm.app/latest/Getting-Started/Metadata-Providers/#igdb
 
 
 

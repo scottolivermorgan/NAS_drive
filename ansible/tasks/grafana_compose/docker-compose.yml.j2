@@ -17,7 +17,7 @@ services:
         - influxdb
 
   influxdb:
-    image: influxdb:latest
+    image: influxdb:{{ docker_env.INFLUXDB_VERSION }}
     ports:
       - '{{ ports.influxdb }}:8086'
     volumes:
@@ -32,7 +32,7 @@ services:
     restart: always
 
   grafana:
-    image: grafana/grafana:latest
+    image: grafana/grafana:{{ docker_env.GRAFANA_VERSION }}
     ports:
       - '{{ ports.grafana }}:3000'
     volumes:
