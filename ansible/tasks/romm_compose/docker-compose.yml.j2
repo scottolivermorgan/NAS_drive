@@ -44,7 +44,7 @@ services:
       - MARIADB_USER=romm-user
       - MARIADB_PASSWORD={{ docker_env.DB_PASSWD }} 
     volumes:
-      - mysql_data:/var/lib/mysql
+      - /media/{{ mount_point }}/Media/metadata/romm/mysql_data:/var/lib/mysql
     healthcheck:
       test: ["CMD", "healthcheck.sh", "--connect", "--innodb_initialized"]
       start_period: 30s

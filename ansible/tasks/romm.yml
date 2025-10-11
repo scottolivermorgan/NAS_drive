@@ -11,6 +11,7 @@
     - /media/{{ mount_point }}/Media/metadata/romm/assets
     - /media/{{ mount_point }}/Media/metadata/romm/resources
     - /media/{{ mount_point }}/Media/metadata/romm/redis
+    - /media/{{ mount_point }}/Media/metadata/romm/mysql_data
 
 
 - name: Template the config file
