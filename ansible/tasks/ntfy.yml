@@ -1,18 +1,30 @@
+#- name: Template the docker-compose.yml file
+#  become: true
+#  template:
+#    src: /home/{{ ansible_env.USER }}/NAS_drive/ansible/tasks/ntfy_compose/docker-compose.yml.j2
+#    dest: /home/{{ ansible_env.USER }}/NAS_drive/ansible/tasks/ntfy_compose/docker-compose.yml
+#  vars:
+#    ansible_user: "{{ ansible_env.USER }}"
 - name: Template the docker-compose.yml file
   become: true
   template:
-    src: /home/{{ ansible_env.USER }}/NAS_drive/ansible/tasks/ntfy_compose/docker-compose.yml.j2
-    dest: /home/{{ ansible_env.USER }}/NAS_drive/ansible/tasks/ntfy_compose/docker-compose.yml
-  vars:
-    ansible_user: "{{ ansible_env.USER }}"
+    src: tasks/ntfy_compose/docker-compose.yml.j2
+    dest: /home/{{ ansible_user }}/NAS_drive/ansible/tasks/ntfy_compose/docker-compose.yml
+
+
+#- name: Template the server.yml file
+#  become: true
+#  template:
+#    src: /home/{{ ansible_env.USER }}/NAS_drive/ansible/tasks/ntfy_compose/server.yml.j2
+#    dest: /home/{{ ansible_env.USER }}/NAS_drive/ansible/tasks/ntfy_compose/server.yml
+#  vars:
+#    ansible_user: "{{ ansible_env.USER }}"
 
 - name: Template the server.yml file
   become: true
   template:
-    src: /home/{{ ansible_env.USER }}/NAS_drive/ansible/tasks/ntfy_compose/server.yml.j2
-    dest: /home/{{ ansible_env.USER }}/NAS_drive/ansible/tasks/ntfy_compose/server.yml
-  vars:
-    ansible_user: "{{ ansible_env.USER }}"
+    src: tasks/ntfy_compose/server.yml.j2
+    dest: /home/{{ ansible_user }}/NAS_drive/ansible/tasks/ntfy_compose/server.yml
 
 
 # Run ntfy docker compose
