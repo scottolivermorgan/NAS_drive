@@ -106,12 +106,12 @@
 #    user: root
 #    job: "HOME=/home/{{ ansible_env.USER }} USER={{ ansible_env.USER }} PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin /bin/bash /home/{{ ansible_env.USER }}/NAS_drive/functions/cron_jobs/daily_reboot.sh"
 #
-#- name: Crontab - setup new media scan
-#  become: true
-#  ansible.builtin.cron:
-#    name: "Scan and notify for new media"
-#    minute: "0"
-#    hour: "17"
-#    user: root
-#    job: "HOME=/home/{{ ansible_env.USER }} USER={{ ansible_env.USER }} PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin /bin/bash /home/{{ ansible_env.USER }}/NAS_drive/functions/cron_jobs/notify_new_media.sh"
+- name: Crontab - setup new media scan
+  become: true
+  ansible.builtin.cron:
+    name: "Scan and notify for new media"
+    minute: "0"
+    hour: "17"
+    user: root
+    job: "HOME=/home/{{ ansible_env.USER }} USER={{ ansible_env.USER }} PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin /bin/bash /home/{{ ansible_env.USER }}/NAS_drive/functions/cron_jobs/notify_new_media.sh"
 
