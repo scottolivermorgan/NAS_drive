@@ -1,0 +1,69 @@
+# Ansible playbook to set up logrotate for managing cron job logs
+
+- name: Install logrotate
+  become: true
+  ansible.builtin.apt:
+    name: logrotate
+    state: present
+    update_cache: true
+
+- name: Create logrotate configuration directory
+  become: true
+  ansible.builtin.file:
+    path: /etc/logrotate.d
+    state: directory
+    mode: '0755'
+
+- name: Template the cron logs logrotate configuration
+  become: true
+  ansible.builtin.template:
+    src: "cron_templates/cron_logs.j2"
+    dest: "/etc/logrotate.d/nas_drive_cron_logs"
+    mode: '0644'
+    owner: root
+    group: root
+
+- name: Test logrotate configuration
+  become: true
+  ansible.builtin.command: logrotate -d /etc/logrotate.d/nas_drive_cron_logs
+  register: logrotate_test
+  changed_when: false
+  failed_when: false
+
+- name: Display logrotate test results
+  ansible.builtin.debug:
+    msg: "Logrotate configuration test completed. Check output for any warnings or errors."
+
+- name: Create logrotate state file directory
+  become: true
+  ansible.builtin.file:
+    path: /var/lib/logrotate
+    state: directory
+    mode: '0755'
+    owner: root
+    group: root
+
+- name: Ensure logrotate cron job exists
+  become: true
+  ansible.builtin.cron:
+    name: "Logrotate cron job logs"
+    minute: "0"
+    hour: "2"
+    job: "/usr/sbin/logrotate /etc/logrotate.d/nas_drive_cron_logs"
+    state: present
+
+- name: Create logrotate status file
+  become: true
+  ansible.builtin.file:
+    path: /var/lib/logrotate/status
+    state: touch
+    mode: '0644'
+    owner: root
+    group: root
+
+#- name: Set up logrotate service
+#  become: true
+#  ansible.builtin.systemd:
+#    name: logrotate
+#    enabled: true
+#    state: started

@@ -1,34 +1,35 @@
 # Playbook to automate the installation of Git and configure global Git settings.
 
-# Task to install Git using the apt package manager.
+# Installs Git using the system package manager
 - name: Install Git
   ansible.builtin.apt:
     name: git
     state: present
 
-# Task to set up the default text editor for Git to be nano.
+# Sets the default Git editor to nano globally
 - name: Setup editor
   community.general.git_config:
-    name: core.editor  # Git configuration key for default editor
-    scope: global      # Apply globally for all users
-    value: nano        # Value set to nano, a lightweight text editor
+    name: core.editor
+    scope: global
+    value: nano
 
-# Task to configure the email associated with Git commits.
+# Configures the global Git user email address
 - name: Setup email
   community.general.git_config:
-    name: user.email          # Git configuration key for user email
-    scope: global            # Apply globally for all users
-    value: "{{ docker_env.GIT_USER_EMAIL }}"  # Value taken from a variable git_user_email, provided externally
+    name: user.email
+    scope: global
+    value: "{{ docker_env.GIT_USER_EMAIL }}"
 
-# Task to configure the username associated with Git commits.
+# Configures the global Git username
 - name: Setup name
   community.general.git_config:
-    name: user.name          # Git configuration key for user name
-    scope: global           # Apply globally for all users
-    value: "{{ docker_env.GIT_USER_NAME }}"  # Value taken from a variable git_user_name, provided externally
+    name: user.name
+    scope: global
+    value: "{{ docker_env.GIT_USER_NAME }}"
 
+# Clones the specified Git repository into the user's home directory
 - name: Clone repository
   ansible.builtin.git:
     repo: https://github.com/scottolivermorgan/NAS_drive.git
     dest: /home/{{ ansible_env.USER }}/NAS_drive
-    version: main
+    version: updates_and_refactor

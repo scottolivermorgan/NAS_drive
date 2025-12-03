@@ -1,0 +1,11 @@
+services:
+  vaultwarden:
+    image: vaultwarden/server:{{ docker_env.VAULTWARDEN_VERSION }}
+    container_name: vaultwarden
+    restart: unless-stopped
+    environment:
+      DOMAIN: "http://{{ server_ip }}:{{ ports.vaultwarden }}"
+    volumes:
+      - /media/{{ mount_point }}/Documents/vw-data/:/data/
+    ports:
+      - {{ server_ip }}:{{ ports.vaultwarden }}:80

@@ -1,3 +1,4 @@
+import re
 import hashlib
 import subprocess
 import RPi.GPIO as GPIO
@@ -6,6 +7,8 @@ import random
 import os
 from dotenv import load_dotenv
 import time
+import yaml
+from .config_loader import get_ntfy_url
 
 
 def power_on(RELAY_CHANNEL, ON) -> None:
@@ -385,7 +388,8 @@ def backup_HD(config_data):
 
     if False in checks:
         print("Verification failed")
-        command = ['curl', '-d', 'Hashchecks failed, backup failed', 'http://192.168.1.9:8090/backup_status']
+        ntfy_url = get_ntfy_url()
+        command = ['curl', '-d', 'Hashchecks failed, backup failed', f'{ntfy_url}/backup_status']
         ntfy_call = subprocess.run(command, capture_output=True)
         return 1
     else:
@@ -427,10 +431,12 @@ def backup_HD(config_data):
                     text=True,
                 )
                 if sync.returncode != 0:
-                    command = ['curl', '-d', 'rsync backup failed', 'http://192.168.1.9:8090/backup_status']
+                    ntfy_url = get_ntfy_url()
+                    command = ['curl', '-d', 'rsync backup failed', f'{ntfy_url}/backup_status']
                     ntfy_call = subprocess.run(command, capture_output=True)
                 else:
-                    command = ['curl', '-d', 'Backup Succsesfull', 'http://192.168.1.9:8090/backup_status']
+                    ntfy_url = get_ntfy_url()
+                    command = ['curl', '-d', 'Backup Succsesfull', f'{ntfy_url}/backup_status']
                     ntfy_call = subprocess.run(command, capture_output=True)
                 # Write stdout and stderr to both console and log file
                 print(sync.stdout)
@@ -449,10 +455,18 @@ def backup_HD(config_data):
 
 
 def get_files_created_today(directory):
-    # Get today's date
-    today = datetime.date.today()
 
-    # List to hold the filenames of files created today
+    def remove_dates(text):
+        # Regular expression to remove any date inside parentheses
+        return re.sub(r'\s\(\d{4}\)', '', text)
+    
+    # List of media file extensions
+    media_extensions = ['.mp4', '.mp3', '.wav', '.avi', '.mov', '.mkv']
+
+    # Get today's date
+    today = datetime.today().date()
+
+    # List to hold the filenames of files created today that are media files
     files_created_today = []
 
     # Walk through the directory and its subdirectories
@@ -461,19 +475,130 @@ def get_files_created_today(directory):
             # Get the file path
             file_path = os.path.join(root, file)
             
-            # Get the creation time of the file (in seconds)
-            creation_time = os.path.getctime(file_path)
-            
-            # Convert creation time to a date object
-            file_creation_date = datetime.date.fromtimestamp(creation_time)
+            # Check if the file has a media extension
+            if any(file.lower().endswith(ext) for ext in media_extensions):
+                # Get the creation time of the file (in seconds)
+                creation_time = os.path.getctime(file_path)
+                
+                # Convert creation time to a datetime object
+                file_creation_date = datetime.fromtimestamp(creation_time).date()
 
-            # Compare the file creation date with today's date
-            if file_creation_date == today:
-                files_created_today.append(file_path)
+                # Compare the file creation date with today's date
+                if file_creation_date == today:
+                    files_created_today.append(file_path)
 
-    # If there are no files created today, return False
+    # If there are no media files created today, return False
     if not files_created_today:
+        print("No new files created")
         return False, files_created_today
-
     else:
-        return True, files_created_today
+        # Define the pattern for matching "S01E01", where the numbers can vary
+        pattern = r"S\d{2}E\d{2}"
+        parsed_fn =[]
+        # Regular expression to extract the show name and remove the year
+        for i in files_created_today:
+            tmp = i.split('/')[5]
+            # Extract the show name and remove the year inside parentheses
+            show_name = remove_dates(tmp)
+            episode_match = re.search(pattern, i.upper())
+            if episode_match:
+                episode = episode_match.group(0)  # Extract the "SxxExx" part
+            else:
+                episode = "" 
+            parsed_fn.append(f"{show_name} {episode}")
+
+        return True, parsed_fn
+    
+
+def activate_logical_volume(volume_group, logical_volume):
+    """
+    Activates the logical volume.
+    """
+    try:
+        # Command to activate the logical volume
+        command = ['sudo', 'lvchange', '-ay', f'{volume_group}/{logical_volume}']
+        subprocess.run(command, check=True)
+        print(f"Logical volume {logical_volume} activated successfully.")
+        return True
+    except subprocess.CalledProcessError as e:
+        print(f"Error activating logical volume {logical_volume}: {e}")
+        return False
+
+
+def mount_logical_volume(mount_point, volume_group, logical_volume):
+    """
+    Mounts the logical volume to the specified mount point if it is not already mounted.
+    """
+    try:
+        # Check if the logical volume is already mounted
+        result = subprocess.run(['mount'], capture_output=True, text=True)
+        if f'/dev/{volume_group}/{logical_volume}' in result.stdout:
+            print(f"Logical volume {logical_volume} is already mounted at {mount_point}.")
+            return True
+        else:
+            # Command to mount the logical volume
+            command = ['sudo', 'mount', f'/dev/{volume_group}/{logical_volume}', mount_point]
+            subprocess.run(command, check=True)
+            print(f"Logical volume {logical_volume} mounted at {mount_point}.")
+            return True
+    except subprocess.CalledProcessError as e:
+        print(f"Error mounting logical volume {logical_volume}: {e}")
+        return False
+
+
+
+def load_config_file(file_path):
+    """
+    Load a YAML config file and return the parsed data as a Python dictionary.
+    
+    :param file_path: The path to the YAML file to load.
+    :return: A dictionary representing the YAML file's contents.
+    """
+    try:
+        with open(file_path, 'r') as file:
+            config = yaml.safe_load(file)
+        return config
+    except FileNotFoundError:
+        print(f"Error: The file {file_path} was not found.")
+    except yaml.YAMLError as e:
+        print(f"Error parsing YAML file: {e}")
+    except Exception as e:
+        print(f"An unexpected error occurred: {e}")
+
+
+def execute_rsync():
+    """
+    Executes the rsync command to copy data from /media/HD_1/ to /media/BU_1/.
+    """
+    try:
+        # Command to execute rsync
+        command = ['sudo', 'rsync', '-av', '/media/HD_1/', '/media/BU_1/']
+        
+        # Capture the verbose output of the rsync command
+        result = subprocess.run(command, check=True, capture_output=True, text=True)
+        
+        # Get the verbose output from the rsync command
+        rsync_output = result.stdout.splitlines()
+        
+        # If there are any lines in the output, take the first and last lines
+        if rsync_output:
+            print(f"rsync output: {rsync_output}")
+            rsync_output = f"{rsync_output[0]}\n{rsync_output[1]}\n ... \n{rsync_output[-2]}\n{rsync_output[-1]}"
+        else:
+            rsync_output = "No output from rsync"
+        
+        print("Rsync completed successfully.")
+        
+        # Send rsync output as part of the curl request
+        ntfy_url = get_ntfy_url()
+        curl_command = ['curl', '-d', f'Backup Successful: {rsync_output}', f'{ntfy_url}/backup_status']
+        subprocess.run(curl_command, capture_output=True)
+
+    except subprocess.CalledProcessError as e:
+        print(f"Error executing rsync: {e}")
+        
+        # If rsync fails, capture the error message and send it via curl
+        error_message = f"Backup Unsuccessful: {e.stderr if e.stderr else 'No error details'}"
+        ntfy_url = get_ntfy_url()
+        curl_command = ['curl', '-d', error_message, f'{ntfy_url}/backup_status']
+        subprocess.run(curl_command, capture_output=True)

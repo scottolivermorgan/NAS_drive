@@ -1,0 +1,44 @@
+# Logrotate configuration for NAS Drive cron job logs
+# This file is managed by Ansible - do not edit manually
+
+/home/{{ ansible_user }}/NAS_drive/logs/*.log {
+    # Rotate daily
+    daily
+    
+    # Keep logs for specified number of days
+    rotate {{ logrotate.log_retention_days }}
+    
+    # Maximum size before rotation
+    size {{ logrotate.max_size }}
+    
+    # Compress old log files
+    {% if logrotate.compress %}compress{% endif %}
+    
+    # Create new log files after rotation
+    {% if logrotate.create %}create{% endif %}
+    
+    # Set user and group for new log files
+    {% if logrotate.create %}user {{ logrotate.user }} group {{ logrotate.group }}{% endif %}
+    
+    # Set permissions for new log files
+    {% if logrotate.create %}mode {{ logrotate.mode }}{% endif %}
+    
+    # Don't rotate if log file is missing
+    missingok
+    
+    # Don't rotate empty log files
+    notifempty
+    
+    # Use date extension for rotated files
+    dateext
+    
+    # Use date format for rotated files
+    dateformat -%Y%m%d
+    
+    # Post-rotate script to ensure proper permissions
+    postrotate
+        # Ensure proper ownership and permissions
+        chown {{ logrotate.user }}:{{ logrotate.group }} /home/{{ ansible_user }}/NAS_drive/logs/*.log
+        chmod {{ logrotate.mode }} /home/{{ ansible_user }}/NAS_drive/logs/*.log
+    endscript
+}

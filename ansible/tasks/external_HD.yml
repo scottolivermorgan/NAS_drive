@@ -1,9 +1,38 @@
-- name: Initialise external hard drives
-  ansible.builtin.shell:
-    cmd: |
-      venv/bin/python -m functions.HD_init
-    chdir: /home/{{ ansible_user }}/NAS_drive
+- name: Create directory for config
   become: true
+  ansible.builtin.file:
+    path: "{{ item }}"
+    state: directory
+    mode: '0777'
+  loop:
+    - /home/{{ ansible_env.USER }}/NAS_drive/config
+
+
+- name: Populate config.yml using the template
+  template:
+    src: env_templates/config.yml.j2
+    dest: /home/{{ ansible_env.USER }}/NAS_drive/config/config.yml
+    mode: '0777'
+
+- name: Ensure logical volume is active
+  become: true
+  lvol:
+    vg: "{{ volume_group }}"
+    lv: "{{ logical_volumes[0]['name'] }}"
+    state: present
+
+
+- name: Add logical volume to fstab (main)
+  become: true
+  mount:
+    name: "/media/{{ mount_point }}"
+    src: "/dev/{{ volume_group }}/{{ logical_volumes[0]['name'] }}"
+    fstype: ext4
+    state: mounted
+    opts: defaults
+    dump: 0
+    passno: 2
+
 
 - name: Create directory structure
   become: true
@@ -12,5 +41,6 @@
     state: directory
     mode: '0777'
   loop:
-    - /media/HD_1/Media
-    - /media/HD_1/Media/Metadata
+    - /media/{{ mount_point }}/Media
+    - /media/{{ mount_point }}/Media/Metadata
+    - /media/{{ backup_mount_point }}

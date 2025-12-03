@@ -1,0 +1,31 @@
+#!/bin/bash
+
+# External HD Backup Script
+# This script runs the Python backup script for external hard drives
+
+LOG="/home/{{ ansible_user }}/NAS_drive/logs/hd_backup.log"
+SUMMARY="/tmp/hd_backup_summary.txt"
+
+# Set environment variables
+export HOME="/home/{{ ansible_user }}"
+export USER="{{ ansible_user }}"
+export PYTHONPATH="/home/{{ ansible_user }}/NAS_drive"
+
+{
+  echo "Running external HD backup at $(date)"
+  
+  # Change to the functions directory and run the backup script
+  cd /home/{{ ansible_user }}/NAS_drive/functions
+  python backup_hd.py
+  
+  echo "External HD backup completed at $(date)"
+} >> "$LOG" 2>&1
+
+# Prepare summary for notification
+{
+  echo "External HD Backup completed at $(date)"
+  echo "Check logs at: $LOG"
+} > "$SUMMARY"
+
+# Send summary to notification server
+curl -d "output=$(cat $SUMMARY)" 'http://{{ server_ip }}:{{ ports.ntfy }}/routine_maintenence'

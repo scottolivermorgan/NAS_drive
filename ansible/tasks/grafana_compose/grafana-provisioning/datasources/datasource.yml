@@ -4,7 +4,7 @@ datasources:
     version: 2
     type: influxdb
     access: proxy
-    url: http://influxdb:8086
+    url: http://influxdb:{{ ports.influxdb }}
     jsonData:
       defaultBucket: $DOCKER_INFLUXDB_INIT_BUCKET
       httpMode: POST

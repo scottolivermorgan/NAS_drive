@@ -1,0 +1,12 @@
+version: "3.7"
+
+services:
+  jellyfin:
+    image: jellyfin/jellyfin:{{ docker_env.JELLYFIN_VERSION }}
+    ports:
+      - {{ ports.jellyfin }}:8096
+    volumes:
+      - "/media/{{ mount_point }}/Media/Metadata/jellyfin/config:/config"
+      - "/media/{{ mount_point }}/Media/Metadata/jellyfin/cache:/cache"
+      - /media/{{ mount_point }}:/media/{{ mount_point }}
+    restart: always

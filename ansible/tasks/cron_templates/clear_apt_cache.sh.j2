@@ -1,0 +1,27 @@
+#!/bin/bash
+
+# Clear APT Cache Script
+# This script clears the APT package cache and logs the results
+
+export PATH="/usr/bin:/usr/sbin:/bin:/sbin"
+LOG="/home/{{ ansible_user }}/NAS_drive/logs/cron_clean_apt_cache.log"
+SUMMARY="/tmp/cron_clean_apt_cache_summary.txt"
+
+{
+  echo "Running APT cache cleanup at $(date)"
+  
+  # Clear APT cache
+  output=$(apt-get clean 2>&1)
+  echo "$output"
+  
+  echo "APT cache cleanup completed at $(date)"
+} >> "$LOG"
+
+# Prepare summary for notification
+{
+  echo "APT Cache Cleanup completed at $(date)"
+  echo "Output: $output"
+} > "$SUMMARY"
+
+# Send summary to notification server
+/usr/bin/curl -d "output=$(cat $SUMMARY)" "http://{{ server_ip }}:{{ ports.ntfy }}/routine_maintenence" >> "$LOG" 2>&1

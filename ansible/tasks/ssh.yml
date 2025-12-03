@@ -33,7 +33,7 @@
   ansible.builtin.debug:  # Print debug information
     msg: "{{ ssh_key.stdout }}"  # Output the contents of the public key
 
-- name: Pause playbook execution and prompt for manual intervention
-  ansible.builtin.pause:  # Pause playbook execution and prompt for manual intervention
-    prompt: "Please enter the above ssh public key to GitHub and then press a key"  # Display a prompt message
-    echo: y # Allow user input to be echoed back
+#- name: Pause playbook execution and prompt for manual intervention
+#  ansible.builtin.pause:  # Pause playbook execution and prompt for manual intervention
+#    prompt: "Please enter the above ssh public key to GitHub and then press a key"  # Display a prompt message
+#    echo: y # Allow user input to be echoed back

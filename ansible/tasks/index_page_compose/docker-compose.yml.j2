@@ -1,0 +1,14 @@
+services:
+  homepage:
+    build:
+      context: .
+    container_name: Homepage
+    restart: always
+    ports:
+      - "{{ ports.homepage }}:80"  # Map port 80 in the container to homepage port on the host
+    healthcheck:
+      test: ["CMD", "wget", "-q", "--spider", "http://localhost/index.html"]
+      interval: 30s
+      timeout: 3s
+      retries: 3
+      start_period: 5s

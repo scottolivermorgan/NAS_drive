@@ -1,0 +1,104 @@
+- name: Main
+  hosts: vms
+  vars_files:
+    - config.yml
+  tasks:
+    - name: Set server_ip from inventory
+      set_fact:
+        server_ip: "{{ hostvars['scott']['ansible_host'] }}"
+
+    - name: Initial setup
+      ansible.builtin.include_tasks:
+        file: tasks/initial_setup.yml
+    
+    - name: SWAP
+      ansible.builtin.include_tasks:
+        file: tasks/swap.yml
+
+    - name: GIT
+      ansible.builtin.include_tasks:
+        file: tasks/git.yml
+
+    - name: SSH
+      ansible.builtin.include_tasks:
+        file: tasks/ssh.yml
+
+    - name: Docker
+      ansible.builtin.include_tasks:
+        file: tasks/docker.yml
+
+    - name: Python venv
+      ansible.builtin.include_tasks:
+        file: tasks/python_venv.yml
+
+    - name: Shutdown & Reboot switches
+      ansible.builtin.include_tasks:
+        file: tasks/shutdown_reboot_switches.yml
+
+    - name: LVM
+      ansible.builtin.include_tasks:
+        file: tasks/lvm.yml
+
+    - name: External HD
+      ansible.builtin.include_tasks:
+        file: tasks/external_HD.yml
+
+    - name: Cron jobs
+      ansible.builtin.include_tasks:
+        file: tasks/cron_jobs.yml
+        
+    - name: Logrotate setup
+      ansible.builtin.include_tasks:
+        file: tasks/logrotate.yml
+       
+    - name: Nextcloud
+      ansible.builtin.include_tasks:
+        file: tasks/nextcloud.yml
+    
+    - name: Jellyfin
+      ansible.builtin.include_tasks:
+        file: tasks/jellyfin.yml
+
+    - name: Komga
+      ansible.builtin.include_tasks:
+        file: tasks/komga.yml
+
+    - name: Audiobookshelf
+      ansible.builtin.include_tasks:
+        file: tasks/audiobookshelf.yml
+
+    - name: Immich
+      ansible.builtin.include_tasks:
+        file: tasks/immich.yml
+
+    - name: Tandoor
+      ansible.builtin.include_tasks:
+        file: tasks/tandoor.yml
+
+    - name: NTFY
+      ansible.builtin.include_tasks:
+        file: tasks/ntfy.yml
+
+    - name: ARR stack
+      ansible.builtin.include_tasks:
+        file: tasks/arr_stack.yml
+
+    - name: Grafana
+      ansible.builtin.include_tasks:
+        file: tasks/grafana_compose.yml
+
+    - name: VaultWarden
+      ansible.builtin.include_tasks:
+        file: tasks/vaultwarden.yml
+
+    - name: Index Page
+      ansible.builtin.include_tasks:
+        file: tasks/index_page.yml
+
+    - name: Romm
+      ansible.builtin.include_tasks:
+        file: tasks/romm.yml         
+
+    - name: Harden security
+      ansible.builtin.include_tasks:
+        file: tasks/harden_security.yml

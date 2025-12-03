@@ -1,71 +1,78 @@
 # Playbook to automate the installation of Docker and configure global Docker settings.
 
+# Installs required system packages for Docker installation
 - name: Install initial packages
-  # Ansible task to ensure essential packages are installed
   become: true
   ansible.builtin.apt:
-    update_cache: true  # Update apt cache before installing packages
-    cache_valid_time: 3600  # Cache validity time set to 1 hour
+    update_cache: true
+    cache_valid_time: 3600
     pkg:
-      - ca-certificates  # Package for CA certificates
-      - curl  # Package for transferring data
-      - gnupg  # Package for GNU Privacy Guard
+      - ca-certificates
+      - curl
+      - gnupg
 
+# Adds the Docker GPG key to the system to verify package authenticity
 - name: Install docker repo key to apt
-  # Ansible task to add Docker repository key to apt
   become: true
   ansible.builtin.apt_key:
-    url: https://download.docker.com/linux/debian/gpg  # URL for Docker repo key
+    url: https://download.docker.com/linux/debian/gpg
 
+# Retrieves the OS codename (e.g., bullseye) for setting up the correct Docker repo
 - name: Register OS code name
   ansible.builtin.command: lsb_release -sc
-  register: os_codename  # Command to get OS codename and register its output
+  register: os_codename
   changed_when: os_codename.rc != 0
 
+# Adds the Docker APT repository using the correct OS codename
 - name: Install docker repository to apt
-  # Ansible task to add Docker repository to apt sources list
   become: true
   ansible.builtin.apt_repository:
-    repo: deb [arch=arm64] https://download.docker.com/linux/debian "{{ os_codename.stdout }}" stable  # Docker repository URL with OS codename
-    state: present  # Ensure the repository is present
+    repo: deb [arch=arm64] https://download.docker.com/linux/debian "{{ os_codename.stdout }}" stable
+    state: present
 
+# Installs Docker and related components from the official Docker repository
 - name: Install docker packages
-  # Ansible task to install Docker packages
   become: true
   ansible.builtin.apt:
-    update_cache: true  # Update apt cache before installing packages
+    update_cache: true
     pkg:
-      - docker-ce  # Docker Community Edition
-      - docker-ce-cli  # Docker CLI
-      - containerd.io  # Container runtime
-      - docker-buildx-plugin  # Docker Buildx plugin
-      - docker-compose-plugin  # Docker Compose plugin
+      - docker-ce
+      - docker-ce-cli
+      - containerd.io
+      - docker-buildx-plugin
+      - docker-compose-plugin
       - docker-compose
 
+# Check if the Docker service is already active
+- name: Check if docker service is running
+  become: true
+  ansible.builtin.service_facts:
+
+# Reboots the machine only if Docker is not already running
 - name: Reboot the machine to make the docker.service start
-  # Ansible task to reboot the machine to ensure Docker service starts
   become: true
   ansible.builtin.reboot:
+  when: not (ansible_facts.services['docker.service'].state == 'running')
 
+# Starts and enables the Docker service to run on boot
 - name: Enable docker.service
-  # Ansible task to enable and restart Docker service
   become: true
   ansible.builtin.service:
-    name: docker  # Docker service name
-    state: restarted  # Restart Docker service if already running
-    enabled: true  # Ensure Docker service is enabled on boot
+    name: docker
+    state: restarted
+    enabled: true
 
+# Creates the 'docker' group if it doesn't exist
 - name: Create "docker" group
-  # Ansible task to create "docker" group if not already present
   become: true
   ansible.builtin.group:
-    name: docker  # Group name
-    state: present  # Ensure group is present
+    name: docker
+    state: present
 
+# Adds the current user to the 'docker' group for non-root Docker access
 - name: Add user to "docker" group
-  # Ansible task to add user to "docker" group
   become: true
   ansible.builtin.user:
-    name: "{{ ansible_user }}"  # User to be added to "docker" group
-    groups: docker  # Add user to "docker" group
-    append: true  # Append user to existing groups
+    name: "{{ ansible_user }}"
+    groups: docker
+    append: true

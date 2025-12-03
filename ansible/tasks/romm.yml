@@ -1,0 +1,32 @@
+- name: Create directories
+  become: true
+  ansible.builtin.file:
+    path: "{{ item }}"
+    state: directory
+    mode: '0777'
+  loop:
+    - /media/{{ mount_point }}/Media/games/library/roms
+    - /media/{{ mount_point }}/Media/games/library/bios
+    - /media/{{ mount_point }}/Media/metadata/romm/config
+    - /media/{{ mount_point }}/Media/metadata/romm/assets
+    - /media/{{ mount_point }}/Media/metadata/romm/resources
+    - /media/{{ mount_point }}/Media/metadata/romm/redis
+    - /media/{{ mount_point }}/Media/metadata/romm/mysql_data
+
+
+- name: Template the config file
+  ansible.builtin.template:
+    src: "romm_compose/config.yml.j2"
+    dest: "/media/{{ mount_point }}/Media/metadata/romm/config/config.yml"
+    mode: '0777'
+
+- name: Template the docker-compose file
+  template:
+    src: romm_compose/docker-compose.yml.j2
+    dest: /home/{{ ansible_env.USER }}/NAS_drive/ansible/tasks/romm_compose/docker-compose.yml
+
+- name: Create and start Romm
+  become: true
+  community.docker.docker_compose_v2:
+    project_src: /home/{{ ansible_env.USER }}/NAS_drive/ansible/tasks/romm_compose
+  register: output

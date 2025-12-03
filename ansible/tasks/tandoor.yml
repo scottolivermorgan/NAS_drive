@@ -6,15 +6,21 @@
     state: directory
     mode: '0777'
   loop:
-    - /media/HD_1/Media/Recipes
-    - /media/HD_1/Media/Recipes/tandoor
-    - /media/HD_1/Media/Recipes/tandoor/postgres
-    - /media/HD_1/Media/Recipes/tandoor/mediafiles
+    - /media/{{ mount_point }}/Media/Recipes
+    - /media/{{ mount_point }}/Media/Recipes/tandoor
+    - /media/{{ mount_point }}/Media/Recipes/tandoor/postgres
+    - /media/{{ mount_point }}/Media/Recipes/tandoor/mediafiles
 
 - name: Create the .env file from template
   template:
     src: env_templates/tandoor.env.j2
     dest: /home/{{ ansible_env.USER }}/NAS_drive/ansible/tasks/tandoor_compose/.env
+
+
+- name: Template the docker-compose file
+  template:
+    src: tandoor_compose/docker-compose.yml.j2
+    dest: /home/{{ ansible_env.USER }}/NAS_drive/ansible/tasks/tandoor_compose/docker-compose.yml
 
 # Run Tandoor docker compose
 - name: Create and start Tandoor

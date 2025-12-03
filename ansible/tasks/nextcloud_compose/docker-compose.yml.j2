@@ -1,0 +1,46 @@
+version: '3'
+
+volumes:
+  nextcloud:
+  db:
+
+services:
+  db:
+    image: mariadb:{{ docker_env.MARIADB_VERSION }}
+    command: --transaction-isolation=READ-COMMITTED --binlog-format=ROW
+    restart: always
+    volumes:
+      - db:/var/lib/mysql
+    container_name: mariadb
+    environment:
+      - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}
+      - MYSQL_PASSWORD=${MYSQL_PASSWORD}
+      - MYSQL_DATABASE=${MYSQL_DATABASE}
+      - MYSQL_USER=${MYSQL_USER}
+      - NEXTCLOUD_ADMIN_USER=${NEXTCLOUD_ADMIN_USER}
+      - NEXTCLOUD_ADMIN_PASSWORD=${NEXTCLOUD_ADMIN_PASSWORD}
+    networks:
+      - nextcloud_network
+
+  app:
+    image: nextcloud:{{ docker_env.NEXTCLOUD_VERSION }}
+    ports:
+      - {{ ports.nextcloud }}:80
+    container_name: nextcloud
+    volumes:
+      - nextcloud:/var/www/html
+      - /media/{{ mount_point }}:/media/{{ mount_point }}
+    restart: always
+    environment:
+      - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}
+      - MYSQL_PASSWORD=${MYSQL_PASSWORD}
+      - MYSQL_DATABASE=${MYSQL_DATABASE}
+      - MYSQL_USER=${MYSQL_USER}
+      - NEXTCLOUD_ADMIN_USER=${NEXTCLOUD_ADMIN_USER}
+      - NEXTCLOUD_ADMIN_PASSWORD=${NEXTCLOUD_ADMIN_PASSWORD}
+    networks:
+      - nextcloud_network
+
+networks:
+  nextcloud_network:
+    driver: bridge

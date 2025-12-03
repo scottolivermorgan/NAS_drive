@@ -6,7 +6,7 @@
     state: directory
     mode: '0777'
   loop:
-    - /media/HD_1/Media/Pictures/immich
+    - /media/{{ mount_point }}/Media/Pictures/immich
 
 - name: Create the .env file from template
   template:

@@ -1,0 +1,33 @@
+# ---------------------------------------------------------------------------
+# External drive names
+# ---------------------------------------------------------------------------
+volumes:
+  {% for volume in volumes %}
+  - {{ volume }}
+  {% endfor %}
+
+volume_group: "{{ volume_group }}"
+
+logical_volumes:
+  {% for lv in logical_volumes %}
+  - name: "{{ lv.name }}"
+      size: "{{ lv.size }}"
+  {% endfor %}
+
+mount_point: "{{ mount_point }}"
+
+# ---------------------------------------------------------------------------
+# Backup drive names (for second LVM)
+# ---------------------------------------------------------------------------
+backup_volumes:
+  {% for backup_volume in backup_volumes %}
+  - {{ backup_volume }}
+  {% endfor %}
+
+backup_volume_group: "{{ backup_volume_group }}"
+
+backup_logical_volumes:
+  {% for backup_lv in backup_logical_volumes %}
+  - name: "{{ backup_lv.name }}"
+      size: "{{ backup_lv.size }}"
+  {% endfor %}

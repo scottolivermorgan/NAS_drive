@@ -1,0 +1,99 @@
+version: "3.7"
+services:
+  qbittorrent:
+    image: lscr.io/linuxserver/qbittorrent:{{ docker_env.QBITTORRENT_VERSION }}
+    container_name: qbittorrent
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=Etc/UTC
+      - WEBUI_PORT={{ ports.qbittorrent_web }}
+      - TORRENTING_PORT={{ ports.qbittorrent_torrent }}
+    volumes:
+      - /media/{{ mount_point }}/Media/metadata/qbittorrent/appdata:/config
+      - /media/{{ mount_point }}/Media/Downloads/completed:/downloads #optional
+    ports:
+      - {{ ports.qbittorrent_web }}:9080
+      - {{ ports.qbittorrent_torrent }}:6881
+      - {{ ports.qbittorrent_torrent }}:6881/udp
+    restart: always
+    networks:
+      - bridge_network
+
+
+  # https://github.com/linuxserver/docker-radarr
+  radarr:
+    image: linuxserver/radarr:{{ docker_env.RADARR_VERSION }}
+    container_name: radarr
+    restart: always
+    ports:
+      - "{{ ports.radarr }}:7878"
+    environment:
+      - PGID=1000
+      - PUID=1000
+      - TZ=Europe/Amsterdam
+    volumes:
+      - /media/{{ mount_point }}/Media/metadata/radarr:/config
+      - /media/{{ mount_point }}/Media/Movies:/movies
+      - /media/{{ mount_point }}/Media/Downloads/completed:/downloads
+    networks:
+      - bridge_network
+
+  # https://github.com/linuxserver/docker-sonarr
+  sonarr:
+    image: linuxserver/sonarr:{{ docker_env.SONARR_VERSION }}
+    container_name: sonarr
+    restart: always
+    ports:
+      - "{{ ports.sonarr }}:8989"
+    environment:
+      - PGID=1000
+      - PUID=1000
+      - TZ=Europe/Amsterdam
+    volumes:
+      - /media/{{ mount_point }}/Media/metadata/sonarr:/config
+      - /media/{{ mount_point }}/Media/TV Shows:/tv
+      - /media/{{ mount_point }}/Media/Downloads/completed:/downloads
+    networks:
+      - bridge_network
+
+  # https://github.com/linuxserver/docker-prowlarr
+  prowlarr:
+    image: linuxserver/prowlarr:{{ docker_env.PROWLARR_VERSION }}
+
+    container_name: prowlarr
+    restart: always
+    ports:
+      - "{{ ports.prowlarr }}:9696"
+    cap_add:
+      - NET_ADMIN
+    environment:
+      - PGID=1000
+      - PUID=1000
+      - TZ=Europe/Amsterdam
+    volumes:
+      - /media/{{ mount_point }}/Media/metadata/prowlarr:/config
+      - /media/{{ mount_point }}/Media/Downloads/watch:/downloads
+    networks:
+      - bridge_network
+
+  bazarr:
+    image: lscr.io/linuxserver/bazarr:{{ docker_env.BAZARR_VERSION }}
+    container_name: bazarr
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=Etc/UTC
+    volumes:
+      - /media/{{ mount_point }}/Media/metadata/bazarr:/config
+      - /media/{{ mount_point }}/Media/Movies:/movies
+      - /media/{{ mount_point }}/Media/TV Shows:/tv
+    ports:
+      - {{ ports.bazarr }}:6767
+    restart: always
+    networks:
+      - bridge_network
+
+networks:
+  bridge_network:
+    driver: bridge

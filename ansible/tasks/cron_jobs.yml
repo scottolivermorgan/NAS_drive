@@ -1,31 +1,111 @@
+- name: Create directory for logs and cron scripts
+  become: true
+  ansible.builtin.file:
+    path: "{{ item }}"
+    state: directory
+    mode: '0777'
+  loop:
+    - "/home/{{ ansible_env.USER }}/NAS_drive/logs"
+    - "/home/{{ ansible_env.USER }}/NAS_drive/functions/cron_jobs"
+
+# Template all the cron job scripts
+- name: Template the update and upgrade script
+  ansible.builtin.template:
+    src: "cron_templates/update_and_upgrade.sh.j2"
+    dest: "/home/{{ ansible_env.USER }}/NAS_drive/functions/cron_jobs/update_and_upgrade.sh"
+    mode: '0777'
+
+- name: Template the clear APT cache script
+  ansible.builtin.template:
+    src: "cron_templates/clear_apt_cache.sh.j2"
+    dest: "/home/{{ ansible_env.USER }}/NAS_drive/functions/cron_jobs/clear_apt_cache.sh"
+    mode: '0777'
+
+- name: Template the Docker cleanup script
+  ansible.builtin.template:
+    src: "cron_templates/docker_cleanup.sh.j2"
+    dest: "/home/{{ ansible_env.USER }}/NAS_drive/functions/cron_jobs/docker_cleanup.sh"
+    mode: '0777'
+
+- name: Template the journal vacuum script
+  ansible.builtin.template:
+    src: "cron_templates/journal_vacuum.sh.j2"
+    dest: "/home/{{ ansible_env.USER }}/NAS_drive/functions/cron_jobs/journal_vacuum.sh"
+    mode: '0777'
+
+- name: Template the HD backup script
+  ansible.builtin.template:
+    src: "cron_templates/hd_backup.sh.j2"
+    dest: "/home/{{ ansible_env.USER }}/NAS_drive/functions/cron_jobs/hd_backup.sh"
+    mode: '0777'
+
+- name: Template the daily reboot script
+  ansible.builtin.template:
+    src: "cron_templates/daily_reboot.sh.j2"
+    dest: "/home/{{ ansible_env.USER }}/NAS_drive/functions/cron_jobs/daily_reboot.sh"
+    mode: '0777'
+
+- name: Template the new media notification script
+  ansible.builtin.template:
+    src: "cron_templates/notify_new_media.sh.j2"
+    dest: "/home/{{ ansible_env.USER }}/NAS_drive/functions/cron_jobs/notify_new_media.sh"
+    mode: '0777'
+
+# Setup all cron jobs using the modular scripts
 - name: Crontab - setup update and upgrade
-  become: true  # This task requires escalated privileges
-  ansible.builtin.cron:
-    name: "Update and upgrade"  # Specifies the name of the cron job
-    minute: "0"  # Specifies the minute when the cron job will run (0th minute)
-    hour: "4"  # Specifies the hour when the cron job will run (4th hour, i.e., 4:00 AM)
-    job: "apt update -q -y && apt dist-upgrade -q -y"
-
-- name: Add HD back up to cron tab
   become: true
   ansible.builtin.cron:
-    name: "External HD backup script"
-    minute: "0"
-    hour: "5"
-    job: "HOME=/home/{{ ansible_user }} USER={{ ansible_user }} python /home/{{ ansible_user }}/NAS_drive/functions/back-up.py >> /home/{{ ansible_user }}/NAS_drive/logs/back_up_cron.log 2>&1"
+    name: "Update and upgrade"
+    minute: "20"
+    hour: "14"
+    user: root
+    job: "HOME=/home/{{ ansible_env.USER }} USER={{ ansible_env.USER }} PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin /bin/bash /home/{{ ansible_env.USER }}/NAS_drive/functions/cron_jobs/update_and_upgrade.sh"
 
-- name: Scan and notify for new media
+
+- name: Crontab - setup clear APT cache
   become: true
   ansible.builtin.cron:
-    name: "Scan and notify for new media"
-    minute: "0"
-    hour: "17"
-    job: "HOME=/home/{{ ansible_user }} USER={{ ansible_user }} python /home/{{ ansible_user }}/NAS_drive/functions/notify_new_media.py"
+    name: "Clear APT Cache"
+    minute: "30"
+    hour: "18"
+    user: root
+    job: "HOME=/home/{{ ansible_env.USER }} USER={{ ansible_env.USER }} PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin /bin/bash /home/{{ ansible_env.USER }}/NAS_drive/functions/cron_jobs/clear_apt_cache.sh"
 
-- name: Daily Reboot
+
+- name: Crontab - setup journal vacuum
+  become: true
+  ansible.builtin.cron:
+    name: "Vacuum journal logs"
+    minute: "40"
+    hour: "18"
+    user: root
+    job: "HOME=/home/{{ ansible_env.USER }} USER={{ ansible_env.USER }} PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin /bin/bash /home/{{ ansible_env.USER }}/NAS_drive/functions/cron_jobs/journal_vacuum.sh"
+
+#- name: Crontab - setup external HD backup
+#  become: true
+#  ansible.builtin.cron:
+#    name: "External HD backup script"
+#    minute: "20"
+#    hour: "04"
+#    user: root
+#    job: "HOME=/home/{{ ansible_env.USER }} USER={{ ansible_env.USER }} PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin /bin/bash /home/{{ ansible_env.USER }}/NAS_drive/functions/cron_jobs/hd_backup.sh"
+#
+- name: Crontab - setup daily reboot
   become: true
   ansible.builtin.cron:
     name: "Daily reboot"
     minute: "0"
     hour: "7"
-    job: "HOME=/home/{{ ansible_user }} USER={{ ansible_user }} sudo reboot"
+    user: root
+    job: "HOME=/home/{{ ansible_env.USER }} USER={{ ansible_env.USER }} PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin /bin/bash /home/{{ ansible_env.USER }}/NAS_drive/functions/cron_jobs/daily_reboot.sh"
+
+
+- name: Crontab - setup new media scan
+  become: true
+  ansible.builtin.cron:
+    name: "Scan and notify for new media"
+    minute: "0"
+    hour: "17"
+    user: root
+    job: "HOME=/home/{{ ansible_env.USER }} USER={{ ansible_env.USER }} PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin /bin/bash /home/{{ ansible_env.USER }}/NAS_drive/functions/cron_jobs/notify_new_media.sh"
+

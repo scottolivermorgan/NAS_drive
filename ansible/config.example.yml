@@ -1,9 +1,120 @@
+# ---------------------------------------------------------------------------
+# Network Configuration
+# ---------------------------------------------------------------------------
+# Server IP addresses - centralized configuration
+#server_ip: "192.168.2.19"
+
+# Service Ports - centralized configuration
+ports:
+  # Core services
+  ntfy: 8090
+  influxdb: 8086
+  grafana: 3001
+  
+  # Media services
+  jellyfin: 8096
+  immich: 2283
+  nextcloud: 8000
+  audiobookshelf: 13378
+  komga: 25600
+  
+  # System services
+  homepage: 1111
+  postgres: 5432
+  
+  # Additional services
+  tandoor: 8081
+  qbittorrent_web: 9080
+  qbittorrent_torrent: 6881
+  radarr: 7878
+  sonarr: 8989
+  prowlarr: 9696
+  bazarr: 6767
+  vaultwarden: 8080
+
+  # Standard ports
+  http: 80
+  https: 443
+  ssh: 22
+
+# Legacy port variables (for backward compatibility)
+#ntfy_port: 8090
+#influxdb_port: 8086
+
+# ---------------------------------------------------------------------------
+# External drive names
+# ---------------------------------------------------------------------------
+volumes:
+  - HD_1
+  - HD_2
+
+volume_group: "my_vg"
+
+logical_volumes:
+  - name: "lv1"
+    size: "100%FREE"
+
+mount_point: "HD_1"
+
+# ---------------------------------------------------------------------------
+# Backup drive names (for second LVM)
+# ---------------------------------------------------------------------------
+backup_volumes:
+  - BU_1
+  - BU_2
+
+backup_volume_group: "backup_vg"
+
+backup_logical_volumes:
+  - name: "backup_lv1"
+    size: "100%FREE"
+
+backup_mount_point: "BU_1"
+
+# ---------------------------------------------------------------------------
+# Logrotate Configuration
+# ---------------------------------------------------------------------------
+logrotate:
+  # Number of days to keep log files
+  log_retention_days: 7
+  # Maximum size of log files before rotation (e.g., "100M", "1G")
+  max_size: "100M"
+  # Whether to compress old log files
+  compress: true
+  # Whether to create new log files after rotation
+  create: true
+  # User and group for new log files
+  user: "{{ ansible_user }}"
+  group: "{{ ansible_user }}"
+  # Permissions for new log files
+  mode: "0644"
+
 docker_env:
+  # ---------------------------------------------------------------------------
+  # Jellyfin
+  # ---------------------------------------------------------------------------
+  JELLYFIN_VERSION: 2025082505
+
+  # ---------------------------------------------------------------------------
+  # Audio Book Shelf
+  # ---------------------------------------------------------------------------
+  ABS_VERSION: 2.29.0
+
+  # ---------------------------------------------------------------------------
+  # Komga
+  # ---------------------------------------------------------------------------
+  KOMGA_VERSION: 1.23.3
+
+  # ---------------------------------------------------------------------------
+  # NTFY
+  # ---------------------------------------------------------------------------
+  NTFY_VERSION: v2.14
+
   # ---------------------------------------------------------------------------
   # Git account
   # ---------------------------------------------------------------------------
-  GIT_USER_EMAIL: scottolivermorgan@yahoo.com
-  GIT_USER_NAME: Scott Morgan
+  GIT_USER_EMAIL: test@test.com
+  GIT_USER_NAME: test
 
   # ---------------------------------------------------------------------------
   # Swap size
@@ -16,12 +127,12 @@ docker_env:
   # Visit the docs to find more https://docs.tandoor.dev/system/configuration/
   # ---------------------------------------------------------------------------
   INFLUXDB_USERNAME: admin
-  INFLUXDB_PASSWORD: secure_influx_admin_password
+  INFLUXDB_PASSWORD: test_test
   INFLUXDB_ORG: my_org
   INFLUXDB_BUCKET: my_bucket
   INFLUXDB_ADMIN_TOKEN: a_secure_admin_token
   GRAFANA_USERNAME: admin
-  GRAFANA_PASSWORD: secure_influx_admin_password
+  GRAFANA_PASSWORD: test_test
   
   # ---------------------------------------------------------------------------
   # IMMICH & POSTGRES
@@ -31,14 +142,14 @@ docker_env:
   # https://immich.app/docs/install/environment-variables
   # ---------------------------------------------------------------------------
   # The location where your uploaded files are stored
-  UPLOAD_LOCATION: /media/HD_1/Media/Pictures/immich
+  #UPLOAD_LOCATION: /media/HD_1/Media/Pictures/immich
   
   # The location where your database files are stored
-  DB_DATA_LOCATION: /media/HD_1/Media/Metadata/immich/postgres
+  #DB_DATA_LOCATION: /media/HD_1/Media/Metadata/immich/postgres
   
   # To set a timezone, uncomment the next line and change Etc/UTC to a TZ 
   # identifier from this list: https://en.wikipedia.org/wiki/List_of_tz_database_time_zones#List
-  # TZ: Etc/UTC
+  TZ: Etc/GMT
   
   # The Immich version to use. You can pin this to a specific version like "v1.71.0"
   IMMICH_VERSION: v1.118.2
@@ -56,10 +167,15 @@ docker_env:
   # This template contains only required options.
   # Visit the docs to find more https://docs.tandoor.dev/system/configuration/
   # ---------------------------------------------------------------------------
+  NEXTCLOUD_VERSION: 31.0.8 #29.0.2
+  MARIADB_VERSION: 11.4.2
+
   MYSQL_ROOT_PASSWORD: test
   MYSQL_PASSWORD: test
   MYSQL_DATABASE: test
   MYSQL_USER: test
+  NEXTCLOUD_ADMIN_USER: test
+  NEXTCLOUD_ADMIN_PASSWORD: test
   
   # ---------------------------------------------------------------------------
   # TANDOOR
@@ -76,6 +192,33 @@ docker_env:
   DB_ENGINE: django.db.backends.postgresql
   POSTGRES_HOST: db_recipes
   POSTGRES_DB: djangodb
-  POSTGRES_PORT: 5432
+  POSTGRES_PORT: "{{ ports.postgres }}"
   POSTGRES_USER: djangouser
   POSTGRES_PASSWORD: test
+
+  # ---------------------------------------------------------------------------
+  # ARR STack
+  # ---------------------------------------------------------------------------
+  QBITTORRENT_VERSION: 5.1.2 #version-5.0.3-r0
+  RADARR_VERSION: nightly-5.27.5.10194-ls11 #5.18.4.9674-ls259
+  SONARR_VERSION: 4.0.15 #4.0.12.2823-ls270
+  PROWLARR_VERSION: 2.1.0-nightly #develop-1.31.1.4959-ls216
+  BAZARR_VERSION: 1.5.2 #v1.5.1-ls290
+
+  # ---------------------------------------------------------------------------
+  # Vaultwarden
+  # ---------------------------------------------------------------------------
+  VAULTWARDEN_VERSION: latest
+
+  # ---------------------------------------------------------------------------
+  # Romm
+  # ---------------------------------------------------------------------------
+  ROMM_VERSION: latest
+  ROMM_MARIADB_VERSION: latest
+  DB_PASSWD: test
+  ROMM_KEY: test
+  SCREENSCRAPER_USER: test
+  SCREENSCRAPER_PASSWORD: test
+  RETROACHIEVEMENTS_API_KEY: test
+  STEAMGRIDDB_API_KEY: test
+  HASHEOUS_API_ENABLED: true
