@@ -32,4 +32,4 @@
   ansible.builtin.git:
     repo: https://github.com/scottolivermorgan/NAS_drive.git
     dest: /home/{{ ansible_env.USER }}/NAS_drive
-    version: updates_and_refactor
+    version: main
