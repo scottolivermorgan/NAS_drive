@@ -1,3 +1,29 @@
+#TODO's
+- Nextcloud
+  - Automate:
+    - Enable external hard drive app
+    - Add external harddrive
+    - admin user creation (startup gui page)
+    - properly setup postgres rather than sqlite.
+- Arr stack
+  - Automate:
+    - prowlarr config via api
+    - sonarr config via api
+    - radarr config via api
+    - qbittorent config via api
+    - bazarr config via templating
+- Index page
+  - Fix qbittorrent link error -> unauthorized
+  - Update vaultwarden link to https
+  - Make ntfy red circle work
+- Grafana
+  - Fix
+  - fix container resource display
+Influxdb:
+  - Sort data storage, drops recent historical data
+- Tandoor & Immich
+  - figure out why postgres db's keep getting corupted and failing.
+
 #TODO uv instructions to readme + migrate
 https://docs.romm.app/latest/Getting-Started/Metadata-Providers/#igdb
 
