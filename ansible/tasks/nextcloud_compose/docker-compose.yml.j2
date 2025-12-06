@@ -56,7 +56,7 @@ services:
       - REDIS_HOST_PASSWORD={{ docker_env.REDIS_PASSWORD }}
 
       # Optional: preconfigure trusted domains
-      #- NEXTCLOUD_TRUSTED_DOMAINS=${NEXTCLOUD_TRUSTED_DOMAINS}
+      - NEXTCLOUD_TRUSTED_DOMAINS={{ server_ip }}
 
     depends_on:
       - db
