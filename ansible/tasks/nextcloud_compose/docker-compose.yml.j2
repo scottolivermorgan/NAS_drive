@@ -3,41 +3,77 @@ version: '3'
 volumes:
   nextcloud:
   db:
+  redis:
 
 services:
+
   db:
     image: mariadb:{{ docker_env.MARIADB_VERSION }}
-    command: --transaction-isolation=READ-COMMITTED --binlog-format=ROW
+    command: --transaction-isolation=READ-COMMITTED --binlog-format=ROW --innodb-read-only-compressed=OFF
     restart: always
+    container_name: mariadb
     volumes:
       - db:/var/lib/mysql
-    container_name: mariadb
     environment:
-      - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}
-      - MYSQL_PASSWORD=${MYSQL_PASSWORD}
-      - MYSQL_DATABASE=${MYSQL_DATABASE}
-      - MYSQL_USER=${MYSQL_USER}
-      - NEXTCLOUD_ADMIN_USER=${NEXTCLOUD_ADMIN_USER}
-      - NEXTCLOUD_ADMIN_PASSWORD=${NEXTCLOUD_ADMIN_PASSWORD}
+      - MYSQL_ROOT_PASSWORD={{ docker_env.MYSQL_ROOT_PASSWORD }}
+      - MYSQL_PASSWORD={{ docker_env.MYSQL_PASSWORD }}
+      - MYSQL_DATABASE={{ docker_env.MYSQL_DATABASE }}
+      - MYSQL_USER={{ docker_env.MYSQL_USER }}
+    networks:
+      - nextcloud_network
+
+  redis:
+    image: redis:alpine
+    container_name: redis
+    restart: always
+    command: ["redis-server", "--requirepass", "{{ docker_env.REDIS_PASSWORD }}"]
     networks:
       - nextcloud_network
 
   app:
     image: nextcloud:{{ docker_env.NEXTCLOUD_VERSION }}
+    container_name: nextcloud
+    restart: always
     ports:
       - {{ ports.nextcloud }}:80
-    container_name: nextcloud
     volumes:
       - nextcloud:/var/www/html
       - /media/{{ mount_point }}:/media/{{ mount_point }}
-    restart: always
     environment:
-      - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}
-      - MYSQL_PASSWORD=${MYSQL_PASSWORD}
-      - MYSQL_DATABASE=${MYSQL_DATABASE}
-      - MYSQL_USER=${MYSQL_USER}
-      - NEXTCLOUD_ADMIN_USER=${NEXTCLOUD_ADMIN_USER}
-      - NEXTCLOUD_ADMIN_PASSWORD=${NEXTCLOUD_ADMIN_PASSWORD}
+
+      # --- AUTOMATED NEXTCLOUD SETUP ---
+      - NEXTCLOUD_ADMIN_USER={{ docker_env.NEXTCLOUD_ADMIN_USER }}
+      - NEXTCLOUD_ADMIN_PASSWORD={{ docker_env.NEXTCLOUD_ADMIN_PASSWORD }}
+
+      # --- DATABASE CONFIG ---
+      - MYSQL_HOST=db
+      - MYSQL_PASSWORD={{ docker_env.MYSQL_PASSWORD }}
+      - MYSQL_DATABASE={{ docker_env.MYSQL_DATABASE }}
+      - MYSQL_USER={{ docker_env.MYSQL_USER }}
+
+      # --- REDIS CONFIG ---
+      - REDIS_HOST=redis
+      - REDIS_HOST_PASSWORD={{ docker_env.REDIS_PASSWORD }}
+
+      # Optional: preconfigure trusted domains
+      #- NEXTCLOUD_TRUSTED_DOMAINS=${NEXTCLOUD_TRUSTED_DOMAINS}
+
+    depends_on:
+      - db
+      - redis
+    networks:
+      - nextcloud_network
+
+  cron:
+    image: nextcloud:{{ docker_env.NEXTCLOUD_VERSION }}
+    container_name: nextcloud_cron
+    restart: always
+    volumes:
+      - nextcloud:/var/www/html
+    entrypoint: /cron.sh
+    depends_on:
+      - db
+      - redis
     networks:
       - nextcloud_network
 
