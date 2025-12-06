@@ -1,8 +1,3 @@
-- name: Create the .env file from template
-  template:
-    src: env_templates/nextcloud.env.j2
-    dest: /home/{{ ansible_env.USER }}/NAS_drive/ansible/tasks/nextcloud_compose/.env
-
 - name: Template the docker-compose file
   template:
     src: nextcloud_compose/docker-compose.yml.j2
