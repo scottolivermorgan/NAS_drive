@@ -7,41 +7,41 @@
       set_fact:
         server_ip: "{{ hostvars['scott']['ansible_host'] }}"
 
-    - name: Initial setup
-      ansible.builtin.include_tasks:
-        file: tasks/initial_setup.yml
-    
-    - name: SWAP
-      ansible.builtin.include_tasks:
-        file: tasks/swap.yml
-
-    - name: GIT
-      ansible.builtin.include_tasks:
-        file: tasks/git.yml
-
-    - name: SSH
-      ansible.builtin.include_tasks:
-        file: tasks/ssh.yml
-
-    - name: Docker
-      ansible.builtin.include_tasks:
-        file: tasks/docker.yml
-
-    - name: Python venv
-      ansible.builtin.include_tasks:
-        file: tasks/python_venv.yml
-
-    - name: Shutdown & Reboot switches
-      ansible.builtin.include_tasks:
-        file: tasks/shutdown_reboot_switches.yml
-
-    - name: LVM
-      ansible.builtin.include_tasks:
-        file: tasks/lvm.yml
-
-    - name: External HD
-      ansible.builtin.include_tasks:
-        file: tasks/external_HD.yml
+    #- name: Initial setup
+    #  ansible.builtin.include_tasks:
+    #    file: tasks/initial_setup.yml
+    #
+    #- name: SWAP
+    #  ansible.builtin.include_tasks:
+    #    file: tasks/swap.yml
+#
+    #- name: GIT
+    #  ansible.builtin.include_tasks:
+    #    file: tasks/git.yml
+#
+    #- name: SSH
+    #  ansible.builtin.include_tasks:
+    #    file: tasks/ssh.yml
+#
+    #- name: Docker
+    #  ansible.builtin.include_tasks:
+    #    file: tasks/docker.yml
+#
+    #- name: Python venv
+    #  ansible.builtin.include_tasks:
+    #    file: tasks/python_venv.yml
+#
+    #- name: Shutdown & Reboot switches
+    #  ansible.builtin.include_tasks:
+    #    file: tasks/shutdown_reboot_switches.yml
+#
+    #- name: LVM
+    #  ansible.builtin.include_tasks:
+    #    file: tasks/lvm.yml
+#
+    #- name: External HD
+    #  ansible.builtin.include_tasks:
+    #    file: tasks/external_HD.yml
 
     #- name: Cron jobs
     #  ansible.builtin.include_tasks:

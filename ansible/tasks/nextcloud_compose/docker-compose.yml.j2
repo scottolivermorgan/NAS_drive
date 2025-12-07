@@ -14,6 +14,11 @@ services:
     container_name: mariadb
     volumes:
       - db:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
     environment:
       - MYSQL_ROOT_PASSWORD={{ docker_env.MYSQL_ROOT_PASSWORD }}
       - MYSQL_PASSWORD={{ docker_env.MYSQL_PASSWORD }}
@@ -39,6 +44,11 @@ services:
     volumes:
       - nextcloud:/var/www/html
       - /media/{{ mount_point }}:/media/{{ mount_point }}
+    healthcheck:
+      test: ["CMD", "php", "-f", "/var/www/html/occ", "status"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
     environment:
 
       # --- AUTOMATED NEXTCLOUD SETUP ---
