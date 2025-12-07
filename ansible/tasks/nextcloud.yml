@@ -21,6 +21,15 @@
   until: result.status == 200
 
 
+- name: Remove Nextcloud default skeleton files
+  become: true
+  community.docker.docker_container_exec:
+    container: nextcloud
+    command: >
+      bash -c "rm -f /var/www/html/core/skeleton/*""
+  ignore_errors: true
+
+
 - name: Enable external storage app
   become: true
   community.docker.docker_container_exec:
