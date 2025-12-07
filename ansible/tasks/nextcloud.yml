@@ -11,17 +11,29 @@
   register: output
 
 
+- name: Wait for Nextcloud container to be healthy
+  community.docker.docker_container_info:
+    name: nextcloud
+  register: nc
+  until: nc.containers[0].State.Health.Status == "healthy"
+  retries: 10
+  delay: 30
+  ignore_errors: true
+
+
 - name: Enable external storage app
   become: true
   community.docker.docker_container_exec:
     container: nextcloud
-    command: occ app:enable files_external
+    user: www-data
+    command: php /var/www/html/occ app:enable files_external
 
 
 - name: Add external storage folder
   become: true
   community.docker.docker_container_exec:
     container: nextcloud
+    user: www-data
     command: >
-      occ files_external:create "{{ docker_env.NEXTCLOUD_EXTERNAL_FOLDER }}"
+      php /var/www/html/occ files_external:create "{{ docker_env.NEXTCLOUD_EXTERNAL_FOLDER }}"
          local null::null -c datadir=/media/{{ mount_point }}

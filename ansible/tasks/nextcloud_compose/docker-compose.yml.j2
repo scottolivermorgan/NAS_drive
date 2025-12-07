@@ -15,7 +15,7 @@ services:
     volumes:
       - db:/var/lib/mysql
     healthcheck:
-      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      test: ["CMD", "mysqladmin", "ping", "-u", "root", "-p{{ docker_env.MYSQL_ROOT_PASSWORD }}"]
       interval: 10s
       timeout: 5s
       retries: 5
