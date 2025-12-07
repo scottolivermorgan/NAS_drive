@@ -8,22 +8,17 @@
   become: true
   community.docker.docker_compose_v2:
     project_src: /home/{{ ansible_env.USER }}/NAS_drive/ansible/tasks/nextcloud_compose
-    compatibility_mode: true
   register: output
 
 
-- name: Wait for Nextcloud container to be healthy
-  community.docker.docker_container_info:
-    name: nextcloud
-  register: nc
-  until: >
-    nc.containers is defined and
-    nc.containers | length > 0 and
-    nc.containers[0].State is defined and
-    nc.containers[0].State.Health is defined and
-    nc.containers[0].State.Health.Status == "healthy"
+- name: Wait for Nextcloud to respond on HTTP
+  uri:
+    url: "http://{{ server_ip }}:{{ ports.nextcloud }}"
+    status_code: 200
+  register: result
   retries: 20
-  delay: 15
+  delay: 10
+  until: result.status == 200
 
 
 - name: Enable external storage app
