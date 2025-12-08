@@ -14,11 +14,6 @@ services:
     container_name: mariadb
     volumes:
       - db:/var/lib/mysql
-    healthcheck:
-      test: ["CMD", "mysqladmin", "ping", "-u", "root", "-p{{ docker_env.MYSQL_ROOT_PASSWORD }}"]
-      interval: 10s
-      timeout: 5s
-      retries: 5
     environment:
       - MYSQL_ROOT_PASSWORD={{ docker_env.MYSQL_ROOT_PASSWORD }}
       - MYSQL_PASSWORD={{ docker_env.MYSQL_PASSWORD }}
