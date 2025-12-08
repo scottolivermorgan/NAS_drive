@@ -78,6 +78,7 @@ services:
     image: nextcloud:{{ docker_env.NEXTCLOUD_VERSION }}
     container_name: nextcloud_cron
     restart: always
+    user: www-data 
     volumes:
       - nextcloud:/var/www/html
     entrypoint: /cron.sh
