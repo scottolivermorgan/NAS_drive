@@ -76,6 +76,17 @@
   changed_when: "'Repair step' in repair_output.stdout"
 
 
+- name: Add missing database indices
+  become: true
+  community.docker.docker_container_exec:
+    container: nextcloud
+    user: www-data
+    command: php /var/www/html/occ db:add-missing-indices
+  register: db_indices
+  changed_when: "'Added indices' in db_indices.stdout or 'No indices added' in db_indices.stdout"
+
+
+
 - name: Make sure AppAPI is disabled
   become: true
   community.docker.docker_container_exec:
