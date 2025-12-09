@@ -21,28 +21,7 @@
   until: result.status == 200
 
 
-- name: Remove Nextcloud default skeleton files
-  become: true
-  community.docker.docker_container_exec:
-    container: nextcloud
-    command: >
-      bash -c "rm -rf /var/www/html/core/skeleton/*"
-  ignore_errors: true
 
-
-- name: Remove default files from existing users
-  community.docker.docker_container_exec:
-    container: nextcloud
-    command: >
-      bash -c "for f in /var/www/html/data/*/files/; do
-                [ -d \"$f\" ] && rm -rf \"$f/Documents\" \"$f/Photos\" \"$f/Templates\" \
-                '$f/Nextcloud.png' '$f/Nextcloud intro.mp4' '$f/Nextcloud Manual.pdf' \
-                '$f/Readme.md' '$f/Reasons to use Nextcloud.pdf' '$f/Templates credits.md';
-               done"
-  ignore_errors: true
-
-
-# --- Rescan user files so Nextcloud updates the database ---
 - name: Rescan all user files
   community.docker.docker_container_exec:
     container: nextcloud
@@ -95,3 +74,21 @@
     command: php /var/www/html/occ maintenance:repair --include-expensive
   register: repair_output
   changed_when: "'Repair step' in repair_output.stdout"
+
+
+- name: Make sure AppAPI is disabled
+  become: true
+  community.docker.docker_container_exec:
+    container: nextcloud
+    user: www-data
+    command: php /var/www/html/occ app:list
+  register: app_list
+
+- name: Disable AppAPI if enabled
+  become: true
+  when: "'app_api' in app_list.stdout and 'Enabled:' in app_list.stdout"
+  community.docker.docker_container_exec:
+    container: nextcloud
+    user: www-data
+    command: php /var/www/html/occ app:disable app_api
+
