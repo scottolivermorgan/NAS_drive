@@ -57,6 +57,14 @@
       bash -c "php /var/www/html/occ config:system:set maintenance_window_start --value='{{ docker_env.NEXTCLOUD_MAINTENECE_START_HOUR }}'"
 
 
+- name: Set system cron as background job mode
+  become: true
+  community.docker.docker_container_exec:
+    container: nextcloud
+    user: www-data
+    command: php /var/www/html/occ config:system:set backgroundjobs_mode --value='cron'
+
+
 - name: Set default phone region
   become: true
   community.docker.docker_container_exec:

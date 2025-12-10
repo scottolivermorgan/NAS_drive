@@ -56,8 +56,8 @@
   become: true
   ansible.builtin.cron:
     name: "Update and upgrade"
-    minute: "20"
-    hour: "14"
+    minute: "10"
+    hour: "04"
     user: root
     job: "HOME=/home/{{ ansible_env.USER }} USER={{ ansible_env.USER }} PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin /bin/bash /home/{{ ansible_env.USER }}/NAS_drive/functions/cron_jobs/update_and_upgrade.sh"
 
@@ -66,8 +66,8 @@
   become: true
   ansible.builtin.cron:
     name: "Clear APT Cache"
-    minute: "30"
-    hour: "18"
+    minute: "15"
+    hour: "04"
     user: root
     job: "HOME=/home/{{ ansible_env.USER }} USER={{ ansible_env.USER }} PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin /bin/bash /home/{{ ansible_env.USER }}/NAS_drive/functions/cron_jobs/clear_apt_cache.sh"
 
@@ -76,8 +76,8 @@
   become: true
   ansible.builtin.cron:
     name: "Vacuum journal logs"
-    minute: "40"
-    hour: "18"
+    minute: "18"
+    hour: "04"
     user: root
     job: "HOME=/home/{{ ansible_env.USER }} USER={{ ansible_env.USER }} PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin /bin/bash /home/{{ ansible_env.USER }}/NAS_drive/functions/cron_jobs/journal_vacuum.sh"
 
