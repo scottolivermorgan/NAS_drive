@@ -23,7 +23,7 @@ services:
       - nextcloud_network
 
   redis:
-    image: redis:alpine
+    image: redis:{{ docker_env.REDIS_VERSION }}
     container_name: redis
     restart: always
     command: ["redis-server", "--requirepass", "{{ docker_env.REDIS_PASSWORD }}"]
