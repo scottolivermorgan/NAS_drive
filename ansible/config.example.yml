@@ -167,7 +167,7 @@ docker_env:
   # This template contains only required options.
   # Visit the docs to find more https://docs.tandoor.dev/system/configuration/
   # ---------------------------------------------------------------------------
-  NEXTCLOUD_VERSION: 31.0.8 #29.0.2
+  NEXTCLOUD_VERSION: 32.0.2
   MARIADB_VERSION: 11.4.2
 
   MYSQL_ROOT_PASSWORD: test
@@ -176,6 +176,11 @@ docker_env:
   MYSQL_USER: test
   NEXTCLOUD_ADMIN_USER: test
   NEXTCLOUD_ADMIN_PASSWORD: test
+  NEXTCLOUD_EXTERNAL_FOLDER: cloud
+  REDIS_PASSWORD: test
+  REDIS_VERSION: 8.4.0-alpine
+  NEXTCLOUD_REGION: GB
+  NEXTCLOUD_MAINTENECE_START_HOUR: 1
   
   # ---------------------------------------------------------------------------
   # TANDOOR
