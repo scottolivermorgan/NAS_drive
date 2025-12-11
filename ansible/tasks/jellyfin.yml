@@ -1,5 +1,3 @@
-# This playbook pulls the latest Jellyfin Docker image and runs a container using that image.
-
 - name: Create directories
   become: true
   ansible.builtin.file:
@@ -10,36 +8,12 @@
     - /media/{{ mount_point }}/Media/Metadata/jellyfin/config
     - /media/{{ mount_point }}/Media/Metadata/jellyfin/cache
 
-# Pull the latest Jellyfin Docker image
-#- name: Pull Jellyfin Docker image
-#  become: true
-#  community.docker.docker_image:
-#    name: jellyfin/jellyfin:2024101405
-#    source: pull
-
-# Run the Jellyfin Docker container
-#- name: Run Jellyfin Docker container
-#  become: true
-#  community.docker.docker_container:
-#    name: jellyfin
-#    image: jellyfin/jellyfin:2024101405
-#    state: started
-#    restart_policy: always  # Restart the container if it stops
-#    published_ports:
-#      - "8096:8096"  # Port mapping (host_port:container_port)
-#    timeout: 120  # Timeout (seconds)
-#    volumes:
-#      {% for volume in volumes %}
-#      - "/media/{{ volume }}:/media/{{ volume }}"  # Mount external hard drive
-#      {% endfor %}
-#      #- "/media/HD_1:/media/HD_1"  # Mount external hard drive
-#      - "/media/HD_1/Media/Metadata/jellyfin/config:/config"
-#      - "/media/HD_1/Media/Metadata/jellyfin/cache:/cache"
 
 - name: Template the docker-compose file
   template:
     src: jellyfin_compose/docker-compose.yml.j2
     dest: /home/{{ ansible_env.USER }}/NAS_drive/ansible/tasks/jellyfin_compose/docker-compose.yml
+
 
 - name: Create and start Jellyfin
   become: true
@@ -47,15 +21,3 @@
     project_src: /home/{{ ansible_env.USER }}/NAS_drive/ansible/tasks/jellyfin_compose
   register: output
 
-# Run the Jellyfin Docker container
-#- name: Run Jellyfin Docker container
-#  become: true
-#  community.docker.docker_container:
-#    name: jellyfin
-#    image: jellyfin/jellyfin:2024101405
-#    state: started
-#    restart_policy: always  # Restart the container if it stops
-#    published_ports:
-#      - "8096:8096"  # Port mapping (host_port:container_port)
-#    timeout: 120  # Timeout (seconds)
-#    volumes: "{{ volume_mappings }}"
