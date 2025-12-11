@@ -1,5 +1,3 @@
-# This playbook pulls the latest Komga Docker image and runs a container using that image.
-
 # Create directories required by komga
 - name: Create directories
   become: true
@@ -10,18 +8,12 @@
   loop:
     - /media/{{ mount_point }}/Media/Metadata/komga/config
 
-# Pull the latest Komga Docker image
-#- name: Pull Komga Docker image
-#  become: true
-#  community.docker.docker_image:
-#    name: gotson/komga:1.14.1
-#    source: pull
-
 
 - name: Template the docker-compose file
   template:
     src: komga_compose/docker-compose.yml.j2
     dest: /home/{{ ansible_env.USER }}/NAS_drive/ansible/tasks/komga_compose/docker-compose.yml
+
 
 - name: Create and start Komga
   become: true

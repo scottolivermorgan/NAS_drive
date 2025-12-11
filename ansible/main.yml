@@ -55,13 +55,13 @@
     #  ansible.builtin.include_tasks:
     #    file: tasks/nextcloud.yml
     
-    - name: Jellyfin
-      ansible.builtin.include_tasks:
-        file: tasks/jellyfin.yml
-
-    #- name: Komga
+    #- name: Jellyfin
     #  ansible.builtin.include_tasks:
-    #    file: tasks/komga.yml
+    #    file: tasks/jellyfin.yml
+
+    - name: Komga
+      ansible.builtin.include_tasks:
+        file: tasks/komga.yml
 #
     #- name: Audiobookshelf
     #  ansible.builtin.include_tasks:
