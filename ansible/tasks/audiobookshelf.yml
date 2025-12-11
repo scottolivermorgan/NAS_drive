@@ -9,11 +9,6 @@
     - /media/{{ mount_point }}/Media/Metadata/audio_bookshelf/metadata
     - /media/{{ mount_point }}/Media/Metadata/audio_bookshelf/config
 
-#- name: Create and start AudioBookShelf
-#  become: true
-#  community.docker.docker_compose_v2:
-#    project_src: /home/{{ ansible_env.USER }}/NAS_drive/ansible/tasks/abs_compose
-#  register: output
 
 - name: Template the docker-compose file
   template:
