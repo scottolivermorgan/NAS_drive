@@ -1,6 +1,7 @@
 services:
   komga:
     image: gotson/komga:{{ docker_env.KOMGA_VERSION }}
+    container_name: komga
     ports:
       - {{ ports.komga }}:25600
     volumes:
