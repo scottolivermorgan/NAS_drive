@@ -63,9 +63,9 @@
     #  ansible.builtin.include_tasks:
     #    file: tasks/komga.yml
 #
-    #- name: Audiobookshelf
-    #  ansible.builtin.include_tasks:
-    #    file: tasks/audiobookshelf.yml
+    - name: Audiobookshelf
+      ansible.builtin.include_tasks:
+        file: tasks/audiobookshelf.yml
 #
     #- name: Immich
     #  ansible.builtin.include_tasks:
@@ -91,9 +91,9 @@
     #  ansible.builtin.include_tasks:
     #    file: tasks/vaultwarden.yml
 #
-    - name: Index Page
-      ansible.builtin.include_tasks:
-        file: tasks/index_page.yml
+    #- name: Index Page
+    #  ansible.builtin.include_tasks:
+    #    file: tasks/index_page.yml
 #
     #- name: Romm
     #  ansible.builtin.include_tasks:

@@ -1,6 +1,7 @@
 services:
   audiobookshelf:
     image: ghcr.io/advplyr/audiobookshelf:{{ docker_env.ABS_VERSION }}
+    container_name: audiobookshelf
     ports:
       - {{ ports.audiobookshelf }}:80
     volumes:
