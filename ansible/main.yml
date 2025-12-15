@@ -75,9 +75,9 @@
     #  ansible.builtin.include_tasks:
     #    file: tasks/tandoor.yml
 #
-    - name: NTFY
-      ansible.builtin.include_tasks:
-        file: tasks/ntfy.yml
+    #- name: NTFY
+    #  ansible.builtin.include_tasks:
+    #    file: tasks/ntfy.yml
 #
     #- name: ARR stack
     #  ansible.builtin.include_tasks:
@@ -91,9 +91,9 @@
     #  ansible.builtin.include_tasks:
     #    file: tasks/vaultwarden.yml
 #
-    #- name: Index Page
-    #  ansible.builtin.include_tasks:
-    #    file: tasks/index_page.yml
+    - name: Index Page
+      ansible.builtin.include_tasks:
+        file: tasks/index_page.yml
 #
     #- name: Romm
     #  ansible.builtin.include_tasks:

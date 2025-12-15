@@ -10,3 +10,9 @@ services:
       # you are running ABS on
       - /media/{{ mount_point }}/Media/Metadata/audio_bookshelf/config:/config
     restart: always
+    healthcheck:
+      test: ["CMD", "wget", "-qO-", "http://{{ server_ip }}:13378/healthcheck"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 20s
