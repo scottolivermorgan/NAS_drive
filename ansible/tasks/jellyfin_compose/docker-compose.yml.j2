@@ -1,6 +1,7 @@
 services:
   jellyfin:
     image: jellyfin/jellyfin:{{ docker_env.JELLYFIN_VERSION }}
+    container_name: jellyfin
     ports:
       - {{ ports.jellyfin }}:8096
     volumes:
