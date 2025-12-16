@@ -51,17 +51,17 @@
     #  ansible.builtin.include_tasks:
     #    file: tasks/logrotate.yml
     #   
-    #- name: Nextcloud
-    #  ansible.builtin.include_tasks:
-    #    file: tasks/nextcloud.yml
+    - name: Nextcloud
+      ansible.builtin.include_tasks:
+        file: tasks/nextcloud.yml
     
-    - name: Jellyfin
-      ansible.builtin.include_tasks:
-        file: tasks/jellyfin.yml
+    #- name: Jellyfin
+    #  ansible.builtin.include_tasks:
+    #    file: tasks/jellyfin.yml
 
-    - name: Komga
-      ansible.builtin.include_tasks:
-        file: tasks/komga.yml
+    #- name: Komga
+    #  ansible.builtin.include_tasks:
+    #    file: tasks/komga.yml
 #
     #- name: Audiobookshelf
     #  ansible.builtin.include_tasks:

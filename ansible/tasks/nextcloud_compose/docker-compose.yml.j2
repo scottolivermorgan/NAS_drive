@@ -1,5 +1,3 @@
-version: '3'
-
 volumes:
   nextcloud:
   db:
@@ -27,6 +25,19 @@ services:
     container_name: redis
     restart: always
     command: ["redis-server", "--requirepass", "{{ docker_env.REDIS_PASSWORD }}"]
+    healthcheck:
+      test:
+        [
+          "CMD",
+          "redis-cli",
+          "-a",
+          "{{ docker_env.REDIS_PASSWORD }}",
+          "ping"
+        ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 5s
     networks:
       - nextcloud_network
 
