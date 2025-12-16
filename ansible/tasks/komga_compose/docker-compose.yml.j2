@@ -8,3 +8,9 @@ services:
       - "/media/{{ mount_point }}/Media/Metadata/komga/config:/config"
       - /media/{{ mount_point }}:/data/{{ mount_point }}
     restart: always
+    healthcheck:
+      test: ["CMD", "wget", "-qO-", "http://{{ server_ip }}:{{ ports.komga }}/actuator/health"]
+      interval: 30s
+      timeout: 5s
+      retries: 5
+      start_period: 30s
