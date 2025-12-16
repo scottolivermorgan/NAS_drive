@@ -88,6 +88,16 @@ services:
     volumes:
       - nextcloud:/var/www/html
     entrypoint: /cron.sh
+    healthcheck:
+      test:
+        [
+          "CMD-SHELL",
+          "php -f /var/www/html/cron.php >/dev/null 2>&1 || exit 1"
+        ]
+      interval: 5m
+      timeout: 30s
+      retries: 3
+      start_period: 1m
     depends_on:
       - db
       - redis
