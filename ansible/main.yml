@@ -51,9 +51,9 @@
     #  ansible.builtin.include_tasks:
     #    file: tasks/logrotate.yml
     #   
-    - name: Nextcloud
-      ansible.builtin.include_tasks:
-        file: tasks/nextcloud.yml
+    #- name: Nextcloud
+    #  ansible.builtin.include_tasks:
+    #    file: tasks/nextcloud.yml
     
     #- name: Jellyfin
     #  ansible.builtin.include_tasks:
@@ -95,9 +95,9 @@
     #  ansible.builtin.include_tasks:
     #    file: tasks/index_page.yml
 #
-    #- name: Romm
-    #  ansible.builtin.include_tasks:
-    #    file: tasks/romm.yml         
+    - name: Romm
+      ansible.builtin.include_tasks:
+        file: tasks/romm.yml         
 #
     #- name: Harden security
     #  ansible.builtin.include_tasks:
