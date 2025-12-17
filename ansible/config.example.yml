@@ -218,8 +218,8 @@ docker_env:
   # ---------------------------------------------------------------------------
   # Romm
   # ---------------------------------------------------------------------------
-  ROMM_VERSION: latest
-  ROMM_MARIADB_VERSION: latest
+  ROMM_VERSION: 4.4.1
+  ROMM_MARIADB_VERSION: 12.1.2
   DB_PASSWD: test
   ROMM_KEY: test
   SCREENSCRAPER_USER: test
