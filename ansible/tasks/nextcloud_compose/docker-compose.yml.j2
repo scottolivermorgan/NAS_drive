@@ -74,6 +74,8 @@ services:
       # Optional: preconfigure trusted domains
       - NEXTCLOUD_TRUSTED_DOMAINS={{ server_ip }}
 
+      - PHP_UPLOAD_LIMIT=0
+
     depends_on:
       - db
       - redis
