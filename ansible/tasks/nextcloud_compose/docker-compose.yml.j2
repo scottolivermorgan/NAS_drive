@@ -50,6 +50,7 @@ services:
     volumes:
       - nextcloud:/var/www/html
       - /media/{{ mount_point }}:/media/{{ mount_point }}
+      - /opt/nextcloud/php/zzz-uploads.ini:/usr/local/etc/php/conf.d/zzz-uploads.ini:ro
     healthcheck:
       test: ["CMD", "php", "-f", "/var/www/html/occ", "status"]
       interval: 30s
@@ -74,10 +75,10 @@ services:
       # Optional: preconfigure trusted domains
       - NEXTCLOUD_TRUSTED_DOMAINS={{ server_ip }}
 
-      - PHP_UPLOAD_LIMIT=50G
-      - PHP_MEMORY_LIMIT=50G
-      - max_execution_time=3600
-      - max_input_time=3600
+      #- PHP_UPLOAD_LIMIT=50G
+      #- PHP_MEMORY_LIMIT=50G
+      #- max_execution_time=3600
+      #- max_input_time=3600
 
     depends_on:
       - db
@@ -92,6 +93,7 @@ services:
     user: www-data 
     volumes:
       - nextcloud:/var/www/html
+      - /opt/nextcloud/php/zzz-uploads.ini:/usr/local/etc/php/conf.d/zzz-uploads.ini:ro
     entrypoint: /cron.sh
     healthcheck:
       test:
@@ -103,11 +105,11 @@ services:
       timeout: 30s
       retries: 3
       start_period: 1m
-    environment:
-      - PHP_UPLOAD_LIMIT=50G
-      - PHP_MEMORY_LIMIT=50G
-      - max_execution_time=3600
-      - max_input_time=3600
+    #environment:
+    #  - PHP_UPLOAD_LIMIT=50G
+    #  - PHP_MEMORY_LIMIT=50G
+    #  - max_execution_time=3600
+    #  - max_input_time=3600
     depends_on:
       - db
       - redis

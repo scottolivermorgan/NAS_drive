@@ -1,3 +1,23 @@
+- name: Create directory for Nextcloud PHP overrides
+  become: true
+  file:
+    path: /opt/nextcloud/php
+    state: directory
+    owner: root
+    group: root
+    mode: "0755"
+
+
+- name: Copy PHP upload override for Nextcloud
+  become: true
+  copy:
+    src: nextcloud_compose/zzz-uploads.ini
+    dest: /opt/nextcloud/php/zzz-uploads.ini
+    owner: root
+    group: root
+    mode: "0777"
+
+
 - name: Template the docker-compose file
   template:
     src: nextcloud_compose/docker-compose.yml.j2
