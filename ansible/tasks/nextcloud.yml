@@ -18,6 +18,25 @@
     mode: "0777"
 
 
+- name: Create directory for Nextcloud apache overrides
+  become: true
+  file:
+    path: /etc/apache2/conf-enabled
+    state: directory
+    owner: root
+    group: root
+    mode: "0777"
+
+- name: Copy Apache upload override for Nextcloud
+  become: true
+  copy:
+    src: nextcloud_compose/zzz-timeouts.conf
+    dest: /etc/apache2/conf-enabled/zzz-timeouts.conf
+    owner: root
+    group: root
+    mode: "0777"
+
+
 - name: Template the docker-compose file
   template:
     src: nextcloud_compose/docker-compose.yml.j2

@@ -51,6 +51,7 @@ services:
       - nextcloud:/var/www/html
       - /media/{{ mount_point }}:/media/{{ mount_point }}
       - /opt/nextcloud/php/zzz-uploads.ini:/usr/local/etc/php/conf.d/zzz-uploads.ini:ro
+      - /opt/nextcloud/apache/zzz-timeouts.conf:/etc/apache2/conf-enabled/zzz-timeouts.conf:ro
     healthcheck:
       test: ["CMD", "php", "-f", "/var/www/html/occ", "status"]
       interval: 30s
@@ -94,6 +95,7 @@ services:
     volumes:
       - nextcloud:/var/www/html
       - /opt/nextcloud/php/zzz-uploads.ini:/usr/local/etc/php/conf.d/zzz-uploads.ini:ro
+      - /opt/nextcloud/apache/zzz-timeouts.conf:/etc/apache2/conf-enabled/zzz-timeouts.conf:ro
     entrypoint: /cron.sh
     healthcheck:
       test:
