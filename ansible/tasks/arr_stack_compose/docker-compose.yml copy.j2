@@ -12,11 +12,6 @@ services:
     volumes:
       - /media/{{ mount_point }}/Media/metadata/qbittorrent/appdata:/config
       - /media/{{ mount_point }}/Media/Downloads/completed:/downloads #optional
-    healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:{{ ports.qbittorrent_web  }}"]
-      interval: 10s
-      timeout: 5s
-      retries: 10
     ports:
       - {{ ports.qbittorrent_web }}:9080
       - {{ ports.qbittorrent_torrent }}:6881
@@ -41,11 +36,6 @@ services:
       - /media/{{ mount_point }}/Media/metadata/radarr:/config
       - /media/{{ mount_point }}/Media/Movies:/movies
       - /media/{{ mount_point }}/Media/Downloads/completed:/downloads
-    healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:{{ ports.radarr }}"]
-      interval: 10s
-      timeout: 5s
-      retries: 10
     networks:
       - bridge_network
 
@@ -64,11 +54,6 @@ services:
       - /media/{{ mount_point }}/Media/metadata/sonarr:/config
       - /media/{{ mount_point }}/Media/TV Shows:/tv
       - /media/{{ mount_point }}/Media/Downloads/completed:/downloads
-    healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:{{ ports.sonarr }}"]
-      interval: 10s
-      timeout: 5s
-      retries: 10
     networks:
       - bridge_network
 
@@ -89,11 +74,6 @@ services:
     volumes:
       - /media/{{ mount_point }}/Media/metadata/prowlarr:/config
       - /media/{{ mount_point }}/Media/Downloads/watch:/downloads
-    healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:{{ ports.prowlarr }}"]
-      interval: 10s
-      timeout: 5s
-      retries: 10
     networks:
       - bridge_network
 
@@ -108,11 +88,6 @@ services:
       - /media/{{ mount_point }}/Media/metadata/bazarr:/config
       - /media/{{ mount_point }}/Media/Movies:/movies
       - /media/{{ mount_point }}/Media/TV Shows:/tv
-    healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:{{ ports.bazarr }}"]
-      interval: 10s
-      timeout: 5s
-      retries: 10
     ports:
       - {{ ports.bazarr }}:6767
     restart: always

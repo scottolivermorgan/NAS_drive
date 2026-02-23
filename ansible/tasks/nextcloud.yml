@@ -1,40 +1,40 @@
-- name: Create directory for Nextcloud PHP overrides
-  become: true
-  file:
-    path: /opt/nextcloud/php
-    state: directory
-    owner: root
-    group: root
-    mode: "0755"
-
-
-- name: Copy PHP upload override for Nextcloud
-  become: true
-  copy:
-    src: nextcloud_compose/zzz-uploads.ini
-    dest: /opt/nextcloud/php/zzz-uploads.ini
-    owner: root
-    group: root
-    mode: "0777"
-
-
-- name: Create directory for Nextcloud apache overrides
-  become: true
-  file:
-    path: /etc/apache2/conf-enabled
-    state: directory
-    owner: root
-    group: root
-    mode: "0777"
-
-- name: Copy Apache upload override for Nextcloud
-  become: true
-  copy:
-    src: nextcloud_compose/zzz-timeouts.conf
-    dest: /etc/apache2/conf-enabled/zzz-timeouts.conf
-    owner: root
-    group: root
-    mode: "0777"
+#- name: Create directory for Nextcloud PHP overrides
+#  become: true
+#  file:
+#    path: /opt/nextcloud/php
+#    state: directory
+#    owner: root
+#    group: root
+#    mode: "0755"
+#
+#
+#- name: Copy PHP upload override for Nextcloud
+#  become: true
+#  copy:
+#    src: nextcloud_compose/zzz-uploads.ini
+#    dest: /opt/nextcloud/php/zzz-uploads.ini
+#    owner: root
+#    group: root
+#    mode: "0777"
+#
+#
+#- name: Create directory for Nextcloud apache overrides
+#  become: true
+#  file:
+#    path: /etc/apache2/conf-enabled
+#    state: directory
+#    owner: root
+#    group: root
+#    mode: "0777"
+#
+#- name: Copy Apache upload override for Nextcloud
+#  become: true
+#  copy:
+#    src: nextcloud_compose/zzz-timeouts.conf
+#    dest: /etc/apache2/conf-enabled/zzz-timeouts.conf
+#    owner: root
+#    group: root
+#    mode: "0777"
 
 
 - name: Template the docker-compose file

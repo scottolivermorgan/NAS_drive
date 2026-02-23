@@ -10,7 +10,7 @@
     #- name: Initial setup
     #  ansible.builtin.include_tasks:
     #    file: tasks/initial_setup.yml
-    #
+   # 
     #- name: SWAP
     #  ansible.builtin.include_tasks:
     #    file: tasks/swap.yml
@@ -51,9 +51,9 @@
     #  ansible.builtin.include_tasks:
     #    file: tasks/logrotate.yml
        
-    - name: Nextcloud
-      ansible.builtin.include_tasks:
-        file: tasks/nextcloud.yml
+    #- name: Nextcloud
+    #  ansible.builtin.include_tasks:
+    #    file: tasks/nextcloud.yml
     
     #- name: Jellyfin
     #  ansible.builtin.include_tasks:
@@ -79,9 +79,9 @@
     #  ansible.builtin.include_tasks:
     #    file: tasks/ntfy.yml
 #
-    #- name: ARR stack
-    #  ansible.builtin.include_tasks:
-    #    file: tasks/arr_stack.yml
+    - name: ARR stack
+      ansible.builtin.include_tasks:
+        file: tasks/arr_stack.yml
 #
     #- name: Grafana
     #  ansible.builtin.include_tasks:
