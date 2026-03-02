@@ -7,9 +7,9 @@
       set_fact:
         server_ip: "{{ hostvars['scott']['ansible_host'] }}"
 
-    #- name: Initial setup
-    #  ansible.builtin.include_tasks:
-    #    file: tasks/initial_setup.yml
+    - name: Initial setup
+      ansible.builtin.include_tasks:
+        file: tasks/initial_setup.yml
    # 
     #- name: SWAP
     #  ansible.builtin.include_tasks:
@@ -79,9 +79,9 @@
     #  ansible.builtin.include_tasks:
     #    file: tasks/ntfy.yml
 #
-    - name: ARR stack
-      ansible.builtin.include_tasks:
-        file: tasks/arr_stack.yml
+    #- name: ARR stack
+    #  ansible.builtin.include_tasks:
+    #    file: tasks/arr_stack.yml
 #
     #- name: Grafana
     #  ansible.builtin.include_tasks:
@@ -95,9 +95,9 @@
     #  ansible.builtin.include_tasks:
     #    file: tasks/index_page.yml
 #
-    #- name: Romm
-    #  ansible.builtin.include_tasks:
-    #    file: tasks/romm.yml         
+    - name: Romm
+      ansible.builtin.include_tasks:
+        file: tasks/romm.yml         
 #
     #- name: Harden security
     #  ansible.builtin.include_tasks:

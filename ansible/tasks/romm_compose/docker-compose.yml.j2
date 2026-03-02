@@ -27,9 +27,9 @@ services:
       - /media/{{ mount_point }}/Media/metadata/romm/config:/romm/config # Path where config.yml is stored
     ports:
       - {{ ports.romm }}:8080
-    depends_on:
-      romm-db:
-        condition: service_healthy
+    #depends_on:
+    #  romm-db:
+    #    condition: service_healthy
     healthcheck:
       test:
         [

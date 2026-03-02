@@ -19,3 +19,5 @@
       - git
       - pip
       #- sqlite3
+      - python3-lxml
+      #- python3-docker
