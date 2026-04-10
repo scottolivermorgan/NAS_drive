@@ -173,10 +173,10 @@
 
 - name: Set qBittorrent connection variables
   set_fact:
-    qbittorrent_host: "192.168.2.179"        # or the container hostname / Docker network name
-    qbittorrent_port: 8080               # qBittorrent WebUI port
-    qbittorrent_user: "admin"            # your username
-    # Make sure qbittorrent_temp_password_parsed was set from the container logs
+    qbittorrent_host: "qbittorrent"
+    qbittorrent_port: "{{ ports.qbittorrent_web }}"
+    qbittorrent_user: "admin"
+    # Sonarr reaches qBittorrent over the shared Docker network.
 
 
 - name: Get qBittorrent logs
@@ -204,6 +204,81 @@
   set_fact:
     sonarr_clients: "{{ sonarr_clients_raw.json | default([]) }}"
 
+- name: Get Sonarr download client schemas
+  uri:
+    url: "http://localhost:8989/api/v3/downloadclient/schema"
+    method: GET
+    headers:
+      X-Api-Key: "{{ sonarr_api_key }}"
+    return_content: yes
+    status_code: 200
+  register: sonarr_downloadclient_schemas_raw
+
+- name: Set Sonarr qBittorrent schema fact
+  set_fact:
+    sonarr_qbittorrent_schema: >-
+      {{
+        (
+          sonarr_downloadclient_schemas_raw.json
+          | default([])
+          | selectattr('implementation', 'defined')
+          | selectattr('implementation', 'match', '(?i)^qbittorrent$')
+          | list
+          | first
+        ) | default({})
+      }}
+
+- name: Fail if Sonarr qBittorrent schema was not found
+  fail:
+    msg: "Could not find a qBittorrent entry in Sonarr download client schema response."
+  when: sonarr_qbittorrent_schema | length == 0
+
+- name: Build Sonarr qBittorrent payload fields
+  set_fact:
+    sonarr_qbittorrent_fields: []
+
+- name: Apply qBittorrent values to Sonarr schema fields
+  set_fact:
+    sonarr_qbittorrent_fields: "{{ sonarr_qbittorrent_fields + [updated_field] }}"
+  loop: "{{ sonarr_qbittorrent_schema.fields | default([]) }}"
+  vars:
+    qb_field_values:
+      host: "{{ qbittorrent_host }}"
+      port: "{{ qbittorrent_port }}"
+      username: "{{ qbittorrent_user }}"
+      password: "{{ qbittorrent_temp_password_parsed[0] }}"
+      category: "tv"
+      tvCategory: "tv"
+      useSsl: false
+    updated_field: "{{ item | combine({'value': qb_field_values[item.name]}, recursive=True) if item.name in qb_field_values else item }}"
+
+- name: Build Sonarr qBittorrent payload
+  set_fact:
+    sonarr_qbittorrent_payload: >-
+      {{
+        {
+          'enable': true,
+          'name': 'qBittorrent',
+          'implementation': sonarr_qbittorrent_schema.implementation,
+          'configContract': sonarr_qbittorrent_schema.configContract,
+          'fields': sonarr_qbittorrent_fields
+        }
+        | combine(
+            sonarr_qbittorrent_schema,
+            recursive=True
+          )
+        | combine(
+            {
+              'enable': true,
+              'name': 'qBittorrent',
+              'implementation': sonarr_qbittorrent_schema.implementation,
+              'configContract': sonarr_qbittorrent_schema.configContract,
+              'fields': sonarr_qbittorrent_fields
+            },
+            recursive=True
+          )
+      }}
+
 - name: Add qBittorrent to Sonarr if missing
   uri:
     url: "http://localhost:8989/api/v3/downloadclient"
@@ -212,23 +287,107 @@
       X-Api-Key: "{{ sonarr_api_key }}"
       Content-Type: "application/json"
     body_format: json
-    body:
-      enable: true
-      name: "qBittorrent"
-      implementation: "qBittorrent"
-      configContract: "DownloadClientConfigContract"
-      fields:
-        - name: host
-          value: "{{ qbittorrent_host }}"
-        - name: port
-          value: "{{ qbittorrent_port }}"
-        - name: username
-          value: "{{ qbittorrent_user }}"
-        - name: password
-          value: "{{ qbittorrent_temp_password_parsed[0] }}"
-        - name: category
-          value: "tv"
-        - name: useSsl
-          value: false
+    body: "{{ sonarr_qbittorrent_payload }}"
     status_code: 201
   when: "'qBittorrent' not in (sonarr_clients | map(attribute='name') | list)"
+
+- name: Get Radarr download clients
+  uri:
+    url: "http://localhost:7878/api/v3/downloadclient"
+    method: GET
+    headers:
+      X-Api-Key: "{{ radarr_api_key }}"
+    return_content: yes
+    status_code: 200
+  register: radarr_clients_raw
+
+- name: Set Radarr clients fact
+  set_fact:
+    radarr_clients: "{{ radarr_clients_raw.json | default([]) }}"
+
+- name: Get Radarr download client schemas
+  uri:
+    url: "http://localhost:7878/api/v3/downloadclient/schema"
+    method: GET
+    headers:
+      X-Api-Key: "{{ radarr_api_key }}"
+    return_content: yes
+    status_code: 200
+  register: radarr_downloadclient_schemas_raw
+
+- name: Set Radarr qBittorrent schema fact
+  set_fact:
+    radarr_qbittorrent_schema: >-
+      {{
+        (
+          radarr_downloadclient_schemas_raw.json
+          | default([])
+          | selectattr('implementation', 'defined')
+          | selectattr('implementation', 'match', '(?i)^qbittorrent$')
+          | list
+          | first
+        ) | default({})
+      }}
+
+- name: Fail if Radarr qBittorrent schema was not found
+  fail:
+    msg: "Could not find a qBittorrent entry in Radarr download client schema response."
+  when: radarr_qbittorrent_schema | length == 0
+
+- name: Build Radarr qBittorrent payload fields
+  set_fact:
+    radarr_qbittorrent_fields: []
+
+- name: Apply qBittorrent values to Radarr schema fields
+  set_fact:
+    radarr_qbittorrent_fields: "{{ radarr_qbittorrent_fields + [updated_field] }}"
+  loop: "{{ radarr_qbittorrent_schema.fields | default([]) }}"
+  vars:
+    qb_field_values:
+      host: "{{ qbittorrent_host }}"
+      port: "{{ qbittorrent_port }}"
+      username: "{{ qbittorrent_user }}"
+      password: "{{ qbittorrent_temp_password_parsed[0] }}"
+      category: "movies"
+      movieCategory: "movies"
+      useSsl: false
+    updated_field: "{{ item | combine({'value': qb_field_values[item.name]}, recursive=True) if item.name in qb_field_values else item }}"
+
+- name: Build Radarr qBittorrent payload
+  set_fact:
+    radarr_qbittorrent_payload: >-
+      {{
+        {
+          'enable': true,
+          'name': 'qBittorrent',
+          'implementation': radarr_qbittorrent_schema.implementation,
+          'configContract': radarr_qbittorrent_schema.configContract,
+          'fields': radarr_qbittorrent_fields
+        }
+        | combine(
+            radarr_qbittorrent_schema,
+            recursive=True
+          )
+        | combine(
+            {
+              'enable': true,
+              'name': 'qBittorrent',
+              'implementation': radarr_qbittorrent_schema.implementation,
+              'configContract': radarr_qbittorrent_schema.configContract,
+              'fields': radarr_qbittorrent_fields
+            },
+            recursive=True
+          )
+      }}
+
+- name: Add qBittorrent to Radarr if missing
+  uri:
+    url: "http://localhost:7878/api/v3/downloadclient"
+    method: POST
+    headers:
+      X-Api-Key: "{{ radarr_api_key }}"
+      Content-Type: "application/json"
+    body_format: json
+    body: "{{ radarr_qbittorrent_payload }}"
+    status_code: 201
+  when: "'qBittorrent' not in (radarr_clients | map(attribute='name') | list)"
