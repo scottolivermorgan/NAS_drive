@@ -1,20 +1,13 @@
 version: '3.9'
 services:
   glances:
-      build:
-        context: .  # Use the current directory where Dockerfile is located
-      container_name: Glances
-      hostname: Glances
-      environment:
-         - GLANCES_OPT=-q --export influxdb2 --time 10
-      volumes:
-        - /var/run/docker.sock:/var/run/docker.sock:ro  # Read-only access to Docker socket
-      network_mode: host  # Use the host's networking
-      pid: host  # Share the host's PID namespace
-      privileged: true
-      restart: always  # Always restart the container if it stops
-      depends_on:
-        - influxdb
+    build: .
+    network_mode: host
+    environment:
+      - GLANCES_OPT=-q --export influxdb2 --time 10 -C /glances/conf/glances.conf
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+    restart: always
 
   influxdb:
     image: influxdb:{{ docker_env.INFLUXDB_VERSION }}

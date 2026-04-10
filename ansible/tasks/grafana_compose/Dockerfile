@@ -1,3 +1,2 @@
-FROM nicolargo/glances:latest-full
+FROM nicolargo/glances:4.3.2
 COPY glances.conf /glances/conf/glances.conf
-CMD python -m glances -C /glances/conf/glances.conf $GLANCES_OPT
