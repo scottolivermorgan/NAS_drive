@@ -31,204 +31,204 @@
     project_src: /home/{{ ansible_env.USER }}/NAS_drive/ansible/tasks/arr_stack_compose
   register: output
 
-#- name: Inspect docker_container_info structure
-#  become: true
-#  community.docker.docker_container_info:
-#    name: qbittorrent
-#  register: result
-#
-#- debug:
-#    var: result
-#
-## task wait for good healthcheck returns
-#- name: Wait for qbittorrent to be healthy
-#  become: true
-#  community.docker.docker_container_info:
-#    name: qbittorrent
-#  register: result
-#  until: result.container.State.Health.Status == "healthy"
-#  retries: 30
-#  delay: 5
-#
-#- name: Wait for radarr to be healthy
-#  become: true
-#  community.docker.docker_container_info:
-#    name: radarr
-#  register: result
-#  until: result.container.State.Health.Status == "healthy"
-#  retries: 30
-#  delay: 5
-#
-#- name: Wait for sonarr to be healthy
-#  become: true
-#  community.docker.docker_container_info:
-#    name: sonarr
-#  register: result
-#  until: result.container.State.Health.Status == "healthy"
-#  retries: 30
-#  delay: 5
-#
-#- name: Wait for prowlarr to be healthy
-#  become: true
-#  community.docker.docker_container_info:
-#    name: prowlarr
-#  register: result
-#  until: result.container.State.Health.Status == "healthy"
-#  retries: 30
-#  delay: 5
-#
-#- name: Wait for bazarr to be healthy
-#  become: true
-#  community.docker.docker_container_info:
-#    name: bazarr
-#  register: result
-#  until: result.container.State.Health.Status == "healthy"
-#  retries: 30
-#  delay: 5
-#
-#- name: Read Sonarr API key
+- name: Inspect docker_container_info structure
+  become: true
+  community.docker.docker_container_info:
+    name: qbittorrent
+  register: result
+
+- debug:
+    var: result
+
+# task wait for good healthcheck returns
+- name: Wait for qbittorrent to be healthy
+  become: true
+  community.docker.docker_container_info:
+    name: qbittorrent
+  register: result
+  until: result.container.State.Health.Status == "healthy"
+  retries: 30
+  delay: 5
+
+- name: Wait for radarr to be healthy
+  become: true
+  community.docker.docker_container_info:
+    name: radarr
+  register: result
+  until: result.container.State.Health.Status == "healthy"
+  retries: 30
+  delay: 5
+
+- name: Wait for sonarr to be healthy
+  become: true
+  community.docker.docker_container_info:
+    name: sonarr
+  register: result
+  until: result.container.State.Health.Status == "healthy"
+  retries: 30
+  delay: 5
+
+- name: Wait for prowlarr to be healthy
+  become: true
+  community.docker.docker_container_info:
+    name: prowlarr
+  register: result
+  until: result.container.State.Health.Status == "healthy"
+  retries: 30
+  delay: 5
+
+- name: Wait for bazarr to be healthy
+  become: true
+  community.docker.docker_container_info:
+    name: bazarr
+  register: result
+  until: result.container.State.Health.Status == "healthy"
+  retries: 30
+  delay: 5
+
+- name: Read Sonarr API key
+  xml:
+    path: /media/{{ mount_point }}/Media/metadata/sonarr/config.xml
+    xpath: /Config/ApiKey
+    content: text
+  register: sonarr_key
+
+- name: Read Radarr API key
+  xml:
+    path: /media/{{ mount_point }}/Media/metadata/radarr/config.xml
+    xpath: /Config/ApiKey
+    content: text
+  register: radarr_key
+
+#- name: Read Bazarr API key
 #  xml:
-#    path: /media/{{ mount_point }}/Media/metadata/sonarr/config.xml
+#    path: /media/{{ mount_point }}/Media/metadata/bazarr/config.xml
 #    xpath: /Config/ApiKey
 #    content: text
-#  register: sonarr_key
+#  register: Bazarr_key
+
+- name: Read Bazarr config.yaml
+  slurp:
+    src: /media/{{ mount_point }}/Media/metadata/bazarr/config/config.yaml
+  register: bazarr_raw
+
+- name: Parse Bazarr config
+  set_fact:
+    bazarr_config: "{{ bazarr_raw.content | b64decode | from_yaml }}"
+
+- name: Extract Bazarr API key
+  set_fact:
+    bazarr_key: "{{ bazarr_config.auth.apikey }}"
+
+#- name: Show Bazarr API key
+#  debug:
+#    msg: "{{ bazarr_key }}"
+
+
+- name: Read Prowlarr API key
+  xml:
+    path: /media/{{ mount_point }}/Media/metadata/prowlarr/config.xml
+    xpath: /Config/ApiKey
+    content: text
+  register: prowlarr_key
+
+
+
+
+- name: Set Sonarr API key
+  set_fact:
+    sonarr_api_key: "{{ sonarr_key.matches[0].ApiKey }}"
+
+- name: Set Radarr API key
+  set_fact:
+    radarr_api_key: "{{ radarr_key.matches[0].ApiKey }}"
+
+- name: Set Bazarr API key
+  set_fact:
+    bazarr_api_key: "{{ bazarr_key }}"  # already parsed from YAML
+
+- name: Set Prowlarr API key
+  set_fact:
+    prowlarr_api_key: "{{ prowlarr_key.matches[0].ApiKey }}"
+
+#- name: Show Sonarr API key
+#  debug:
+#    msg: "{{ sonarr_key.matches[0] }}"
 #
-#- name: Read Radarr API key
-#  xml:
-#    path: /media/{{ mount_point }}/Media/metadata/radarr/config.xml
-#    xpath: /Config/ApiKey
-#    content: text
-#  register: radarr_key
+#- name: Show radarr API key
+#  debug:
+#    msg: "{{ radarr_key.matches[0] }}"
 #
-##- name: Read Bazarr API key
-##  xml:
-##    path: /media/{{ mount_point }}/Media/metadata/bazarr/config.xml
-##    xpath: /Config/ApiKey
-##    content: text
-##  register: Bazarr_key
+#- name: Show bazarr API key
+#  debug:
+#    msg: "{{ bazarr_key.matches[0] }}"
 #
-#- name: Read Bazarr config.yaml
-#  slurp:
-#    src: /media/{{ mount_point }}/Media/metadata/bazarr/config/config.yaml
-#  register: bazarr_raw
+#- name: Show prowarr API key
+#  debug:
+#    msg: "{{ prowlarr_key.matches[0] }}"
 #
-#- name: Parse Bazarr config
-#  set_fact:
-#    bazarr_config: "{{ bazarr_raw.content | b64decode | from_yaml }}"
-#
-#- name: Extract Bazarr API key
-#  set_fact:
-#    bazarr_key: "{{ bazarr_config.auth.apikey }}"
-#
-##- name: Show Bazarr API key
-##  debug:
-##    msg: "{{ bazarr_key }}"
-#
-#
-#- name: Read Prowlarr API key
-#  xml:
-#    path: /media/{{ mount_point }}/Media/metadata/prowlarr/config.xml
-#    xpath: /Config/ApiKey
-#    content: text
-#  register: prowlarr_key
-#
-#
-#
-#
-#- name: Set Sonarr API key
-#  set_fact:
-#    sonarr_api_key: "{{ sonarr_key.matches[0].ApiKey }}"
-#
-#- name: Set Radarr API key
-#  set_fact:
-#    radarr_api_key: "{{ radarr_key.matches[0].ApiKey }}"
-#
-#- name: Set Bazarr API key
-#  set_fact:
-#    bazarr_api_key: "{{ bazarr_key }}"  # already parsed from YAML
-#
-#- name: Set Prowlarr API key
-#  set_fact:
-#    prowlarr_api_key: "{{ prowlarr_key.matches[0].ApiKey }}"
-#
-##- name: Show Sonarr API key
-##  debug:
-##    msg: "{{ sonarr_key.matches[0] }}"
-##
-##- name: Show radarr API key
-##  debug:
-##    msg: "{{ radarr_key.matches[0] }}"
-##
-##- name: Show bazarr API key
-##  debug:
-##    msg: "{{ bazarr_key.matches[0] }}"
-##
-##- name: Show prowarr API key
-##  debug:
-##    msg: "{{ prowlarr_key.matches[0] }}"
-##
-##- name: Debug full radarr_key variable
-##  debug:
-##    var: sonarr_key
-#
-#- name: Set qBittorrent connection variables
-#  set_fact:
-#    qbittorrent_host: "192.168.2.179"        # or the container hostname / Docker network name
-#    qbittorrent_port: 8080               # qBittorrent WebUI port
-#    qbittorrent_user: "admin"            # your username
-#    # Make sure qbittorrent_temp_password_parsed was set from the container logs
-#
-#
-#- name: Get qBittorrent logs
-#  command: docker logs qbittorrent
-#  register: qbittorrent_logs
-#  changed_when: false
-#
-#- name: Parse temporary qBittorrent password
-#  set_fact:
-#    qbittorrent_temp_password_parsed: "{{ (qbittorrent_logs.stdout | regex_search('temporary password is provided for this session: (\\S+)', '\\1')) }}"
-#
-## 2. Get current Sonarr download clients
-#- name: Get Sonarr download clients
-#  uri:
-#    url: "http://localhost:8989/api/v3/downloadclient"
-#    method: GET
-#    headers:
-#      X-Api-Key: "{{ sonarr_api_key }}"
-#    return_content: yes
-#    status_code: 200
-#  register: sonarr_clients_raw
-#
-## 3. Parse existing clients into a list
-#- name: Set Sonarr clients fact
-#  set_fact:
-#    sonarr_clients: "{{ sonarr_clients_raw.json | default([]) }}"
-#
-#- name: Add qBittorrent to Sonarr if missing
-#  uri:
-#    url: "http://localhost:8989/api/v3/downloadclient"
-#    method: POST
-#    headers:
-#      X-Api-Key: "{{ sonarr_api_key }}"
-#      Content-Type: "application/json"
-#    body_format: json
-#    body:
-#      enable: true
-#      name: "qBittorrent"
-#      implementation: "qBittorrent"
-#      configContract: "DownloadClientConfigContract"
-#      fields:
-#        - name: host
-#          value: "{{ qbittorrent_host }}"
-#        - name: port
-#          value: "{{ qbittorrent_port }}"
-#        - name: username
-#          value: "{{ qbittorrent_user }}"
-#        - name: password
-#          value: "{{ qbittorrent_temp_password_parsed[0] }}"
-#        - name: category
-#          value: "tv"
-#        - name: useSsl
-#          value: false
-#    status_code: 201
-#  when: "'qBittorrent' not in (sonarr_clients | map(attribute='name') | list)"
+#- name: Debug full radarr_key variable
+#  debug:
+#    var: sonarr_key
+
+- name: Set qBittorrent connection variables
+  set_fact:
+    qbittorrent_host: "192.168.2.179"        # or the container hostname / Docker network name
+    qbittorrent_port: 8080               # qBittorrent WebUI port
+    qbittorrent_user: "admin"            # your username
+    # Make sure qbittorrent_temp_password_parsed was set from the container logs
+
+
+- name: Get qBittorrent logs
+  command: docker logs qbittorrent
+  register: qbittorrent_logs
+  changed_when: false
+
+- name: Parse temporary qBittorrent password
+  set_fact:
+    qbittorrent_temp_password_parsed: "{{ (qbittorrent_logs.stdout | regex_search('temporary password is provided for this session: (\\S+)', '\\1')) }}"
+
+# 2. Get current Sonarr download clients
+- name: Get Sonarr download clients
+  uri:
+    url: "http://localhost:8989/api/v3/downloadclient"
+    method: GET
+    headers:
+      X-Api-Key: "{{ sonarr_api_key }}"
+    return_content: yes
+    status_code: 200
+  register: sonarr_clients_raw
+
+# 3. Parse existing clients into a list
+- name: Set Sonarr clients fact
+  set_fact:
+    sonarr_clients: "{{ sonarr_clients_raw.json | default([]) }}"
+
+- name: Add qBittorrent to Sonarr if missing
+  uri:
+    url: "http://localhost:8989/api/v3/downloadclient"
+    method: POST
+    headers:
+      X-Api-Key: "{{ sonarr_api_key }}"
+      Content-Type: "application/json"
+    body_format: json
+    body:
+      enable: true
+      name: "qBittorrent"
+      implementation: "qBittorrent"
+      configContract: "DownloadClientConfigContract"
+      fields:
+        - name: host
+          value: "{{ qbittorrent_host }}"
+        - name: port
+          value: "{{ qbittorrent_port }}"
+        - name: username
+          value: "{{ qbittorrent_user }}"
+        - name: password
+          value: "{{ qbittorrent_temp_password_parsed[0] }}"
+        - name: category
+          value: "tv"
+        - name: useSsl
+          value: false
+    status_code: 201
+  when: "'qBittorrent' not in (sonarr_clients | map(attribute='name') | list)"

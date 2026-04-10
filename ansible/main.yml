@@ -79,13 +79,13 @@
     #  ansible.builtin.include_tasks:
     #    file: tasks/ntfy.yml
 #
-    #- name: ARR stack
-    #  ansible.builtin.include_tasks:
-    #    file: tasks/arr_stack.yml
-#
-    - name: Grafana
+    - name: ARR stack
       ansible.builtin.include_tasks:
-        file: tasks/grafana_compose.yml
+        file: tasks/arr_stack.yml
+#
+    #- name: Grafana
+    #  ansible.builtin.include_tasks:
+    #    file: tasks/grafana_compose.yml
 
     #- name: VaultWarden
     #  ansible.builtin.include_tasks:
