@@ -559,3 +559,177 @@
     body: "{{ prowlarr_radarr_payload }}"
     status_code: 201
   when: "'Radarr' not in (prowlarr_applications | map(attribute='name') | list)"
+
+- name: Get Sonarr host config
+  uri:
+    url: "http://localhost:8989/api/v3/config/host"
+    method: GET
+    headers:
+      X-Api-Key: "{{ sonarr_api_key }}"
+    return_content: yes
+    status_code: 200
+  register: sonarr_host_config_raw
+  when:
+    - arr_auth is defined
+    - arr_auth.sonarr is defined
+
+- name: Build Sonarr auth payload
+  set_fact:
+    sonarr_auth_payload: >-
+      {{
+        sonarr_host_config_raw.json
+        | combine(
+            {
+              'authenticationMethod': arr_auth.sonarr.authentication_method
+            },
+            recursive=True
+          )
+        | combine(
+            ('authenticationRequired' in sonarr_host_config_raw.json)
+            | ternary(
+                {
+                  'authenticationRequired': arr_auth.sonarr.authentication_required
+                },
+                {}
+              ),
+            recursive=True
+          )
+        | combine(
+            {
+              'username': arr_auth.sonarr.username,
+              'password': arr_auth.sonarr.password,
+              'passwordConfirmation': arr_auth.sonarr.password
+            },
+            recursive=True
+          )
+      }}
+  when:
+    - arr_auth is defined
+    - arr_auth.sonarr is defined
+
+- name: Update Sonarr auth settings
+  uri:
+    url: "http://localhost:8989/api/v3/config/host/{{ sonarr_host_config_raw.json.id | default(1) }}"
+    method: PUT
+    headers:
+      X-Api-Key: "{{ sonarr_api_key }}"
+      Content-Type: "application/json"
+    body_format: json
+    body: "{{ sonarr_auth_payload }}"
+    status_code: 202
+  register: sonarr_auth_update
+  when:
+    - arr_auth is defined
+    - arr_auth.sonarr is defined
+
+- name: Restart Sonarr after auth update
+  uri:
+    url: "http://localhost:8989/api/v3/system/restart"
+    method: POST
+    headers:
+      X-Api-Key: "{{ sonarr_api_key }}"
+    status_code: 200
+  when:
+    - arr_auth is defined
+    - arr_auth.sonarr is defined
+    - sonarr_auth_update is succeeded
+
+- name: Wait for Sonarr to be healthy after auth update
+  become: true
+  community.docker.docker_container_info:
+    name: sonarr
+  register: result
+  until: result.container.State.Health.Status == "healthy"
+  retries: 30
+  delay: 5
+  when:
+    - arr_auth is defined
+    - arr_auth.sonarr is defined
+    - sonarr_auth_update is succeeded
+
+- name: Get Radarr host config
+  uri:
+    url: "http://localhost:7878/api/v3/config/host"
+    method: GET
+    headers:
+      X-Api-Key: "{{ radarr_api_key }}"
+    return_content: yes
+    status_code: 200
+  register: radarr_host_config_raw
+  when:
+    - arr_auth is defined
+    - arr_auth.radarr is defined
+
+- name: Build Radarr auth payload
+  set_fact:
+    radarr_auth_payload: >-
+      {{
+        radarr_host_config_raw.json
+        | combine(
+            {
+              'authenticationMethod': arr_auth.radarr.authentication_method
+            },
+            recursive=True
+          )
+        | combine(
+            ('authenticationRequired' in radarr_host_config_raw.json)
+            | ternary(
+                {
+                  'authenticationRequired': arr_auth.radarr.authentication_required
+                },
+                {}
+              ),
+            recursive=True
+          )
+        | combine(
+            {
+              'username': arr_auth.radarr.username,
+              'password': arr_auth.radarr.password,
+              'passwordConfirmation': arr_auth.radarr.password
+            },
+            recursive=True
+          )
+      }}
+  when:
+    - arr_auth is defined
+    - arr_auth.radarr is defined
+
+- name: Update Radarr auth settings
+  uri:
+    url: "http://localhost:7878/api/v3/config/host/{{ radarr_host_config_raw.json.id | default(1) }}"
+    method: PUT
+    headers:
+      X-Api-Key: "{{ radarr_api_key }}"
+      Content-Type: "application/json"
+    body_format: json
+    body: "{{ radarr_auth_payload }}"
+    status_code: 202
+  register: radarr_auth_update
+  when:
+    - arr_auth is defined
+    - arr_auth.radarr is defined
+
+- name: Restart Radarr after auth update
+  uri:
+    url: "http://localhost:7878/api/v3/system/restart"
+    method: POST
+    headers:
+      X-Api-Key: "{{ radarr_api_key }}"
+    status_code: 200
+  when:
+    - arr_auth is defined
+    - arr_auth.radarr is defined
+    - radarr_auth_update is succeeded
+
+- name: Wait for Radarr to be healthy after auth update
+  become: true
+  community.docker.docker_container_info:
+    name: radarr
+  register: result
+  until: result.container.State.Health.Status == "healthy"
+  retries: 30
+  delay: 5
+  when:
+    - arr_auth is defined
+    - arr_auth.radarr is defined
+    - radarr_auth_update is succeeded

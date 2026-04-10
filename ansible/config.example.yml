@@ -57,6 +57,24 @@ logical_volumes:
 mount_point: "HD_1"
 
 # ---------------------------------------------------------------------------
+# ARR authentication
+# These values are applied via the app APIs after first startup.
+# authentication_method values: forms, basic, external, none
+# authentication_required values: enabled, disabledForLocalAddresses
+# ---------------------------------------------------------------------------
+arr_auth:
+  sonarr:
+    authentication_method: "forms"
+    authentication_required: "disabledForLocalAddresses"
+    username: "admin"
+    password: "change-me"
+  radarr:
+    authentication_method: "forms"
+    authentication_required: "disabledForLocalAddresses"
+    username: "admin"
+    password: "change-me"
+
+# ---------------------------------------------------------------------------
 # Backup drive names (for second LVM)
 # ---------------------------------------------------------------------------
 backup_volumes:
