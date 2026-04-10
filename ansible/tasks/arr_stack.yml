@@ -391,3 +391,171 @@
     body: "{{ radarr_qbittorrent_payload }}"
     status_code: 201
   when: "'qBittorrent' not in (radarr_clients | map(attribute='name') | list)"
+
+- name: Get Prowlarr applications
+  uri:
+    url: "http://localhost:9696/api/v1/applications"
+    method: GET
+    headers:
+      X-Api-Key: "{{ prowlarr_api_key }}"
+    return_content: yes
+    status_code: 200
+  register: prowlarr_applications_raw
+
+- name: Set Prowlarr applications fact
+  set_fact:
+    prowlarr_applications: "{{ prowlarr_applications_raw.json | default([]) }}"
+
+- name: Get Prowlarr application schemas
+  uri:
+    url: "http://localhost:9696/api/v1/applications/schema"
+    method: GET
+    headers:
+      X-Api-Key: "{{ prowlarr_api_key }}"
+    return_content: yes
+    status_code: 200
+  register: prowlarr_application_schemas_raw
+
+- name: Set Prowlarr Sonarr schema fact
+  set_fact:
+    prowlarr_sonarr_schema: >-
+      {{
+        (
+          prowlarr_application_schemas_raw.json
+          | default([])
+          | selectattr('implementation', 'defined')
+          | selectattr('implementation', 'match', '(?i)^sonarr$')
+          | list
+          | first
+        ) | default({})
+      }}
+
+- name: Fail if Prowlarr Sonarr schema was not found
+  fail:
+    msg: "Could not find a Sonarr entry in Prowlarr application schema response."
+  when: prowlarr_sonarr_schema | length == 0
+
+- name: Build Prowlarr Sonarr payload fields
+  set_fact:
+    prowlarr_sonarr_fields: []
+
+- name: Apply Sonarr values to Prowlarr schema fields
+  set_fact:
+    prowlarr_sonarr_fields: "{{ prowlarr_sonarr_fields + [updated_field] }}"
+  loop: "{{ prowlarr_sonarr_schema.fields | default([]) }}"
+  vars:
+    prowlarr_sonarr_field_values:
+      prowlarrUrl: "http://prowlarr:9696"
+      baseUrl: "http://sonarr:8989"
+      apiKey: "{{ sonarr_api_key }}"
+      syncLevel: "fullSync"
+    updated_field: "{{ item | combine({'value': prowlarr_sonarr_field_values[item.name]}, recursive=True) if item.name in prowlarr_sonarr_field_values else item }}"
+
+- name: Build Prowlarr Sonarr payload
+  set_fact:
+    prowlarr_sonarr_payload: >-
+      {{
+        {
+          'name': 'Sonarr',
+          'implementation': prowlarr_sonarr_schema.implementation,
+          'configContract': prowlarr_sonarr_schema.configContract,
+          'fields': prowlarr_sonarr_fields
+        }
+        | combine(
+            prowlarr_sonarr_schema,
+            recursive=True
+          )
+        | combine(
+            {
+              'name': 'Sonarr',
+              'implementation': prowlarr_sonarr_schema.implementation,
+              'configContract': prowlarr_sonarr_schema.configContract,
+              'fields': prowlarr_sonarr_fields
+            },
+            recursive=True
+          )
+      }}
+
+- name: Add Sonarr to Prowlarr if missing
+  uri:
+    url: "http://localhost:9696/api/v1/applications"
+    method: POST
+    headers:
+      X-Api-Key: "{{ prowlarr_api_key }}"
+      Content-Type: "application/json"
+    body_format: json
+    body: "{{ prowlarr_sonarr_payload }}"
+    status_code: 201
+  when: "'Sonarr' not in (prowlarr_applications | map(attribute='name') | list)"
+
+- name: Set Prowlarr Radarr schema fact
+  set_fact:
+    prowlarr_radarr_schema: >-
+      {{
+        (
+          prowlarr_application_schemas_raw.json
+          | default([])
+          | selectattr('implementation', 'defined')
+          | selectattr('implementation', 'match', '(?i)^radarr$')
+          | list
+          | first
+        ) | default({})
+      }}
+
+- name: Fail if Prowlarr Radarr schema was not found
+  fail:
+    msg: "Could not find a Radarr entry in Prowlarr application schema response."
+  when: prowlarr_radarr_schema | length == 0
+
+- name: Build Prowlarr Radarr payload fields
+  set_fact:
+    prowlarr_radarr_fields: []
+
+- name: Apply Radarr values to Prowlarr schema fields
+  set_fact:
+    prowlarr_radarr_fields: "{{ prowlarr_radarr_fields + [updated_field] }}"
+  loop: "{{ prowlarr_radarr_schema.fields | default([]) }}"
+  vars:
+    prowlarr_radarr_field_values:
+      prowlarrUrl: "http://prowlarr:9696"
+      baseUrl: "http://radarr:7878"
+      apiKey: "{{ radarr_api_key }}"
+      syncLevel: "fullSync"
+    updated_field: "{{ item | combine({'value': prowlarr_radarr_field_values[item.name]}, recursive=True) if item.name in prowlarr_radarr_field_values else item }}"
+
+- name: Build Prowlarr Radarr payload
+  set_fact:
+    prowlarr_radarr_payload: >-
+      {{
+        {
+          'name': 'Radarr',
+          'implementation': prowlarr_radarr_schema.implementation,
+          'configContract': prowlarr_radarr_schema.configContract,
+          'fields': prowlarr_radarr_fields
+        }
+        | combine(
+            prowlarr_radarr_schema,
+            recursive=True
+          )
+        | combine(
+            {
+              'name': 'Radarr',
+              'implementation': prowlarr_radarr_schema.implementation,
+              'configContract': prowlarr_radarr_schema.configContract,
+              'fields': prowlarr_radarr_fields
+            },
+            recursive=True
+          )
+      }}
+
+- name: Add Radarr to Prowlarr if missing
+  uri:
+    url: "http://localhost:9696/api/v1/applications"
+    method: POST
+    headers:
+      X-Api-Key: "{{ prowlarr_api_key }}"
+      Content-Type: "application/json"
+    body_format: json
+    body: "{{ prowlarr_radarr_payload }}"
+    status_code: 201
+  when: "'Radarr' not in (prowlarr_applications | map(attribute='name') | list)"
