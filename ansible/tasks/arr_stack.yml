@@ -175,7 +175,8 @@
   set_fact:
     qbittorrent_host: "qbittorrent"
     qbittorrent_port: "{{ ports.qbittorrent_web }}"
-    qbittorrent_user: "admin"
+    qbittorrent_user: "{{ arr_auth.qbittorrent.username | default('admin') }}"
+    qbittorrent_password_configured: "{{ arr_auth.qbittorrent.password | default('') }}"
     # Sonarr reaches qBittorrent over the shared Docker network.
 
 
@@ -187,6 +188,87 @@
 - name: Parse temporary qBittorrent password
   set_fact:
     qbittorrent_temp_password_parsed: "{{ (qbittorrent_logs.stdout | regex_search('temporary password is provided for this session: (\\S+)', '\\1')) }}"
+
+- name: Try qBittorrent login with configured credentials
+  uri:
+    url: "http://localhost:{{ ports.qbittorrent_web }}/api/v2/auth/login"
+    method: POST
+    headers:
+      Referer: "http://localhost:{{ ports.qbittorrent_web }}"
+    body_format: form-urlencoded
+    body:
+      username: "{{ qbittorrent_user }}"
+      password: "{{ qbittorrent_password_configured }}"
+    return_content: yes
+    status_code: 200
+  register: qbittorrent_login_configured
+  failed_when: false
+  no_log: true
+  when: qbittorrent_password_configured | length > 0
+
+- name: Try qBittorrent login with temporary password
+  uri:
+    url: "http://localhost:{{ ports.qbittorrent_web }}/api/v2/auth/login"
+    method: POST
+    headers:
+      Referer: "http://localhost:{{ ports.qbittorrent_web }}"
+    body_format: form-urlencoded
+    body:
+      username: "admin"
+      password: "{{ qbittorrent_temp_password_parsed[0] }}"
+    return_content: yes
+    status_code: 200
+  register: qbittorrent_login_temp
+  failed_when: false
+  no_log: true
+  when:
+    - qbittorrent_password_configured | length == 0 or qbittorrent_login_configured.content | default('') != 'Ok.'
+
+- name: Set qBittorrent API auth facts
+  set_fact:
+    qbittorrent_api_cookie: >-
+      {{
+        (
+          qbittorrent_login_configured.cookies_string
+          if qbittorrent_login_configured is defined and qbittorrent_login_configured.content | default('') == 'Ok.'
+          else qbittorrent_login_temp.cookies_string
+        )
+      }}
+    qbittorrent_client_password: >-
+      {{
+        (
+          qbittorrent_password_configured
+          if qbittorrent_password_configured | length > 0
+          else qbittorrent_temp_password_parsed[0]
+        )
+      }}
+  no_log: true
+
+- name: Fail if qBittorrent login failed
+  fail:
+    msg: "Could not authenticate to qBittorrent with either the configured credentials or the temporary password."
+  when:
+    - (qbittorrent_login_configured is not defined or qbittorrent_login_configured.content | default('') != 'Ok.')
+    - (qbittorrent_login_temp is not defined or qbittorrent_login_temp.content | default('') != 'Ok.')
+
+- name: Update qBittorrent WebUI credentials
+  uri:
+    url: "http://localhost:{{ ports.qbittorrent_web }}/api/v2/app/setPreferences"
+    method: POST
+    headers:
+      Referer: "http://localhost:{{ ports.qbittorrent_web }}"
+      Cookie: "{{ qbittorrent_api_cookie }}"
+    body_format: form-urlencoded
+    body:
+      json: "{{ {'web_ui_username': qbittorrent_user, 'web_ui_password': qbittorrent_password_configured} | to_json }}"
+    status_code: 200
+  no_log: true
+  when: qbittorrent_password_configured | length > 0
+
+- name: Set qBittorrent client password fact
+  set_fact:
+    qbittorrent_client_password: "{{ qbittorrent_password_configured if qbittorrent_password_configured | length > 0 else qbittorrent_client_password }}"
+  no_log: true
 
 # 2. Get current Sonarr download clients
 - name: Get Sonarr download clients
@@ -246,7 +328,7 @@
       host: "{{ qbittorrent_host }}"
       port: "{{ qbittorrent_port }}"
       username: "{{ qbittorrent_user }}"
-      password: "{{ qbittorrent_temp_password_parsed[0] }}"
+      password: "{{ qbittorrent_client_password }}"
       category: "tv"
       tvCategory: "tv"
       useSsl: false
@@ -347,7 +429,7 @@
       host: "{{ qbittorrent_host }}"
       port: "{{ qbittorrent_port }}"
       username: "{{ qbittorrent_user }}"
-      password: "{{ qbittorrent_temp_password_parsed[0] }}"
+      password: "{{ qbittorrent_client_password }}"
       category: "movies"
       movieCategory: "movies"
       useSsl: false

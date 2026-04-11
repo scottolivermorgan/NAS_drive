@@ -78,6 +78,9 @@ arr_auth:
     authentication_required: "disabledForLocalAddresses"
     username: "admin"
     password: "change-me"
+  qbittorrent:
+    username: "admin"
+    password: "change-me"
   bazarr:
     authentication_type: "form"
     username: "admin"
