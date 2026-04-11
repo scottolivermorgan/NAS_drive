@@ -73,6 +73,15 @@ arr_auth:
     authentication_required: "disabledForLocalAddresses"
     username: "admin"
     password: "change-me"
+  prowlarr:
+    authentication_method: "forms"
+    authentication_required: "disabledForLocalAddresses"
+    username: "admin"
+    password: "change-me"
+  bazarr:
+    authentication_type: "form"
+    username: "admin"
+    password: "change-me"
 
 # ---------------------------------------------------------------------------
 # Backup drive names (for second LVM)

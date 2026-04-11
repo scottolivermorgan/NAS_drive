@@ -733,3 +733,153 @@
     - arr_auth is defined
     - arr_auth.radarr is defined
     - radarr_auth_update is succeeded
+
+- name: Build Bazarr auth config
+  set_fact:
+    bazarr_auth_config: >-
+      {{
+        bazarr_config
+        | combine(
+            {
+              'auth': (
+                bazarr_config.auth | default({})
+                | combine(
+                    {
+                      'type': arr_auth.bazarr.authentication_type,
+                      'username': arr_auth.bazarr.username,
+                      'password': arr_auth.bazarr.password
+                    },
+                    recursive=True
+                  )
+              )
+            },
+            recursive=True
+          )
+      }}
+  no_log: true
+  when:
+    - arr_auth is defined
+    - arr_auth.bazarr is defined
+
+- name: Write Bazarr auth config
+  become: true
+  copy:
+    dest: /media/{{ mount_point }}/Media/metadata/bazarr/config/config.yaml
+    content: "{{ bazarr_auth_config | to_nice_yaml(indent=2, sort_keys=False) }}"
+    mode: '0644'
+  register: bazarr_auth_config_write
+  no_log: true
+  when:
+    - arr_auth is defined
+    - arr_auth.bazarr is defined
+
+- name: Restart Bazarr after auth update
+  become: true
+  community.docker.docker_container:
+    name: bazarr
+    state: started
+    restart: true
+  when:
+    - arr_auth is defined
+    - arr_auth.bazarr is defined
+    - bazarr_auth_config_write is changed
+
+- name: Wait for Bazarr to be healthy after auth update
+  become: true
+  community.docker.docker_container_info:
+    name: bazarr
+  register: result
+  until: result.container.State.Health.Status == "healthy"
+  retries: 30
+  delay: 5
+  when:
+    - arr_auth is defined
+    - arr_auth.bazarr is defined
+    - bazarr_auth_config_write is changed
+
+- name: Get Prowlarr host config
+  uri:
+    url: "http://localhost:9696/api/v1/config/host"
+    method: GET
+    headers:
+      X-Api-Key: "{{ prowlarr_api_key }}"
+    return_content: yes
+    status_code: 200
+  register: prowlarr_host_config_raw
+  when:
+    - arr_auth is defined
+    - arr_auth.prowlarr is defined
+
+- name: Build Prowlarr auth payload
+  set_fact:
+    prowlarr_auth_payload: >-
+      {{
+        prowlarr_host_config_raw.json
+        | combine(
+            {
+              'authenticationMethod': arr_auth.prowlarr.authentication_method
+            },
+            recursive=True
+          )
+        | combine(
+            ('authenticationRequired' in prowlarr_host_config_raw.json)
+            | ternary(
+                {
+                  'authenticationRequired': arr_auth.prowlarr.authentication_required
+                },
+                {}
+              ),
+            recursive=True
+          )
+        | combine(
+            {
+              'username': arr_auth.prowlarr.username,
+              'password': arr_auth.prowlarr.password,
+              'passwordConfirmation': arr_auth.prowlarr.password
+            },
+            recursive=True
+          )
+      }}
+  when:
+    - arr_auth is defined
+    - arr_auth.prowlarr is defined
+
+- name: Update Prowlarr auth settings
+  uri:
+    url: "http://localhost:9696/api/v1/config/host/{{ prowlarr_host_config_raw.json.id | default(1) }}"
+    method: PUT
+    headers:
+      X-Api-Key: "{{ prowlarr_api_key }}"
+      Content-Type: "application/json"
+    body_format: json
+    body: "{{ prowlarr_auth_payload }}"
+    status_code: 202
+  register: prowlarr_auth_update
+  when:
+    - arr_auth is defined
+    - arr_auth.prowlarr is defined
+
+- name: Restart Prowlarr after auth update
+  uri:
+    url: "http://localhost:9696/api/v1/system/restart"
+    method: POST
+    headers:
+      X-Api-Key: "{{ prowlarr_api_key }}"
+    status_code: 200
+  when:
+    - arr_auth is defined
+    - arr_auth.prowlarr is defined
+    - prowlarr_auth_update is succeeded
+
+- name: Wait for Prowlarr to be healthy after auth update
+  become: true
+  community.docker.docker_container_info:
+    name: prowlarr
+  register: result
+  until: result.container.State.Health.Status == "healthy"
+  retries: 30
+  delay: 5
+  when:
+    - arr_auth is defined
+    - arr_auth.prowlarr is defined
+    - prowlarr_auth_update is succeeded
