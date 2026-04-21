@@ -2,12 +2,12 @@ services:
   homeassistant:
     image: ghcr.io/home-assistant/home-assistant:{{ docker_env.HOME_ASSISTANT_VERSION }}
     container_name: homeassistant
-    {% if home_assistant.host_network %}
+{% if home_assistant.host_network %}
     network_mode: host
-    {% else %}
+{% else %}
     ports:
       - {{ ports.home_assistant }}:8123
-    {% endif %}
+{% endif %}
     volumes:
       - "{{ home_assistant.config_dir }}:/config"
       - /etc/localtime:/etc/localtime:ro
