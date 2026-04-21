@@ -151,6 +151,249 @@
   set_fact:
     prowlarr_api_key: "{{ prowlarr_key.matches[0].ApiKey }}"
 
+- name: Get Sonarr root folders
+  uri:
+    url: "http://localhost:8989/api/v3/rootfolder"
+    method: GET
+    headers:
+      X-Api-Key: "{{ sonarr_api_key }}"
+    return_content: yes
+    status_code: 200
+  register: sonarr_rootfolders_raw
+
+- name: Set Sonarr root folders fact
+  set_fact:
+    sonarr_rootfolders: "{{ sonarr_rootfolders_raw.json | default([]) }}"
+
+- name: Add Sonarr TV root folder if missing
+  uri:
+    url: "http://localhost:8989/api/v3/rootfolder"
+    method: POST
+    headers:
+      X-Api-Key: "{{ sonarr_api_key }}"
+      Content-Type: "application/json"
+    body_format: json
+    body:
+      path: "{{ sonarr_import.root_folder | default('/tv') }}"
+    status_code:
+      - 200
+      - 201
+  when: "(sonarr_import.root_folder | default('/tv')) not in (sonarr_rootfolders | map(attribute='path') | list)"
+
+- name: Get Sonarr quality profiles
+  uri:
+    url: "http://localhost:8989/api/v3/qualityprofile"
+    method: GET
+    headers:
+      X-Api-Key: "{{ sonarr_api_key }}"
+    return_content: yes
+    status_code: 200
+  register: sonarr_quality_profiles_raw
+  when:
+    - sonarr_import is defined
+    - sonarr_import.existing_import_enabled | default(false)
+
+- name: Build matching Sonarr quality profiles list
+  set_fact:
+    sonarr_matching_quality_profiles: >-
+      {{
+        sonarr_quality_profiles_raw.json
+        | default([])
+        | selectattr('name', 'equalto', sonarr_import.quality_profile_name | default(''))
+        | list
+      }}
+  when:
+    - sonarr_import is defined
+    - sonarr_import.existing_import_enabled | default(false)
+
+- name: Set Sonarr quality profile fact for import
+  set_fact:
+    sonarr_import_quality_profile: >-
+      {{
+        (
+          sonarr_matching_quality_profiles
+          if (sonarr_matching_quality_profiles | default([]) | length) > 0
+          else
+          (sonarr_quality_profiles_raw.json | default([]))
+        )
+        | default([], true)
+        | first
+        | default({})
+      }}
+  when:
+    - sonarr_import is defined
+    - sonarr_import.existing_import_enabled | default(false)
+
+- name: Fall back to first Sonarr quality profile for import
+  set_fact:
+    sonarr_import_quality_profile: >-
+      {{
+        (
+          sonarr_quality_profiles_raw.json | default([])
+        )
+        | default([], true)
+        | first
+        | default({})
+      }}
+  when:
+    - sonarr_import is defined
+    - sonarr_import.existing_import_enabled | default(false)
+    - sonarr_import_quality_profile | length == 0
+
+- name: Get Sonarr language profiles
+  uri:
+    url: "http://localhost:8989/api/v3/languageprofile"
+    method: GET
+    headers:
+      X-Api-Key: "{{ sonarr_api_key }}"
+    return_content: yes
+    status_code: 200
+  register: sonarr_language_profiles_raw
+  when:
+    - sonarr_import is defined
+    - sonarr_import.existing_import_enabled | default(false)
+
+- name: Build matching Sonarr language profiles list
+  set_fact:
+    sonarr_matching_language_profiles: >-
+      {{
+        sonarr_language_profiles_raw.json
+        | default([])
+        | selectattr('name', 'equalto', sonarr_import.language_profile_name | default(''))
+        | list
+      }}
+  when:
+    - sonarr_import is defined
+    - sonarr_import.existing_import_enabled | default(false)
+
+- name: Set Sonarr language profile fact for import
+  set_fact:
+    sonarr_import_language_profile: >-
+      {{
+        (
+          sonarr_matching_language_profiles
+          if (sonarr_import.language_profile_name is defined and (sonarr_matching_language_profiles | default([]) | length) > 0)
+          else
+          (sonarr_language_profiles_raw.json | default([]))
+        )
+        | default([], true)
+          | first
+        | default({})
+      }}
+  when:
+    - sonarr_import is defined
+    - sonarr_import.existing_import_enabled | default(false)
+
+- name: Fail if no Sonarr quality profile was found for import
+  fail:
+    msg: "Could not resolve any Sonarr quality profile for existing-series import."
+  when:
+    - sonarr_import is defined
+    - sonarr_import.existing_import_enabled | default(false)
+    - sonarr_import_quality_profile | length == 0
+
+- name: Show Sonarr quality profile selected for import
+  debug:
+    msg: "Using Sonarr quality profile '{{ sonarr_import_quality_profile.name }}' for existing-series import."
+  when:
+    - sonarr_import is defined
+    - sonarr_import.existing_import_enabled | default(false)
+
+- name: Fail if no Sonarr language profile was found for import
+  fail:
+    msg: "Could not resolve a Sonarr language profile for existing-series import."
+  when:
+    - sonarr_import is defined
+    - sonarr_import.existing_import_enabled | default(false)
+    - sonarr_import_language_profile | length == 0
+
+- name: Show Sonarr language profile selected for import
+  debug:
+    msg: "Using Sonarr language profile '{{ sonarr_import_language_profile.name }}' for existing-series import."
+  when:
+    - sonarr_import is defined
+    - sonarr_import.existing_import_enabled | default(false)
+
+- name: Get Sonarr existing-series import candidates
+  uri:
+    url: "http://localhost:8989/api/v3/series/import?folder={{ sonarr_import.root_folder | urlencode }}"
+    method: GET
+    headers:
+      X-Api-Key: "{{ sonarr_api_key }}"
+    return_content: yes
+    status_code: 200
+  register: sonarr_series_import_candidates_raw
+  when:
+    - sonarr_import is defined
+    - sonarr_import.existing_import_enabled | default(false)
+
+- name: Set Sonarr existing-series import candidates fact
+  set_fact:
+    sonarr_series_import_candidates: "{{ sonarr_series_import_candidates_raw.json | default([]) }}"
+  when:
+    - sonarr_import is defined
+    - sonarr_import.existing_import_enabled | default(false)
+
+- name: Reset Sonarr existing-series import payload
+  set_fact:
+    sonarr_series_import_payload: []
+  when:
+    - sonarr_import is defined
+    - sonarr_import.existing_import_enabled | default(false)
+
+- name: Build Sonarr existing-series import payload
+  set_fact:
+    sonarr_series_import_payload: "{{ (sonarr_series_import_payload | default([])) + [import_item] }}"
+  loop: "{{ sonarr_series_import_candidates | default([]) }}"
+  vars:
+    import_item: >-
+      {{
+        item
+        | combine(
+            {
+              'qualityProfileId': sonarr_import_quality_profile.id,
+              'languageProfileId': sonarr_import_language_profile.id,
+              'rootFolderPath': sonarr_import.root_folder,
+              'monitor': sonarr_import.monitor,
+              'monitored': true,
+              'seasonFolder': sonarr_import.season_folder | default(true),
+              'addOptions': (
+                item.addOptions | default({})
+                | combine(
+                    {
+                      'monitor': sonarr_import.monitor,
+                      'monitorNewItems': sonarr_import.monitor,
+                      'seasonFolder': sonarr_import.season_folder | default(true)
+                    },
+                    recursive=True
+                  )
+              )
+            },
+            recursive=True
+          )
+      }}
+  when:
+    - sonarr_import is defined
+    - sonarr_import.existing_import_enabled | default(false)
+
+- name: Import existing Sonarr series if found
+  uri:
+    url: "http://localhost:8989/api/v3/series/import"
+    method: POST
+    headers:
+      X-Api-Key: "{{ sonarr_api_key }}"
+      Content-Type: "application/json"
+    body_format: json
+    body: "{{ sonarr_series_import_payload }}"
+    status_code:
+      - 200
+      - 201
+      - 202
+  when:
+    - sonarr_import is defined
+    - sonarr_import.existing_import_enabled | default(false)
+    - (sonarr_series_import_payload | default([]) | length) > 0
+
 #- name: Show Sonarr API key
 #  debug:
 #    msg: "{{ sonarr_key.matches[0] }}"

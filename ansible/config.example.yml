@@ -86,6 +86,15 @@ arr_auth:
     username: "admin"
     password: "change-me"
 
+sonarr_import:
+  root_folder: "/tv"
+  quality_profile_name: "default_profile"
+  monitor: "all"
+  season_folder: true
+  existing_import_enabled: false
+  # Leave unset to use Sonarr's first available language profile
+  # language_profile_name: "English"
+
 # ---------------------------------------------------------------------------
 # Backup drive names (for second LVM)
 # ---------------------------------------------------------------------------
