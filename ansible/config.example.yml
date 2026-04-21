@@ -10,6 +10,7 @@ ports:
   ntfy: 8090
   influxdb: 8086
   grafana: 3001
+  home_assistant: 8123
   
   # Media services
   jellyfin: 8096
@@ -128,6 +129,15 @@ logrotate:
   # Permissions for new log files
   mode: "0644"
 
+# ---------------------------------------------------------------------------
+# Home Assistant
+# ---------------------------------------------------------------------------
+home_assistant:
+  config_dir: "/media/{{ mount_point }}/Media/Metadata/home_assistant/config"
+  host_network: true
+  time_zone: "Europe/London"
+  name: "Home"
+
 docker_env:
   # ---------------------------------------------------------------------------
   # Jellyfin
@@ -148,6 +158,11 @@ docker_env:
   # NTFY
   # ---------------------------------------------------------------------------
   NTFY_VERSION: v2.15
+
+  # ---------------------------------------------------------------------------
+  # Home Assistant
+  # ---------------------------------------------------------------------------
+  HOME_ASSISTANT_VERSION: 2026.4.2
 
   # ---------------------------------------------------------------------------
   # Git account

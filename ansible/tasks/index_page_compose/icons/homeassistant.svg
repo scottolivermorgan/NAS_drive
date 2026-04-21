@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-labelledby="title">
+  <title>Home Assistant Placeholder</title>
+  <rect width="64" height="64" rx="14" fill="#0f172a"/>
+  <path d="M32 14 16 27v23h32V27L32 14Z" fill="#38bdf8"/>
+  <path d="M24 40h16v10H24z" fill="#0f172a"/>
+  <path d="M28 28h8v8h-8z" fill="#0f172a"/>
+</svg>
