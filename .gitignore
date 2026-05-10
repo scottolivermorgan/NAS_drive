@@ -3,6 +3,7 @@ ansible/config.yml
 venv
 .pdm-python
 .vscode
+.codex
 
 inventory.yml
 
